@@ -2,12 +2,11 @@
 var webpack = require('webpack');
 var path = require('path');
 var glob = require('glob');
+var gutil = require('gulp-util');
 
-//插件定义
-var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
+//插件
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 
 /*
 //遍历入口JS文件
@@ -52,71 +51,22 @@ var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 */
 module.exports = function(config){
 
-var debug = config.debug !== undefined ? config.debug :true;
-
 //路径定义
-var srcDir  = config.src; 
-var destDir = config.dest;
-var nodeModPath = path.resolve(process.cwd(), './node_modules');
-var publicPath = config.publicPath; //'/';
-var alias = config.alias || {};
-var vendor = config.vendor || [];
-var port = config.port || 8080;
-
-var plugins = [
-  new webpack.BannerPlugin('作者: 空山 112093112@qq.com'),
-  
-  //提供预定义require
-  new webpack.ProvidePlugin({
-    //Base: '../../base/index.js', //从路径获取
-    "$": "jquery", //从别名获取
-    "jQuery": "jquery",
-    "window.jQuery": "jquery",
-    "Vue" :  "vue"
-  }),
-  
-  //提取公共模块
-  new CommonsChunkPlugin({
-    name: 'vendor',
-    minChunks: Infinity
-  }),
-  //HTML处理
-  new HtmlWebpackPlugin({
-    template: config.srcHtml_index,
-    filename: 'index.html',
-    showErrors: true,
-    inject: 'body', //inject :true，js会注入到html任何位置
-    chunks: ['vendor','base','index']
-  }),
-  //热加载
-  ,new webpack.HotModuleReplacementPlugin()
-  
-  ,new webpack.optimize.OccurenceOrderPlugin()
-  
-];
-
-var devtool, ifMin, extractCSS, cssLoader, sassLoader, lessLoader, cssLoaderSet,
-    extractCSSOptions = {
-      publicPath: '../' //用于修正css文件中的图片路径
-    };
-
-if(debug){
-  
-  ifMin = '';
-  cssLoaderSet = 'css-loader';
+var publicPath = config.path.publicPath; //'/';
+var devtool, min, allChunks ,plugins = [];
+if(config.env !== 'product'){
+  min = '';
+  allChunks = false;
   devtool = '#cheap-module-eval-source-map';
-    
 }else{
-  
-  ifMin = '.min';
-  cssLoaderSet = 'css-loader?minimize';
-  extractCSSOptions.allChunks = false;
+  min = '.min';
+  allChunks = true;
   devtool = '#cheap-module-source-map';
-  
   plugins.push(
-    new UglifyJsPlugin({
+    new webpack.optimize.UglifyJsPlugin({
         compress: {
-            warnings: false
+            warnings: false,
+            drop_console: false
         },
         output: {
             comments: false
@@ -125,32 +75,22 @@ if(debug){
             except: ['$', 'exports', 'require','avalon']
         }
     }),
+    new webpack.LoaderOptionsPlugin({ minimize: true }),
     new webpack.optimize.DedupePlugin(),
     new webpack.NoErrorsPlugin()
   )
 };
 
-//css-loader用于解析，而style-loader则将解析后的样式嵌入js;  
-//API : ExtractTextPlugin.extract([notExtractLoader], loader, [config])
-extractCSS = new ExtractTextPlugin( 'css/[name]'+ ifMin +'-[hash:8].css');
-cssLoader  = extractCSS.extract('style-loader', [cssLoaderSet, 'postcss'], extractCSSOptions);
-sassLoader = extractCSS.extract('style-loader', [cssLoaderSet, 'postcss', 'sass'], extractCSSOptions);
-lessLoader = extractCSS.extract('style-loader', [cssLoaderSet, 'postcss', 'less'], extractCSSOptions);
-plugins.push(extractCSS);
 
-//config
-var config = {
-  entry: Object.assign(
-    config.entry,
-    {'vendor': vendor }
-  ),
-
+//config Object.assign()
+return {
+  entry: config.entry,
   output: {
-      path: destDir,
-      filename: 'js/[name]' + ifMin + '-[hash:8].js',
-      chunkFilename: 'js/chunk.[chunkhash:8]' + ifMin +'-[hash:8].js',//未被列在entry中，却又需要被打包出来的文件命名配置;
-      publicPath: publicPath,
-      sourceMapFilename: '[file]' + ifMin +'-[hash:8].map'
+      path: config.path.dest,
+      filename: 'js/[name]' + min + '-[hash:8].js',
+      chunkFilename: 'js/chunk.[chunkhash:8]' + min +'-[hash:8].js',//未被列在entry中，却又需要被打包出来的文件命名配置;
+      publicPath: config.path.publicPath,
+      sourceMapFilename: '[file]' + min +'-[hash:8].map'
   },
   
   devtool : devtool,
@@ -163,63 +103,139 @@ var config = {
   
   //webpack-dev-server配置
   devServer: {
-    contentBase: destDir,//本地服务器所加载的页面所在的目录
-    colors: true,//终端中输出结果为彩色
-    port : port,
+    contentBase: config.path.dest,//本地服务器所加载的页面所在的目录
+    port : config.port,
     //跳转重定向 ;必须指定 contentBase 正确,否则此配置会造成错误;
-    historyApiFallback: false,
-    inline: true//实时刷新,cmd信息;
+    historyApiFallback: true,
+    inline : true,//启动inline
+    hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
+    https: false, // true for self-signed, object for cert authority
+    noInfo: true // only errors & warns on hot reload
   },
-
+  
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.((woff2?|svg)(\?v=[0-9]\.[0-9]\.[0-9]))|(woff2?|svg|jpe?g|png|gif|ico)$/,
-        loaders: [
+        use: [
+          {
           //小于10KB的图片会自动转成dataUrl，
-          'url?limit=10000&name=img/[name]-[hash:8].[ext]',
-          'image?{bypassOnDebug:true, progressive:true,optimizationLevel:3,pngquant:{quality:"65-80",speed:4}}'
+            loader: 'url-loader',
+            options: {
+              limit : 10000,
+              name : 'img/[name]-[hash:8].[ext]'
+            }
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug : true,
+              progressive : true,
+              optipng :{
+                optimizationLevel : 3,
+              },
+              pngquant : '{quality:"65-80",speed:4}}'
+            }
+          }
         ]
       },
       {
         test: /\.((ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9]))|(ttf|eot)$/,
-        loader: 'url?limit=10000&name=fonts/[name]-[hash:8].[ext]'
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit : 10000,
+            name : 'img/[name]-[hash:8].[ext]'
+          }
+        },
       },
-      {test: /\.(tpl|ejs)$/, loader: 'ejs'},
-      {test: /\.css$/, loader: cssLoader},
-      {test: /\.scss$/, loader: sassLoader},
-      {test: /\.less$/, loader: lessLoader},
-      {test: /\.json$/, loader: "json"},
+      { 
+        test: /\.(tpl|ejs)$/, 
+        loader: 'ejs-loader' 
+      },
+      {
+        test: /\.css$/, 
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader",
+          publicPath: '../'
+        })
+      },
+      {
+        test: /\.scss$/, 
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "scss-loader",
+          publicPath: '../'
+        })
+      },
+      {
+        test: /\.less$/, 
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "less-loader",
+          publicPath: '../'
+        })
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel',
-        query: {
-          presets: ['es2015','react']
+        loader: 'babel-loader',
+        options : {
+          presets: ['es2015','latest','stage-3']
         }
-      },
-      { test: /\.vue$/, loader: 'vue-loader'}
+      }
     ]
   },
 
-  postcss: [
-    require('autoprefixer')//调用autoprefixer插件
-  ],
-  
+
   //resolve 定义应用层的模块（要被打包的模块）的解析配置
   resolve: {
-      extensions: ['', '.js', '.json','.es6','.jsx','css','.scss','png','jpg','jpeg','.tpl','.vue'],//可省略的文件扩展名
-      root: [srcDir, nodeModPath],
-      fallback : nodeModPath,
-      
-      //定义引用路径的别名
-      alias: alias
+    modules: [ "node_modules" ],
+    extensions: [ '.js', '.json','.es6','.jsx','css','.scss'],//可省略的文件扩展名
+    //定义引用路径的别名
+    alias: {
+      jquery : path.join(config.path.src , './js/lib/jquery-2.1.4.js'),
+      vue : path.join(config.path.src , './js/lib/vue-2.1.6.js'),
+    }
   },
-  //resolveLoader 用来配置 loader 模块的解析
-  resolveLoader: { fallback: nodeModPath },
-  plugins: plugins
+  
+  plugins: [
+    new webpack.BannerPlugin('作者: 空山 112093112@qq.com'),
+    //提供预定义require
+    new webpack.ProvidePlugin({
+      //Base: '../../base/index.js', //从路径获取
+      "$": "jquery", //从别名获取
+      "jQuery": "jquery",
+      "Vue" :  "vue"
+    }),
+
+    //提取公共模块
+    new webpack.optimize.CommonsChunkPlugin({
+      name: ['vendor', 'manifest']
+    }),
+    //HTML处理
+    new HtmlWebpackPlugin({
+      template: config.path.html,
+      filename: 'index.html',
+      showErrors: true,
+      inject: 'body', //inject :true，js会注入到html任何位置
+      chunks: ['manifest','vendor','index']
+    }),
+    //配置超全局变量[包括业务代码]
+    new webpack.DefinePlugin({
+        env : config.env
+    }),
+    //热加载
+    new webpack.HotModuleReplacementPlugin(),
+    //根据模块调用次数，给模块分配ids，常被调用的ids分配更短的id，使得ids可预测，降低文件大小，
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    //css
+    new ExtractTextPlugin({
+     filename: 'css/[name]'+ min +'-[hash:8].css',
+     disable: false,
+     allChunks: allChunks
+    })
+  ].concat(plugins)
 }
-
-return config;
-
 }

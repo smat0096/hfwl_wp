@@ -19,23 +19,25 @@ var env = {
         default: {env: process.env.NODE_ENV || 'debug'}
     };
 env = minimist(process.argv.slice(2), env).env; 
-//env: debug[默认] 本地开发 , build 本地编译构建 , server 服务器构建[替换link和src] 
+//env: 
+//debug[默认] 本地开发 webpack-dev-server , 
+//build 本地编译构建 browser-sync , 
+//product 服务器构建[替换url并压缩] 
 
 //设置路径
 var config = require('./config.js');
-config.browser = env === 'debug' ? config.src : config.dest;
-config.debug === 'debug' ? true : false;
+config.env = env;
+gutil.log('mode : ', env);
+(env === 'debug' || env === 'build') && (config.path.publicPath = '');
 //配置webpack
-
-
 var webpackCompiler = webpackConfig( config );
 
 //check code
 gulp.task('hint', function () {
     var jshint = require('gulp-jshint')
     var stylish = require('jshint-stylish')
-
-    return gulp.src(config.srcJs)
+    return;
+    return gulp.src(config.path.srcBabel)
         .pipe(jshint())
         .pipe(jshint.reporter(stylish));
 })
@@ -43,7 +45,7 @@ gulp.task('hint', function () {
 //browser-sync 热测试
 gulp.task('browser-sync',function() {
   var files = [
-    path.join(config.browser, '/**')
+    path.join( config.path.dest, '/**')
   ];
   browserSync.init(files,{
     injectChanges: false,
@@ -53,9 +55,9 @@ gulp.task('browser-sync',function() {
     notify: false, //禁止通知
     reloadDebounce: 500, //热重载间隔
     server: {
-      baseDir: config.browser,
-      //index: config.browserIndex,
-      //startPath: config.browserStartPath,
+      baseDir: config.path.dest,
+      //index: config.path.browserIndex,
+      //startPath: config.path.browserStartPath,
       port :  config.port
     }
   });
@@ -64,7 +66,7 @@ gulp.task('browser-sync',function() {
 //清理目录
 gulp.task("clean", ['hint'], function (done) {
     //return cache.clearAll(done);
-    return gulp.src(config.dest, {
+    return gulp.src(config.path.dest, {
         read: false
     })
     .pipe(clean({force: true}));
@@ -89,28 +91,27 @@ gulp.task('webpack-dev-server',  function (done) {
           hot: true , 
           stats: { colors: true },
           historyApiFallback: true
-    }).listen(webpackCompiler.devServer.port, 'localhost', function (err) {
+    }).listen(config.port, 'localhost', function (err) {
         if (err) {
-            throw new gutil.PluginError('webpack-dev-server', err);
+            throw new gutil.PluginError('webpack-dev-server 启动失败:', err);
         }
-        gutil.log('[webpack-dev-server]', 'http://localhost:' +config.port+'/index.html');
+        gutil.log('[webpack-dev-server 启动成功:]', 'http://localhost:' +config.port);
     });
 });
 
 gulp.task('browser-sync-server',['webpack-build', 'watch'],function(){
-  gulp.start('browser-sync')
+  return gulp.start('browser-sync')
 });
 
 gulp.task('upload', function () {
-    var _conf = env === 'server' ? config.remoteServer : config.localServer;
-    return gulp.src(path.join(config.dest , './**'))
-        //.pipe(sftp(_conf))
-        .pipe(ftp(_conf))
+    var _conf = env === 'remote' ? config.remoteServer : config.localServer;
+    return gulp.src(path.join(config.path.dest , './**'))
+        .pipe(sftp(_conf))
         .pipe(gutil.noop());
 });
 
 gulp.task('watch', function () {  
-   gulp.watch(config.srcAll, ['webpack-build']);  
+   return gulp.watch(config.path.srcAll, ['webpack-build']);  
 });
 
 gulp.task('product',['webpack-build'],function(){

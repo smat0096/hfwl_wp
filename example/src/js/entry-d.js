@@ -1,0 +1,1 @@
+document.write('entry-d的输出信息<br>');
