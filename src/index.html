@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>恒丰物流平台</title>
+        <meta name="description" content="不超过150个字符">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <script>
+          ;(function(){
+            window.addEventListener('load',function(){
+              setTimeout(function(){
+                 $ && seajs && Vue && VueRouter && Vuex || window.location.reload(false);
+              },1e2);
+              var loadfail = document.getElementById('loadfail');
+              loadfail && (loadfail.innerText ='');
+              setTimeout(function(){
+                 window.__LOADED || window.location.reload(false);
+                 loadfail && (loadfail.innerText ='加载失败,请重启应用');
+              },6e3);
+            }, false)
+          })();
+        </script>
+        <link rel="shortcut icon" href="./staticBase/img/favicon.ico" /> 
+        <!-- useref合并所需注释-->
+        <!-- build:css ./staticBase/css/main.css -->
+        <link rel="stylesheet" type="text/css" href="./staticBase/js/lib/jquery-weui/lib/weui.min.css" />
+        <link rel="stylesheet" type="text/css" href="./staticBase/js/lib/jquery-weui/css/jquery-weui.css" />
+        <link rel="stylesheet" type="text/css" href="./staticBase/css/createmap.css" />
+        <link rel="stylesheet" href="./staticBase/css/common.css" >
+        <link rel="stylesheet" href="./staticBase/css/find.css" >
+        <link rel="stylesheet" href="./staticBase/css/fhRecord.css" >
+        <link rel="stylesheet" href="./staticBase/css/fhIssue_new.css">
+        <link rel="stylesheet" href="./staticBase/css/carlist.css" >
+        <link rel="stylesheet" href="./staticBase/css/ks-page.css" />
+        <!-- endbuild -->
+
+    </head>
+<body ontouchstart>
+<div class="wrap index" id="index">
+
+  <!-- mode="out-in"-->
+    <!--keep-alive-->
+      <!-- <lazy-load> -->
+  <transition :name="transitionName">
+        <router-view :user="user"></router-view>
+  </transition>
+      <!-- </lazy-load> -->
+
+  <div class="loading-page" v-show="!!isLoading" style="top: 0;">
+    <div class='loading-page_center'>
+        <div>
+          <div class="loading-image"></div>
+          <!--<img src="./staticBase/img/loading.png" alt="" style="width:50%" />-->
+        </div>
+        <div>
+          <div class="ball-triangle-path">
+            <div></div><div></div><div></div>
+          </div>
+          <!--<i class="weui-loading"></i> -->
+          <span class="weui-loadmore__tips c_o">数据加载中</span>
+        </div>
+        <a id="loadfail" class="weui-loadmore__tips c_o"></a>
+    </div>
+  </div>
+
+<!--   <loading-page 
+    v-show="isLoading"
+    :loading-icon='loadingIcon'
+    :loading-text="loadingText"
+  ></loading-page> -->
+  
+  <footer-nav :user = "user" ></footer-nav>
+
+  <!-- 地图 -->
+  <map-baidu></map-baidu>
+
+</div>
+<script src="https://api.map.baidu.com/api?v=2.0&&ak=DNbYBM3B9ANr8MlAPOiGVGhTU6b5B2z5"></script>
+<!-- build:js ./staticBase/js/lib/libs.js -->
+<script type="text/javascript" src="./staticBase/js/lib/lib.js"></script>
+<script type="text/javascript" src="./staticBase/js/lib/jquery-weui/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="./staticBase/js/lib/jquery-weui/lib/fastclick.min.js"></script>
+<script type="text/javascript" src="./staticBase/js/lib/vue/vue-2.2.0.min.js"></script>
+<script type="text/javascript" src="./staticBase/js/lib/vue/vuex.min.js"></script>
+<script type="text/javascript" src="./staticBase/js/lib/vue/vue-router-2.1.1.min.js"></script>
+<!-- endbuild -->
+<!-- <script type="text/javascript" src="./staticBase/js/lib/vue/vue-lazyload.js"></script> -->
+<script type="text/javascript" src="./staticBase/js/base.js"></script>
+<script type="text/javascript">
+  seajs.use("pages/index.js" , function(){
+  })
+</script>
+<iframe src="./manifest.html" frameborder="0" style="display:none"></iframe>
+</body>
+</html>

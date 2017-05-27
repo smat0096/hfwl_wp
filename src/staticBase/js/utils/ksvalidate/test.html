@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>测试validate</title>
+        <meta name="description" content="不超过150个字符">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    </head>
+<body ontouchstart>
+<div class="wrap carport-add" id="carport-add">
+      <form action="" id="form">
+            <p></p><br><br>
+            <p><input class="weui-input" type="text"  maxlength="11" placeholder="请输入司机姓名"  name="name"  autocomplete="off"></p>
+            <p><input class="weui-input" type="text" maxlength="19" placeholder="请输入司机手机号码" name="mobile"  autocomplete="off"></p>
+            <p><textarea
+              name = "comment"
+              id="carport-add_comment"
+              class="weui-textarea" 
+              placeholder="请输入备注信息" 
+              rows="3"
+              maxlength="60"
+              v-model="driverComment"
+              ></textarea></p><br>
+            <p>
+              <input type="submit" value="提交">
+              <a href="javascript:;" class="btn f18" id="submit">确定</a>
+            </p>
+      </form>
+</div>
+<!-- 引入js文件 -->
+<script type="text/javascript" src="../../lib/sea/sea.js"></script>
+<script type="text/javascript" src="../../lib/jquery-weui/lib/jquery-2.1.4.js"></script>
+<script type="text/javascript">
+  seajs.use("./test" , function(){ })
+</script>
+</html>

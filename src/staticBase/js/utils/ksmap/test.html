@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>测试ksmap</title>
+        <meta name="description" content="不超过150个字符">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="shortcut icon" href="./img/favicon.ico" /> 
+        <!-- <link rel="stylesheet" type="text/css" href="./staticBase/css/common-hc.css"> -->
+        <style>
+          body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";font-size:14px;}
+          #bmap {width:100%;height:300px;}
+        </style>
+      
+    </head>
+<body ontouchstart>
+
+<div class="weui-tab wrap find_goods" id="ks_find_goods">
+  <div></div>
+  <div id="bmap"></div>
+</div>
+    <script src="https://api.map.baidu.com/api?v=2.0&&ak=DNbYBM3B9ANr8MlAPOiGVGhTU6b5B2z5"></script>
+    <script type="text/javascript" src="../lib/sea/sea.js"></script>
+    <script type="text/javascript">
+      //seajs.use("./staticConsignorFindMS/js/demo_city" , function(find){
+      //seajs.use("find/find" , function(find){find.init();
+      seajs.use("./ks_map" , function(KsMap){
+        var ksmap = KsMap();
+        // ksmap.getUserPositionByIp(function(res){ console.log(res) })
+        // ksmap.getCurrentPosition(function(res){ console.log(res) })
+        // ksmap.getUserCityHash(function(res){ console.log(res) })
+        ksmap.getCurrentPosition(function(res){ console.log(res) })
+        //ksmap.getUserDistances([{lng: 121.487899, lat: 31.249162}],function(res){ console.log(res) })
+      })
+    </script>
+
+</body>
+</html>

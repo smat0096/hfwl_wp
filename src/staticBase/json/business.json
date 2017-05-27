@@ -1,0 +1,23 @@
+{
+  "status": "OK",
+  "content": {
+    "page": 1,
+    "pageSize": 8,
+    "messages": [
+      {
+        "createTime": 1488338275000,
+        "userName": "用户名1",
+        "userId": 190697,
+        "auditStatus": 1,
+        "auditType" : 1,
+        "avatarUrl": "./staticBase/img/avatar.jpg",
+        "realName": "丁赵军",
+        "idCard": "431003198207010019",
+        "companyName": "湖南省郴州市某某某某公司",
+        "mobile": "13573999999"
+      }
+    ]
+  },
+  "errorCode": 0,
+  "errorMsg": ""
+}

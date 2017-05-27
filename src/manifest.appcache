@@ -1,0 +1,137 @@
+CACHE MANIFEST
+#第一行一定是 CACHE MANIFEST
+#version 2017-05-27-4
+#web服务器需要设置配置: AddType text/cache-manifest .appcache
+
+CACHE:
+# 指定你要浏览器进行离线存储的文件列表，一个文件一行,默认强制缓存入口文件[manifest.html]
+  ./staticBase/css/main.css
+  ./staticBase/js/lib/libs.js
+
+  ./staticBase/img/loading.png
+  ./staticBase/img/favicon.ico
+  ./staticBase/img/avatar.jpg
+  ./staticBase/img/bg.png
+  ./staticBase/img/car.png
+  ./staticBase/img/icon_1.png
+  ./staticBase/img/common.png
+  ./staticBase/images/common.png
+
+  ./staticBase/js/city/chose_city.js
+  ./staticBase/js/city/city_plug.js
+  ./staticBase/js/city/city_plug_ks.js
+  ./staticBase/js/city/demo_city.js
+  ./staticBase/js/city/positionHash.js
+  ./staticBase/js/city/site.js
+  ./staticBase/js/city/siteHash.js
+  ./staticBase/js/city/siteHashDo.js
+
+  ./staticBase/js/component/component.js
+  ./staticBase/js/component/about/depart-detail.js
+  ./staticBase/js/component/about/depart-list.js
+  ./staticBase/js/component/business/business-list.js
+  ./staticBase/js/component/carport/car-detail.js
+  ./staticBase/js/component/carport/car-list.js
+  ./staticBase/js/component/common/header-back.js
+  ./staticBase/js/component/common/header-choose.js
+  ./staticBase/js/component/common/header-choose_plug.js
+  ./staticBase/js/component/common/lazy-load.js
+  ./staticBase/js/component/common/loading-page.js
+  ./staticBase/js/component/common/loadmore-link.js
+  ./staticBase/js/component/common/loadmore-scroll.js
+  ./staticBase/js/component/common/picker-footer.js
+  ./staticBase/js/component/common/pull-to-refresh.js
+  ./staticBase/js/component/common/road_hourse.js
+  ./staticBase/js/component/common/search-bar.js
+
+  ./staticBase/js/component/find/find-detail.js
+  ./staticBase/js/component/find/findgoods-list.js
+
+  ./staticBase/js/component/index/footer-nav.js
+  ./staticBase/js/component/index/map.js
+
+  ./staticBase/js/component/send/footer-batch.js
+  ./staticBase/js/component/send/sendgoods-listR.js
+  ./staticBase/js/component/user/user-detail-head.js
+  ./staticBase/js/component/user/validate_options.js
+
+  ./staticBase/js/pages/about/aboutPage.js
+  ./staticBase/js/pages/about/depart.js
+  ./staticBase/js/pages/about/idCard.js
+  ./staticBase/js/pages/about/mileage.js
+
+  ./staticBase/js/pages/business/businessR.js
+
+  ./staticBase/js/pages/carport/carportAdd.js
+  ./staticBase/js/pages/carport/carport-common.js
+  ./staticBase/js/pages/carport/carportContact.js
+  ./staticBase/js/pages/carport/carportKnown.js
+  ./staticBase/js/pages/carport/carportSource.js
+
+  ./staticBase/js/pages/find/findGoods.js
+  ./staticBase/js/pages/find/findgoods-common.js
+  ./staticBase/js/pages/find/findGoodsContact.js
+
+  ./staticBase/js/pages/home/home.js
+  ./staticBase/js/pages/send/send-common.js
+  ./staticBase/js/pages/send/sendGoodsP.js
+  ./staticBase/js/pages/send/sendGoodsR.js
+  ./staticBase/js/pages/send/sendGoodsU.js
+
+  ./staticBase/js/pages/user/user-audite-driver.js
+  ./staticBase/js/pages/user/user-audite-sender.js
+  ./staticBase/js/pages/user/user-comment-car.js
+  ./staticBase/js/pages/user/user-comment-self.js
+  ./staticBase/js/pages/user/user-common.js
+  ./staticBase/js/pages/user/userSetting.js
+
+  ./staticBase/js/plug/carNumber.js
+  ./staticBase/js/plug/setLayerData.js
+  ./staticBase/js/plug/siteHashDo.js
+  ./staticBase/js/plug/staticTXT.js
+
+  ./staticBase/js/router/router-async.js
+  ./staticBase/js/router/router-sync.js
+
+  ./staticBase/js/store/index.js
+  ./staticBase/js/store/modules/map.js
+
+  ./staticBase/js/tpl/city_plug.js
+  ./staticBase/js/tpl/detail.js
+  ./staticBase/js/tpl/dialog.js
+  ./staticBase/js/tpl/driver_item.js
+  ./staticBase/js/tpl/label.js  
+
+  ./staticBase/js/dialog/blueDialog.js
+  ./staticBase/js/dialog/dialog.js
+  ./staticBase/js/dialog/floor.js
+
+  ./staticBase/js/utils/ks_base.js
+  ./staticBase/js/utils/ks_common.js
+  ./staticBase/js/utils/ks_dom.js
+  ./staticBase/js/utils/ks_utils.js
+
+  ./staticBase/js/utils/kscitychoose/ks_city_choose.js
+  ./staticBase/js/utils/ksmap/ks_map.js
+  ./staticBase/js/utils/kspicker/ks_picker.js
+  ./staticBase/js/utils/ksvalidate/ks_validate.js
+  ./staticBase/js/utils/ksvalidate/ks_validate_regs.js
+
+  ./staticBase/js/common.js
+  ./staticBase/js/commonBase.js
+  ./staticBase/js/setLayerData.js
+  ./staticBase/js/staticTXT.js
+
+  ./staticConsignorSendMS/js/fhIssue_new.js
+  ./staticConsignorSendMS/js/floor.js
+
+#跟CACHE相反,指定浏览器一定要通过网络访问的文件列表,使用通配符捕捉所有
+#负责配置和错误控制的刷新页面,不进行缓存
+NETWORK:
+  *
+  ./staticBase/js/base.js
+  ./staticBase/js/pages/index.js
+  https://api.map.baidu.com/api?v=2.0&&ak=DNbYBM3B9ANr8MlAPOiGVGhTU6b5B2z5
+
+#如果通过网络访问失败了，就去访问紧跟着的那个在本地缓存好的文件文件
+FALLBACK: 

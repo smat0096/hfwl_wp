@@ -1,0 +1,26 @@
+{
+      "content": {
+            "id": 2422787,
+            "userId": 57480,
+            "fromId": 341010,
+            "from": "广西,百色,乐业",
+            "toId": 731001,
+            "to": "台湾,新竹县,竹北市",
+            "content": "百色乐业 -> 新竹县竹北市，有其他1000吨，求4.2米平板车，1元/吨",
+            "resendCount": 0,
+            "resendInterval": 0,
+            "cargoType": "其他",
+            "numLoad": 1000.0,
+            "load": "吨",
+            "numPrice": 1.0,
+            "price": "元/吨",
+            "carType": "平板",
+            "carLen": "4.2米",
+            "hiddenForLocal": 0,
+            "state": 0,
+            "hiddenForPlaceIds": ""
+      },
+      "status": "OK",
+      "errorCode": "666666",
+      "errorMsg": "666666"
+}

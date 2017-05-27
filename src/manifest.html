@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN" manifest="./manifest.appcache"><!-- manifest="./manifest.appcache" -->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        <script>
+          (function(){
+            window.addEventListener('load',function(){
+              var appCache = window.applicationCache;
+              //appCache.update();//使用 update() 和 swapCache() 不会立刻向用户提供更新的资源
+              appCache.addEventListener("downloading",function(){
+                console.log("manifest 需要更新缓存，或者第一次下载资源时 downloading,status:"+appCache.status);
+              },false);
+              appCache.addEventListener('noupdate',function(){
+                console.log('manifest 配置文件无更新, noupdate: status:'+appCache.status);
+              },false);
+              appCache.addEventListener('updateready',function(){
+                if (appCache.status == appCache.UPDATEREADY) {
+                  appCache.swapCache()
+                  console.log('manifest 配置有文件更新, updateready: status:'+appCache.status);
+                  setTimeout(refresh,1e2);
+                }
+              },false);
+              appCache.addEventListener("error",function(){
+                console.error("错误: manifest配置文件加载失败,此时客户端缓存配置自动回滚到上一次正确加载, error: status:"+appCache.status);
+              },false);
+              appCache.addEventListener("obsolete",function(){
+                console.error("错误: manifest配置文件缺失,只加载一次,刷新页面后缓存失效,obsolete: status:"+appCache.status);
+                setTimeout(refresh,0);
+              },false);
+            }, false);
+
+            function refresh(param){
+              setTimeout(function(){
+                window.parent.location.reload(false); 
+              },0);
+            };
+
+            function getParentUrlParam (name,type) {
+              var str;
+              var l = window.parent.location;
+              if(type === 'hash'){
+                str = l.hash;
+              }else if(type === 'search'){
+                str = l.search;
+              }else{
+                str = l.search;//href
+              };
+              str = new RegExp("(^|&|\\?)" + name + "=([^&$]*)",'i').exec(str.substr(1));
+              if(str){
+                try{
+                  str = decodeURIComponent(str[2]);
+                }catch(error){
+                  str = '';
+                  console.error('非法URI字符串',error);
+                }
+              }else{
+                str = '';
+              }
+              return str;
+            };
+          })();
+        </script>
+    </head>
+<body>
+</body>
+</html>

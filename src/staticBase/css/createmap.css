@@ -1,0 +1,101 @@
+.marker_icon{
+    display: inline-block;
+    vertical-align: middle;
+}
+.marker_icon_1_1{
+	background: url("../img/cursor.gif");
+	background-position: 4px 4px;
+}
+.marker_icon_1_2{
+	background: url("../img/cursor.gif");
+	background-position: -20px 4px;
+}
+.marker_icon_1_3{
+	background: url("../img/cursor.gif");
+	background-position: -42px 4px;
+}
+.marker_icon_1_4{
+	background: url("../img/cursor.gif");
+	background-position: -65px 4px;
+}
+.marker_icon_1_5{
+	background: url("../img/cursor.gif");
+	background-position: -88px 4px;
+}
+.marker_icon_1_6{
+	background: url("../img/cursor.gif");
+	background-position: -110px 4px;
+}
+.marker_icon_2_1{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: 0 -21px;
+}
+
+.marker_icon_2_2{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: -22px -21px;
+}
+.marker_icon_2_3{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: -45px -21px;
+}
+.marker_icon_2_4{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: -68px -21px;
+}
+.marker_icon_2_5{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: -91px -21px;
+}
+.marker_icon_2_6{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: -114px -21px;
+}
+.marker_icon_3_1{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: 0 -46px;
+}
+.marker_icon_3_2{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: -22px -46px;
+}
+.marker_icon_3_3{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: -45px -46px;
+}
+.marker_icon_3_4{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: -68px -46px;
+}
+.marker_icon_3_5{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: -91px -46px;
+}
+.marker_icon_3_6{
+	width: 20px !important;
+	height: 25px !important;
+	background: url("../img/cursor.gif");
+	background-position: -114px -46px;
+}

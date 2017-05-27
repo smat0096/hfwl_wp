@@ -1,0 +1,40 @@
+{
+  "status": "OK",
+  "content": {
+    "startIndex": 0,
+    "pageNumber": 1,
+    "pageSize": 8,
+    "totalNumber": 0,
+    "messages": [
+      {
+        "destinations": "2216",
+        "createTime": 1488338275000,
+        "load": 40.0,
+        "carLen": 17.5,
+        "carId": 170182,
+        "lng": "113.350306",
+        "userName": "用户名1",
+        "distance": 0.0,
+        "trailerAxleType": "半挂二拖三",
+        "lastLocateTime": 1490232658000,
+        "lastLocateType": 0,
+        "userId": 190697,
+        "carType": "高低平板",
+        "plateNumber": "豫P4Z171",
+        "lat": "23.279142",
+        "idCard": null,
+        "lastCityId": 3301,
+        "lastAddress": "广东省广州市白云区大源北路靠近合昌物流园",
+        "myVehicleComment": "备注文字备注文字",
+        "vipType": 1,
+        "destinationsName": "周口",
+        "mobileList": [],
+        "comment": "备注文字备注文字",
+        "avatarUrl": "https://wlqq4driver.b0.upaiyun.com/uploaded/2015-01/03/豫P4Z171/full-shot-photo.jpg",
+        "mobile": "1535761****",
+        "isKnown" : 1
+      }
+    ]
+  },
+  "errorCode": 0
+}
