@@ -2,15 +2,13 @@
 var path = require('path'),
     glob = require('glob'),
     gutil = require('gulp-util');
-    
+
 var srcPath = './src/',
     destPath = './dest/';
 
-var paths = {
-
-    server : '/addons/ewei_shopv2/plugin/wuliu/template/mobile/default/hfwl/',
-    seaMain : path.join(srcPath , './staticBase/js/pages/main.js'),
-
+var config = {
+    
+    port : 3000,
     src : srcPath,
     srcAll : path.join(srcPath , './**'),
 
@@ -18,7 +16,11 @@ var paths = {
     srcHtml_index : path.join(srcPath , './index.html'),
 
     srcJs : [path.join(srcPath , './staticBase/js/**/*.js'),'!'+path.join(srcPath , './**/lib/*.js')],
-    srcJsStatic : [
+    entry : {
+        'base' : path.join(srcPath , 'staticBase/js/base.js'),
+        'index' : path.join(srcPath , 'staticBase/js/pages/index.js')
+    },
+    vender : [
         path.join(srcPath , 'staticBase/js/lib/lib.js'),
         path.join(srcPath , 'staticBase/js/lib/jquery-weui/js/jquery-weui.min.js'),
         path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/fastclick.js'),
@@ -48,15 +50,17 @@ var paths = {
     srcImg : [path.join(srcPath , './img/**')],
 
     dest : destPath,
-
     destStatic : path.join(destPath , './static'),
     destJsStatic : path.join(destPath , './staticBase/js/lib'),
     destCss : path.join(destPath , './staticBase/css'),
     destImg : path.join(destPath , './img'),
 
+    //browser-sync 配置
     browserIndex :'index.html', // 
     browserStartPath :'/loading.html', //
 
+    //远程服务器
+    publicPath : '/addons/ewei_shopv2/plugin/wuliu/template/mobile/default/hfwl/',
     remoteServer : {
         host: '211.149.183.58',
         port : '21',
@@ -70,6 +74,7 @@ var paths = {
         }
     },
 
+    //局域网服务器
     localServer : {
         host: '192.168.56.130',
         port : '80',
@@ -78,4 +83,18 @@ var paths = {
         pass: 'password'
     }
 };
-module.exports = paths;
+//遍历入口JS文件
+var entries= function (srcDir) {
+  var jsDir = path.resolve(srcDir, 'js')
+  var entryFiles = glob.sync(jsDir + '/*.{js,jsx}')
+  var map = {};
+
+  for (var i = 0; i < entryFiles.length; i++) {
+      var filePath = entryFiles[i];
+      var filename = filePath.substring(filePath.lastIndexOf('\/') + 1, filePath.lastIndexOf('.'));
+      map[filename] = filePath;
+  }
+  return map;
+};
+
+module.exports = config;

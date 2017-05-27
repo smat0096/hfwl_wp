@@ -5,7 +5,7 @@ define("base",[],function(){
   window._G_={
     //生产模式 0 本地 [调试环境]; 1 本地文件路径,服务器数据接口[调试环境]; 2.服务器文件路径,服务器数据接口 [生产环境]
     mode : {
-      status : 2,
+      status : 0,
       debug : 0,
       build : 1,
       server : 2,
