@@ -28,7 +28,7 @@ config.debug === 'debug' ? true : false;
 //配置webpack
 
 
-//var webpackCompiler = webpackConfig( config );
+var webpackCompiler = webpackConfig( config );
 
 //check code
 gulp.task('hint', function () {

@@ -79,7 +79,7 @@ var plugins = [
   new CommonsChunkPlugin({
     name: 'vendor',
     minChunks: Infinity
-  })
+  }),
   //HTML处理
   new HtmlWebpackPlugin({
     template: config.srcHtml_index,
