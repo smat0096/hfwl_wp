@@ -8,8 +8,8 @@ var webpackDevServer = require('webpack-dev-server');
 var browserSync = require('browser-sync').create(); //移动端浏览器同步热更新
 var webpackConfig = require('./webpack/webpack.config.base.js');
 var config = require('./webpack/config.js');
-
 //用于gulp传递参数
+var runSequence = require('run-sequence');//同步执行
 var minimist = require('minimist');
 var gutil = require('gulp-util');
 var clean = require('gulp-clean');
@@ -113,8 +113,8 @@ gulp.task('watch', function () {
 });
 
 gulp.task('reload', ['build'], function(done){
-  browserSync.reload();
   gulp.start('watch');
+  browserSync.reload();
   done();
 });
 
