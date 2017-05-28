@@ -42,27 +42,6 @@ gulp.task('hint', function () {
         .pipe(jshint.reporter(stylish));
 })
 
-//browser-sync 热测试
-gulp.task('browser-sync',function() {
-  var files = [
-    path.join( config.dest.path, '/**')
-  ];
-  browserSync.init(files,{
-    injectChanges: false,
-    watchOptions: {
-        ignoreInitial: true
-    },
-    notify: false, //禁止通知
-    reloadDebounce: 500, //热重载间隔
-    server: {
-      baseDir: config.dest.path,
-      //index: config.browser.index,
-      //startPath: config.browser.startPath,
-      port :  config.port
-    }
-  });
-});
-
 //清理目录
 gulp.task("clean", ['hint'], function (done) {
     //return cache.clearAll(done);
@@ -73,10 +52,10 @@ gulp.task("clean", ['hint'], function (done) {
 });
 
 //run webpack build
-gulp.task('webpack-build', ['clean'], function (done) {
+gulp.task('build', ['clean'], function (done) {
     webpack( webpackCompiler , function (err, stats) {
         if (err) throw new gutil.PluginError('webpack', err)
-        gutil.log('[webpack-build]', stats.toString({colors: true}))
+        gutil.log('[build]', stats.toString({colors: true}))
         done()
     });
 });
@@ -102,8 +81,17 @@ gulp.task('webpack-dev-server',  function (done) {
     });
 });
 
-gulp.task('browser-sync-server',['webpack-build', 'watch'],function(){
-  return gulp.start('browser-sync')
+//browser-sync 热测试
+gulp.task('browser-sync',['build'],function() {
+  browserSync.init({
+    server: {
+      baseDir: config.dest.path,
+      //index: config.browser.index,
+      //startPath: config.browser.startPath,
+      port :  config.port
+    }
+  });
+  gulp.start('watch');
 });
 
 gulp.task('upload', function () {
@@ -114,10 +102,23 @@ gulp.task('upload', function () {
 });
 
 gulp.task('watch', function () {  
-   //return gulp.watch(path.join(config.src.path,'./**'), ['webpack-build']);  
+   return gulp.watch(
+    [
+      path.join(config.src.path,'./**/*.js'), 
+      path.join(config.src.path,'./**/*.css'), 
+      path.join(config.src.path,'./**/*.html'), 
+    ],
+    ['reload']
+  );  
 });
 
-gulp.task('product',['webpack-build'],function(){
+gulp.task('reload', ['build'], function(done){
+  browserSync.reload();
+  gulp.start('watch');
+  done();
+});
+
+gulp.task('product',['build'],function(){
   //return gulp.start('upload')
 });
 
@@ -125,7 +126,7 @@ gulp.task('default',function(){
   if( env === 'dev'){
     gulp.start('webpack-dev-server');
   } else if( env === 'browser'){
-    gulp.start('browser-sync-server');
+    gulp.start('browser-sync');
   } else if( env === 'product'){
     gulp.start('product');
   }
