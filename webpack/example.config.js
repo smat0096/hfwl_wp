@@ -3,8 +3,8 @@ var path = require('path'),
     glob = require('glob'),
     gutil = require('gulp-util');
 
-var srcPath = path.resolve('./src/'),
-    destPath = path.resolve(process.cwd(), './dest/'), //绝对路径 ,不要用 __dirname 文件所在目录
+var srcPath = path.resolve('./example/src/'),
+    destPath = path.resolve(process.cwd(), './example/dest/'), //绝对路径 ,不要用 __dirname 文件所在目录
     nodeModPath = path.resolve(process.cwd(), './node_modules');
 
 var config = {
@@ -24,7 +24,7 @@ var config = {
     },
     dest : {
       path : destPath,
-      static : path.resolve(destPath, './static/'),
+      static : path.resolve(destPath, './example/static/'),
     },
     //browser-sync 配置
     browser: {
@@ -32,27 +32,28 @@ var config = {
       startPath : '/loading.html'
     },
     alias : {
-          'jquery' : path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/jquery-2.1.4.js'),
-          'art-template' : path.join(srcPath , 'staticBase/js/lib/art-template/template-web.js'),
-          'jquery-weui' : path.join(srcPath , 'staticBase/js/lib/jquery-weui/js/jquery-weui.min.js'),
-          'fastclick' : path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/fastclick.js'),
-          'vue' : path.join(srcPath , 'staticBase/js/lib/vue/vue-2.2.0.min.js'),
-          'vuex' : path.join(srcPath , 'staticBase/js/lib/vue/vuex.min.js'),
-          'vue-router' : path.join(srcPath , 'staticBase/js/lib/vue/vue-router-2.1.1.min.js')
+      jquery : path.join(srcPath , './js/lib/jquery-2.1.4.js'),
+      vue : path.join(srcPath , './js/lib/vue-2.1.6.js'),
+      //lodash : path.join(srcPath , './js/lib/lodash-4.17.2.js'),
     },
     entry : {
       'index' : [
-          path.join(srcPath , 'staticBase/js/base.js'),
-          path.join(srcPath , 'staticBase/js/pages/index.js')
+           path.join(srcPath , './js/entry-a.js'),
+           path.join(srcPath , './js/entry-b'),
+           path.join(srcPath , './js/entry-c.js'),
+           path.join(srcPath , './js/entry-d'),
+          // path.join(srcPath , 'staticBase/js/base.js'),
+          // path.join(srcPath , 'staticBase/js/pages/index.js')
       ],
       'vendor' : [
-          path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/jquery-2.1.4.js'),
-          path.join(srcPath , 'staticBase/js/lib/art-template/template-web.js'),
-          path.join(srcPath , 'staticBase/js/lib/jquery-weui/js/jquery-weui.min.js'),
-          path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/fastclick.js'),
-          path.join(srcPath , 'staticBase/js/lib/vue/vue-2.2.0.min.js'),
-          path.join(srcPath , 'staticBase/js/lib/vue/vuex.min.js'),
-          path.join(srcPath , 'staticBase/js/lib/vue/vue-router-2.1.1.min.js')
+          path.join(srcPath , './js/lib/jquery-2.1.4'),
+          path.join(srcPath , './js/lib/vue-2.1.6'),
+          // path.join(srcPath , 'staticBase/js/lib/lib.js'),
+          // path.join(srcPath , 'staticBase/js/lib/jquery-weui/js/jquery-weui.min.js'),
+          // path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/fastclick.js'),
+          // path.join(srcPath , 'staticBase/js/lib/vue/vue-2.2.0.min.js'),
+          // path.join(srcPath , 'staticBase/js/lib/vue/vuex.min.js'),
+          // path.join(srcPath , 'staticBase/js/lib/vue/vue-router-2.1.1.min.js')
       ]
     },
     //远程服务器

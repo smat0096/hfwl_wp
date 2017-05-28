@@ -164,7 +164,9 @@ var webpackConfBase = {
       "$": "jquery", //从别名获取
       "jQuery": "jquery",
       "Vue" :  "vue",
-      "_" :  "lodash"
+      "Vuex" :  "vuex",
+      "VueRouter" :  "vue-router",
+      //"_" :  "lodash"
     }),
     //根据模块调用次数，给模块分配ids，常被调用的ids分配更短的id，使得ids可预测，降低文件大小，
     new webpack.optimize.OccurrenceOrderPlugin(),
@@ -218,18 +220,20 @@ var webpackConfBase = {
     ])
   ]
 }
+
+var webpackConfAdd = {};
 switch(config.env){
   case 'dev' : 
-    webpackConfBase = merge(webpackConfBase,webpackConfDev(config));
+    webpackConfAdd = webpackConfDev(config);
     break;
   case 'browser' : 
-    webpackConfBase = webpackConfBase;
     break;
   case 'product' : 
-    webpackConfBase = merge(webpackConfBase,webpackConfProd(config));
+    webpackConfAdd = webpackConfProd(config);
     break;
   default:
     break;
 } 
-return webpackConfBase;
+return merge(webpackConfBase,webpackConfAdd);
+
 }
