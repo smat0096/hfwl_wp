@@ -1,4 +1,4 @@
-document.write(' entry-a的输出信息<br>');
+document.write(' entry-a的输出信息1<br>');
 //require("!style!css!./style.css") // 载入 style.css
 require('../css/style-a.css');
 //import './style.css'; 这样引用会失败,原因未知
@@ -21,5 +21,5 @@ imgNode.src = img;
 body.insertBefore(imgNode,firstNode);
 
 console.log($);
-$('#jjj').attr('id','app').text('3333这是JQ写入的内容');
+$('#jjj').attr('id','app').text('11这是JQ写入的内容');
 console.log(Vue);

@@ -5,8 +5,7 @@ var path = require('path');
 module.exports = function(config){
 return {
   output: {
-      publicPath: config.publicPath,
-      sourceMapFilename: '[file]-[hash].map'
+      publicPath: config.publicPath
   },
   devtool : '#cheap-module-source-map',
   plugins: [
@@ -19,7 +18,7 @@ return {
           comments: false
       },
       mangle: {
-          except: ['$', 'exports', 'require','avalon']
+          except: ['$', 'exports', 'require', 'avalon']
         }
     }),
     new webpack.LoaderOptionsPlugin({ minimize: true }),

@@ -4,7 +4,6 @@ var path = require('path');
 module.exports = function(config){
 return {
   devtool : '#cheap-module-eval-source-map',
-  //webpack-dev-server配置
   devServer: {
     contentBase: config.dest.path,//本地服务器所加载的页面所在的目录
     port : config.port,

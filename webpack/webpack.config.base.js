@@ -60,7 +60,9 @@ var webpackConfBase = {
   entry: config.entry,
   output: {
     path: config.dest.path,
-    filename: 'js/[name]-[hash].js'
+    filename: "js/[name].[hash].js",
+    chunkFilename: 'js/[name].[chunkhash].js',
+    sourceMapFilename: 'js/[file].[chunkhash].map'
   },
   //添加了此项，则表明从外部引入，内部不会打包合并进去
   externals: {
@@ -78,7 +80,7 @@ var webpackConfBase = {
             loader: 'url-loader',
             options: {
               limit : 10000,
-              name : 'img/[name]-[hash].[ext]'
+              name : 'img/[name].[hash].[ext]'
             }
           },
           {
@@ -100,7 +102,7 @@ var webpackConfBase = {
           loader: 'url-loader',
           options: {
             limit : 10000,
-            name : 'img/[name]-[hash].[ext]'
+            name : 'img/[name].[hash].[ext]'
           }
         },
       },
@@ -170,7 +172,7 @@ var webpackConfBase = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     //css
     new ExtractTextPlugin({
-     filename: 'css/[name]-[contenthash].css',
+     filename: 'css/[name].[contenthash].css',
      disable: false,
      allChunks: true
     }),
@@ -200,6 +202,7 @@ var webpackConfBase = {
     // 如果把minChunks修改为Infinity，那么chunk1和chunk2(公有的业务逻辑部分,在main.js和main1.js中require进来)都打包到main.js,main1.js里，也就是共有逻辑不会抽取出来作为一个单独的chunk,而是打包到jquery.js中!
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor','manifest'],
+      minChunks: Infinity,
       // minChunks: function (module, count) { // 只抽取 node_modules 中的块
       //   return (
       //     module.resource &&
@@ -209,7 +212,6 @@ var webpackConfBase = {
       //     ) === 0
       //   )
       // },
-      filename: 'js/[name].js',
       // children: true,
       // async: true
     }),
