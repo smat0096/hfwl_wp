@@ -9,7 +9,6 @@ var merge = require('webpack-merge');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin')
-var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 var webpackConfDev = require('./webpack.config.dev.js');
 var webpackConfProd = require('./webpack.config.prod.js');
@@ -62,14 +61,14 @@ var webpackConfBase = {
     path: config.dest.path,
     filename: "js/[name].[hash].js",
     chunkFilename: 'js/[name].[chunkhash].js',
-    sourceMapFilename: 'js/[file].[chunkhash].map'
+    sourceMapFilename: '[file].[chunkhash].map'
   },
   //添加了此项，则表明从外部引入，内部不会打包合并进去
   externals: {
       //jquery: 'window.jQuery',
       //...
   },
-
+  devtool : '#cheap-module-eval-source-map',
   module: {
     rules: [
       {
@@ -144,7 +143,6 @@ var webpackConfBase = {
       }
     ]
   },
-
   //resolve 定义应用层的模块（要被打包的模块）的解析配置
   resolve: {
     modules: [ "node_modules" ],
@@ -176,20 +174,15 @@ var webpackConfBase = {
      disable: false,
      allChunks: true
     }),
-    new OptimizeCSSPlugin({
-      cssProcessorOptions: {
-        safe: true
-      }
-    }),
     //HTML处理
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: config.src.html,
       inject: 'body', //true : 任意位置 ,'body' : 底部
       minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true
+        removeComments: !config.debug,
+        collapseWhitespace: !config.debug,
+        removeAttributeQuotes: !config.debug
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
@@ -225,5 +218,18 @@ var webpackConfBase = {
     ])
   ]
 }
-return config.debug ? merge(webpackConfBase,webpackConfDev(config)) : merge(webpackConfBase,webpackConfProd(config)) ;
+switch(config.env){
+  case 'dev' : 
+    webpackConfBase = merge(webpackConfBase,webpackConfDev(config));
+    break;
+  case 'browser' : 
+    webpackConfBase = webpackConfBase;
+    break;
+  case 'product' : 
+    webpackConfBase = merge(webpackConfBase,webpackConfProd(config));
+    break;
+  default:
+    break;
+} 
+return webpackConfBase;
 }

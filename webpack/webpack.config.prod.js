@@ -1,6 +1,7 @@
 'use strict';
 var webpack = require('webpack');
-var path = require('path');
+var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+
 //插件
 module.exports = function(config){
 return {
@@ -21,8 +22,13 @@ return {
           except: ['$', 'exports', 'require', 'avalon']
         }
     }),
+    //压缩css
+    new OptimizeCSSPlugin({
+      cssProcessorOptions: {
+        safe: true
+      }
+    }),
     new webpack.LoaderOptionsPlugin({ minimize: true }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin()
   ]
 }}
