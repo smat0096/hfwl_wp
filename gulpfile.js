@@ -5,8 +5,9 @@ var path = require('path');
 
 var webpack = require('webpack');
 var webpackDevServer = require('webpack-dev-server');
-var browserSync = require('browser-sync').create(); //浏览器同步热更新
-var webpackConfig = require('./webpack.config.allinone.js');
+var browserSync = require('browser-sync').create(); //移动端浏览器同步热更新
+var webpackConfig = require('./webpack/webpack.config.base.js');
+var config = require('./webpack/config.js');
 
 //用于gulp传递参数
 var minimist = require('minimist');
@@ -16,19 +17,18 @@ var clean = require('gulp-clean');
   //读取参数
 var env = {
         string: 'env',
-        default: {env: process.env.NODE_ENV || 'debug'}
+        default: {env: process.env.NODE_ENV || 'dev'}
     };
 env = minimist(process.argv.slice(2), env).env; 
 //env: 
-//debug[默认] 本地开发 webpack-dev-server , 
-//build 本地编译构建 browser-sync , 
+//dev[默认] 本地开发 webpack-dev-server , 
+//brower 本地编译构建 browser-sync , 
 //product 服务器构建[替换url并压缩] 
 
-//设置路径
-var config = require('./config.js');
 config.env = env;
-gutil.log('mode : ', env);
-(env === 'debug' || env === 'build') && (config.path.publicPath = '');
+config.debug = (env === 'dev' || env === 'browser');
+config.debug && (config.publicPath = '');
+gutil.log('env : ', config.env, ' ; debug :',config.debug);
 //配置webpack
 var webpackCompiler = webpackConfig( config );
 
@@ -37,7 +37,7 @@ gulp.task('hint', function () {
     var jshint = require('gulp-jshint')
     var stylish = require('jshint-stylish')
     return;
-    return gulp.src(config.path.srcBabel)
+    return gulp.src(config.src.babel)
         .pipe(jshint())
         .pipe(jshint.reporter(stylish));
 })
@@ -45,7 +45,7 @@ gulp.task('hint', function () {
 //browser-sync 热测试
 gulp.task('browser-sync',function() {
   var files = [
-    path.join( config.path.dest, '/**')
+    path.join( config.dest.path, '/**')
   ];
   browserSync.init(files,{
     injectChanges: false,
@@ -55,9 +55,9 @@ gulp.task('browser-sync',function() {
     notify: false, //禁止通知
     reloadDebounce: 500, //热重载间隔
     server: {
-      baseDir: config.path.dest,
-      //index: config.path.browserIndex,
-      //startPath: config.path.browserStartPath,
+      baseDir: config.dest.path,
+      //index: config.browser.index,
+      //startPath: config.browser.startPath,
       port :  config.port
     }
   });
@@ -66,7 +66,7 @@ gulp.task('browser-sync',function() {
 //清理目录
 gulp.task("clean", ['hint'], function (done) {
     //return cache.clearAll(done);
-    return gulp.src(config.path.dest, {
+    return gulp.src(config.dest.path, {
         read: false
     })
     .pipe(clean({force: true}));
@@ -83,6 +83,9 @@ gulp.task('webpack-build', ['clean'], function (done) {
 
 //run webpackDevServer
 gulp.task('webpack-dev-server',  function (done) {
+    // Object.keys(webpackCompiler.entry).forEach(function (name) {
+    //   webpackCompiler.entry[name] = ['./build/dev-client'].concat(webpackCompiler.entry[name])
+    // })
     webpackCompiler.entry.index = webpackCompiler.entry.index || [];
     webpackCompiler.entry.index.unshift("webpack-dev-server/client?http://localhost:"+config.port);  // 将执替换js内联进去
     webpackCompiler.entry.index.unshift("webpack/hot/dev-server"); // HMR 更新失败之后会刷新整个页面;webpack/hot/only-dev-server配置会要求手动刷新
@@ -105,13 +108,13 @@ gulp.task('browser-sync-server',['webpack-build', 'watch'],function(){
 
 gulp.task('upload', function () {
     var _conf = env === 'remote' ? config.remoteServer : config.localServer;
-    return gulp.src(path.join(config.path.dest , './**'))
+    return gulp.src(path.join(config.dest.path , './**'))
         .pipe(sftp(_conf))
         .pipe(gutil.noop());
 });
 
 gulp.task('watch', function () {  
-   return gulp.watch(config.path.srcAll, ['webpack-build']);  
+   //return gulp.watch(path.join(config.src.path,'./**'), ['webpack-build']);  
 });
 
 gulp.task('product',['webpack-build'],function(){
@@ -119,9 +122,9 @@ gulp.task('product',['webpack-build'],function(){
 });
 
 gulp.task('default',function(){
-  if( env === 'debug'){
+  if( env === 'dev'){
     gulp.start('webpack-dev-server');
-  } else if( env === 'build'){
+  } else if( env === 'browser'){
     gulp.start('browser-sync-server');
   } else if( env === 'product'){
     gulp.start('product');

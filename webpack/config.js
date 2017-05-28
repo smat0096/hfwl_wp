@@ -3,27 +3,37 @@ var path = require('path'),
     glob = require('glob'),
     gutil = require('gulp-util');
 
-var srcPath = path.resolve(__dirname, './example/src/'),
-    destPath = path.resolve(__dirname, './example/dest/'), //绝对路径
+var srcPath = path.resolve('./example/src/'),
+    destPath = path.resolve(process.cwd(), './example/dest/'), //绝对路径 ,不要用 __dirname 文件所在目录
     nodeModPath = path.resolve(process.cwd(), './node_modules');
 
 var config = {
     port : 3000,
-    path : {
-      publicPath : '/addons/ewei_shopv2/plugin/wuliu/template/mobile/default/hfwl/',
-      src : srcPath,
-      dest : destPath,
-      html :  path.join(srcPath , './index.html'),
-      srcBabel : [
-          path.join(srcPath , 'staticBase/js/component/**/*.js'),
-          path.join(srcPath , 'staticBase/js/pages/**/*.js'),
-          path.join(srcPath , 'staticBase/js/utils/**/*.js'),
-          path.join(srcPath , 'staticBase/js/router/**/*.js'),
-          path.join(srcPath , 'staticBase/js/store/**/*.js')
+    publicPath : '/addons/ewei_shopv2/plugin/wuliu/template/mobile/default/hfwl/',
+    src : {
+      path : srcPath,
+      html : path.join(srcPath , './index.html'),
+      babel : [
+        path.join(srcPath , 'staticBase/js/component/**/*.js'),
+        path.join(srcPath , 'staticBase/js/pages/**/*.js'),
+        path.join(srcPath , 'staticBase/js/utils/**/*.js'),
+        path.join(srcPath , 'staticBase/js/router/**/*.js'),
+        path.join(srcPath , 'staticBase/js/store/**/*.js')
       ],
-      //browser-sync 配置
-      browserIndex :'index.html', // 
-      browserStartPath :'/loading.html', //
+      static : path.resolve(srcPath, './static/'),
+    },
+    dest : {
+      path : destPath,
+      static : path.resolve(destPath, './example/static/'),
+    },
+    //browser-sync 配置
+    browser: {
+      index : 'index.html',
+      startPath : '/loading.html'
+    },
+    alias : {
+      jquery : path.join(srcPath , './js/lib/jquery-2.1.4.js'),
+      vue : path.join(srcPath , './js/lib/vue-2.1.6.js'),
     },
     entry : {
       'index' : [

@@ -3,11 +3,16 @@ var webpack = require('webpack');
 var path = require('path');
 var glob = require('glob');
 var gutil = require('gulp-util');
+var merge = require('webpack-merge');
 
 //插件
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin')
+var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
+var webpackConfDev = require('./webpack.config.dev.js');
+var webpackConfProd = require('./webpack.config.prod.js');
 /*
 //遍历入口JS文件
   var entries= function (srcDir) {
@@ -50,69 +55,22 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
   };
 */
 module.exports = function(config){
-
-//路径定义
-var publicPath = config.path.publicPath; //'/';
-var devtool, min, allChunks ,plugins = [];
-if(config.env !== 'product'){
-  min = '';
-  allChunks = false;
-  devtool = '#cheap-module-eval-source-map';
-}else{
-  min = '.min';
-  allChunks = true;
-  devtool = '#cheap-module-source-map';
-  plugins.push(
-    new webpack.optimize.UglifyJsPlugin({
-        compress: {
-            warnings: false,
-            drop_console: false
-        },
-        output: {
-            comments: false
-        },
-        mangle: {
-            except: ['$', 'exports', 'require','avalon']
-        }
-    }),
-    new webpack.LoaderOptionsPlugin({ minimize: true }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.NoErrorsPlugin()
-  )
-};
-
-
 //config Object.assign()
-return {
+var webpackConfBase = {
   entry: config.entry,
   output: {
-      path: config.path.dest,
-      filename: 'js/[name]' + min + '-[hash:8].js',
-      chunkFilename: 'js/chunk.[chunkhash:8]' + min +'-[hash:8].js',//未被列在entry中，却又需要被打包出来的文件命名配置;
-      publicPath: config.path.publicPath,
-      sourceMapFilename: '[file]' + min +'-[hash:8].map'
+      path: config.dest.path,
+      filename: 'js/[name]-[hash].js',
+      chunkFilename: 'js/chunk-[chunkhash].js',//未被列在entry中，却又需要被打包出来的文件命名配置;
+      publicPath: config.publicPath,
+      sourceMapFilename: '[file]-[hash].map'
   },
-  
-  devtool : devtool,
-  
   //添加了此项，则表明从外部引入，内部不会打包合并进去
   externals: {
       //jquery: 'window.jQuery',
       //...
   },
-  
-  //webpack-dev-server配置
-  devServer: {
-    contentBase: config.path.dest,//本地服务器所加载的页面所在的目录
-    port : config.port,
-    //跳转重定向 ;必须指定 contentBase 正确,否则此配置会造成错误;
-    historyApiFallback: true,
-    inline : true,//启动inline
-    hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
-    https: false, // true for self-signed, object for cert authority
-    noInfo: true // only errors & warns on hot reload
-  },
-  
+
   module: {
     rules: [
       {
@@ -123,7 +81,7 @@ return {
             loader: 'url-loader',
             options: {
               limit : 10000,
-              name : 'img/[name]-[hash:8].[ext]'
+              name : 'img/[name]-[contenthash].[ext]'
             }
           },
           {
@@ -145,7 +103,7 @@ return {
           loader: 'url-loader',
           options: {
             limit : 10000,
-            name : 'img/[name]-[hash:8].[ext]'
+            name : 'img/[name]-[contenthash].[ext]'
           }
         },
       },
@@ -188,19 +146,20 @@ return {
     ]
   },
 
-
   //resolve 定义应用层的模块（要被打包的模块）的解析配置
   resolve: {
     modules: [ "node_modules" ],
     extensions: [ '.js', '.json','.es6','.jsx','css','.scss'],//可省略的文件扩展名
     //定义引用路径的别名
-    alias: {
-      jquery : path.join(config.path.src , './js/lib/jquery-2.1.4.js'),
-      vue : path.join(config.path.src , './js/lib/vue-2.1.6.js'),
-    }
+    alias: config.alias
   },
   
   plugins: [
+    //配置超全局变量[包括业务代码]
+    new webpack.DefinePlugin({
+        'G.env' : config.env
+    }),
+    //固定注释
     new webpack.BannerPlugin('作者: 空山 112093112@qq.com'),
     //提供预定义require
     new webpack.ProvidePlugin({
@@ -209,33 +168,64 @@ return {
       "jQuery": "jquery",
       "Vue" :  "vue"
     }),
-
-    //提取公共模块
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ['vendor', 'manifest']
-    }),
-    //HTML处理
-    new HtmlWebpackPlugin({
-      template: config.path.html,
-      filename: 'index.html',
-      showErrors: true,
-      inject: 'body', //inject :true，js会注入到html任何位置
-      chunks: ['manifest','vendor','index']
-    }),
-    //配置超全局变量[包括业务代码]
-    new webpack.DefinePlugin({
-        env : config.env
-    }),
-    //热加载
-    new webpack.HotModuleReplacementPlugin(),
     //根据模块调用次数，给模块分配ids，常被调用的ids分配更短的id，使得ids可预测，降低文件大小，
     new webpack.optimize.OccurrenceOrderPlugin(),
     //css
     new ExtractTextPlugin({
-     filename: 'css/[name]'+ min +'-[hash:8].css',
+     filename: 'css/[name]-[contenthash].css',
      disable: false,
-     allChunks: allChunks
-    })
-  ].concat(plugins)
+     allChunks: true
+    }),
+    new OptimizeCSSPlugin({
+      cssProcessorOptions: {
+        safe: true
+      }
+    }),
+    //HTML处理
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: config.src.html,
+      inject: true, //true : 任意位置 ,'body' : 底部
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+        // more options:
+        // https://github.com/kangax/html-minifier#options-quick-reference
+      },
+      chunks: ['manifest','vendor','index']
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      // chunksSortMode: 'dependency'
+    }),
+    // 提取公共模块 split vendor js into its own file
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function (module, count) {
+        // any required modules inside node_modules are extracted to vendor
+        return (
+          module.resource &&
+          /\.js$/.test(module.resource) &&
+          module.resource.indexOf(
+            path.join(__dirname, '../node_modules')
+          ) === 0
+        )
+      }
+    }),
+    // extract webpack runtime and module manifest to its own file in order to
+    // prevent vendor hash from being updated whenever app bundle is updated
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      chunks: ['vendor']
+    }),
+    // copy custom static assets
+    new CopyWebpackPlugin([
+      {
+        from: config.src.static,
+        to: config.dest.static,
+        ignore: ['.*']
+      }
+    ])
+  ]
 }
+return config.debug ? merge(webpackConfBase,webpackConfDev(config)) : merge(webpackConfBase,webpackConfProd(config)) ;
 }
