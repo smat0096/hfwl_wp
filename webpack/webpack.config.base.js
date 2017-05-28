@@ -59,11 +59,8 @@ module.exports = function(config){
 var webpackConfBase = {
   entry: config.entry,
   output: {
-      path: config.dest.path,
-      filename: 'js/[name]-[hash].js',
-      chunkFilename: 'js/chunk-[chunkhash].js',//未被列在entry中，却又需要被打包出来的文件命名配置;
-      publicPath: config.publicPath,
-      sourceMapFilename: '[file]-[hash].map'
+    path: config.dest.path,
+    filename: 'js/[name]-[hash].js'
   },
   //添加了此项，则表明从外部引入，内部不会打包合并进去
   externals: {
@@ -81,7 +78,7 @@ var webpackConfBase = {
             loader: 'url-loader',
             options: {
               limit : 10000,
-              name : 'img/[name]-[contenthash].[ext]'
+              name : 'img/[name]-[hash].[ext]'
             }
           },
           {
@@ -103,7 +100,7 @@ var webpackConfBase = {
           loader: 'url-loader',
           options: {
             limit : 10000,
-            name : 'img/[name]-[contenthash].[ext]'
+            name : 'img/[name]-[hash].[ext]'
           }
         },
       },
@@ -166,7 +163,8 @@ var webpackConfBase = {
       //Base: '../../base/index.js', //从路径获取
       "$": "jquery", //从别名获取
       "jQuery": "jquery",
-      "Vue" :  "vue"
+      "Vue" :  "vue",
+      "_" :  "lodash"
     }),
     //根据模块调用次数，给模块分配ids，常被调用的ids分配更短的id，使得ids可预测，降低文件大小，
     new webpack.optimize.OccurrenceOrderPlugin(),
@@ -185,7 +183,7 @@ var webpackConfBase = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: config.src.html,
-      inject: true, //true : 任意位置 ,'body' : 底部
+      inject: 'body', //true : 任意位置 ,'body' : 底部
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -197,27 +195,25 @@ var webpackConfBase = {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       // chunksSortMode: 'dependency'
     }),
-    // 提取公共模块 split vendor js into its own file
+    // 提取公共模块
+    // 注意：webpack用插件CommonsChunkPlugin进行打包的时候，将符合引用规则(minChunks)的模块打包到name参数的数组的第一个块里（chunk）,然后数组后面的块依次打包(查找entry里的key,没有找到相关的key就生成一个空的块)，最后一个块包含webpack生成的在浏览器上使用各个块的加载代码，所以页面上使用的时候最后一个块必须最先加载,
+    // 如果把minChunks修改为Infinity，那么chunk1和chunk2(公有的业务逻辑部分,在main.js和main1.js中require进来)都打包到main.js,main1.js里，也就是共有逻辑不会抽取出来作为一个单独的chunk,而是打包到jquery.js中!
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: function (module, count) {
-        // any required modules inside node_modules are extracted to vendor
-        return (
-          module.resource &&
-          /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
-        )
-      }
+      names: ['vendor','manifest'],
+      // minChunks: function (module, count) { // 只抽取 node_modules 中的块
+      //   return (
+      //     module.resource &&
+      //     /\.js$/.test(module.resource) &&
+      //     module.resource.indexOf(
+      //       path.join(__dirname, '../node_modules')
+      //     ) === 0
+      //   )
+      // },
+      filename: 'js/[name].js',
+      // children: true,
+      // async: true
     }),
-    // extract webpack runtime and module manifest to its own file in order to
-    // prevent vendor hash from being updated whenever app bundle is updated
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      chunks: ['vendor']
-    }),
-    // copy custom static assets
+    // 拷贝静态文件
     new CopyWebpackPlugin([
       {
         from: config.src.static,

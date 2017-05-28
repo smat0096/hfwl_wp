@@ -13,6 +13,7 @@ var config = {
     src : {
       path : srcPath,
       html : path.join(srcPath , './index.html'),
+      static : path.resolve(srcPath, './static/'),
       babel : [
         path.join(srcPath , 'staticBase/js/component/**/*.js'),
         path.join(srcPath , 'staticBase/js/pages/**/*.js'),
@@ -20,7 +21,6 @@ var config = {
         path.join(srcPath , 'staticBase/js/router/**/*.js'),
         path.join(srcPath , 'staticBase/js/store/**/*.js')
       ],
-      static : path.resolve(srcPath, './static/'),
     },
     dest : {
       path : destPath,
@@ -34,6 +34,7 @@ var config = {
     alias : {
       jquery : path.join(srcPath , './js/lib/jquery-2.1.4.js'),
       vue : path.join(srcPath , './js/lib/vue-2.1.6.js'),
+      //lodash : path.join(srcPath , './js/lib/lodash-4.17.2.js'),
     },
     entry : {
       'index' : [

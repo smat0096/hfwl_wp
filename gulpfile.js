@@ -27,7 +27,6 @@ env = minimist(process.argv.slice(2), env).env;
 
 config.env = env;
 config.debug = (env === 'dev' || env === 'browser');
-config.debug && (config.publicPath = '');
 gutil.log('env : ', config.env, ' ; debug :',config.debug);
 //配置webpack
 var webpackCompiler = webpackConfig( config );

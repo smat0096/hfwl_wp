@@ -4,6 +4,10 @@ var path = require('path');
 //插件
 module.exports = function(config){
 return {
+  output: {
+      publicPath: config.publicPath,
+      sourceMapFilename: '[file]-[hash].map'
+  },
   devtool : '#cheap-module-source-map',
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
