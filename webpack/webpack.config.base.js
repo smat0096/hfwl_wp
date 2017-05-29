@@ -178,19 +178,21 @@ var webpackConfBase = {
     }),
     //HTML处理
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: config.src.html,
-      inject: 'body', //true : 任意位置 ,'body' : 底部
-      minify: {
+      template: config.src.html, //模板文件路径，支持加载器，比如 html-loader!./index.html
+      // title : '', //标题
+      filename: 'index.html', //输出的 HTML 文件名，默认是 index.html, 也可以直接配置带有子目录。
+      inject: 'body', // true | 'head' | 'body' | false  ,注入所有的资源到特定的 template 或者 templateContent 中，如果设置为 true 或者 body，所有的 javascript 资源将被放置到 body 元素的底部，'head' 将放置到 head 元素中
+      hash: false , // true | false, 如果为 true, 将添加一个唯一的 webpack 编译 hash 到所有包含的脚本和 CSS 文件，对于解除 cache 很有用
+      cache: true, // true | false，如果为 true, 这是默认值，仅仅在文件修改之后才会发布文件
+      showErrors: true, // true | false, 如果为 true, 这是默认值，错误信息会写入到 HTML 页面中
+      minify: { // 传递 html-minifier 选项给 minify 输出; https://github.com/kangax/html-minifier#options-quick-reference
         removeComments: !config.debug,
         collapseWhitespace: !config.debug,
         removeAttributeQuotes: !config.debug
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      chunks: ['manifest','vendor','index']
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      // chunksSortMode: 'dependency'
+      chunks: ['manifest','vendor','index'], //允许只添加某些块 
+      // excludeChunks: [] , //允许跳过某些块
+      chunksSortMode: 'dependency',  //允许控制块在添加到页面之前的排序方式，支持的值：'none' | 'default' | {function}-default:'auto'
     }),
     // 提取公共模块
     // 注意：webpack用插件CommonsChunkPlugin进行打包的时候，将符合引用规则(minChunks)的模块打包到name参数的数组的第一个块里（chunk）,然后数组后面的块依次打包(查找entry里的key,没有找到相关的key就生成一个空的块)，最后一个块包含webpack生成的在浏览器上使用各个块的加载代码，所以页面上使用的时候最后一个块必须最先加载,

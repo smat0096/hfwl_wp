@@ -9,6 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!--
         <script>
           ;(function(){
             window.addEventListener('load',function(){
@@ -24,9 +25,10 @@
             }, false)
           })();
         </script>
+        -->
         <link rel="shortcut icon" href="./staticBase/img/favicon.ico" /> 
         <!-- useref合并所需注释-->
-        <!-- build:css ./staticBase/css/main.css -->
+        <!-- build:css ./staticBase/css/main.css 
         <link rel="stylesheet" type="text/css" href="./staticBase/js/lib/jquery-weui/lib/weui.min.css" />
         <link rel="stylesheet" type="text/css" href="./staticBase/js/lib/jquery-weui/css/jquery-weui.css" />
         <link rel="stylesheet" type="text/css" href="./staticBase/css/createmap.css" />
@@ -66,12 +68,6 @@
         <a id="loadfail" class="weui-loadmore__tips c_o"></a>
     </div>
   </div>
-
-<!--   <loading-page 
-    v-show="isLoading"
-    :loading-icon='loadingIcon'
-    :loading-text="loadingText"
-  ></loading-page> -->
   
   <footer-nav :user = "user" ></footer-nav>
 
@@ -80,20 +76,7 @@
 
 </div>
 <script src="https://api.map.baidu.com/api?v=2.0&&ak=DNbYBM3B9ANr8MlAPOiGVGhTU6b5B2z5"></script>
-<!-- build:js ./staticBase/js/lib/libs.js -->
-<script type="text/javascript" src="./staticBase/js/lib/lib.js"></script>
-<script type="text/javascript" src="./staticBase/js/lib/jquery-weui/js/jquery-weui.min.js"></script>
-<script type="text/javascript" src="./staticBase/js/lib/jquery-weui/lib/fastclick.min.js"></script>
-<script type="text/javascript" src="./staticBase/js/lib/vue/vue-2.2.0.min.js"></script>
-<script type="text/javascript" src="./staticBase/js/lib/vue/vuex.min.js"></script>
-<script type="text/javascript" src="./staticBase/js/lib/vue/vue-router-2.1.1.min.js"></script>
-<!-- endbuild -->
-<!-- <script type="text/javascript" src="./staticBase/js/lib/vue/vue-lazyload.js"></script> -->
-<script type="text/javascript" src="./staticBase/js/base.js"></script>
-<script type="text/javascript">
-  seajs.use("pages/index.js" , function(){
-  })
-</script>
-<iframe src="./manifest.html" frameborder="0" style="display:none"></iframe>
+
+<!-- <iframe src="./manifest.html" frameborder="0" style="display:none"></iframe> -->
 </body>
 </html>
