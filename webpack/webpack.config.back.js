@@ -93,7 +93,7 @@ var plugins = [
       template: path.join(__dirname,"./example/src/index.html"),
       filename: 'index.html',
       showErrors: true,
-      inject: 'body', // true | 'head' | 'body' | false  ,注入所有的资源到特定的 template 或者 templateContent 中，如果设置为 true 或者 body，所有的 javascript 资源将被放置到 body 元素的底部，'head' 将放置到 head 元素中
+      inject: 'body', //inject :true，js会注入到html任何位置
 
       //或excludeChunks, 依次为: 第三方库打包, 单独入口a, 入口c和d所抽取的公共部分,入口c,入口d
       chunks: ['vendor','entry-a','common','entry-c','entry-d']

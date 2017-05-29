@@ -1,5 +1,4 @@
-define(function(require, exports, module) {
-  "use strict";
+"use strict";
   // Vue.use(VueLazyload, {
   //   preLoad: 1.3,
   //   error: window._G_.url.basicUrl+'/staticBase/img/avatar.jpg',
@@ -15,7 +14,7 @@ define(function(require, exports, module) {
   window.valiOpts = _base.valiOpts;
   window.KsMap = _base.map;
   window.Picker = _base.picker;
-  window._fhIssue = require('fhIssue_new');//必须先在index这里引入 fhIssue, 然后 sendgoods 里才能引入成功,site文件较大/异步加载的关系?;
+  //window._fhIssue = require('fhIssue_new');//必须先在index这里引入 fhIssue, 然后 sendgoods 里才能引入成功,site文件较大/异步加载的关系?;
   /* 全局替换 KsValidate S */
   var KsValidateReplace = {
         showSuccess : function(data){
@@ -129,70 +128,5 @@ define(function(require, exports, module) {
     };
     
     var main = Vue.extend(_main);
-    var vm = new main().$mount('#index');
-
-
-    //router.afterEach(function (to, from) {  vm.isLoading = false; }); //对应 vm.$data.isLoading = false 事件写入 storeSync 中
-    //vuex-router-sync
-    /*
-    function storeSync (store, router, options) {
-      var moduleName = (options || {}).moduleName || 'route'
-
-      store.registerModule(moduleName, {
-        state: cloneRoute(router.currentRoute),
-        mutations: {
-          'router/ROUTE_CHANGED': function (state, transition) {
-            store.state[moduleName] = cloneRoute(transition.to, transition.from)
-          }
-        }
-      })
-
-      var isTimeTraveling = false
-      var currentPath
-
-      // sync router on store change
-      store.watch(
-        function (state) { return state[moduleName] },
-        function (route) {
-          if (route.fullPath === currentPath) {
-            return
-          }
-          isTimeTraveling = true
-          currentPath = route.fullPath
-          router.push(route)
-        },
-        { sync: true }
-      )
-
-      // sync store on router navigation
-      router.afterEach(function (to, from) {
-        if (isTimeTraveling) {
-          isTimeTraveling = false
-          return
-        }
-        currentPath = to.fullPath
-        store.commit('router/ROUTE_CHANGED', { to: to, from: from })
-      })
-    }
-
-    function cloneRoute (to, from) {
-      var clone = {
-        name: to.name,
-        path: to.path,
-        hash: to.hash,
-        query: to.query,
-        params: to.params,
-        fullPath: to.fullPath,
-        meta: to.meta
-      }
-      if (from) {
-        clone.from = cloneRoute(from)
-      }
-      return Object.freeze(clone)
-    }
-    */
-    
+    new main().$mount('#index');
   });
-
-});
-

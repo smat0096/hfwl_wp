@@ -154,7 +154,8 @@ var webpackConfBase = {
   plugins: [
     //配置超全局变量[包括业务代码]
     new webpack.DefinePlugin({
-        'G.env' : config.env
+        'G.env' : JSON.stringify(config.env), //注意,这里输出到业务环境的是标识符, 若需要识别为字符串,需双引号: "'字符串'",或 stringify;
+        'G.url' : JSON.stringify(config.debug ? config.localUrl : config.remoteUrl)
     }),
     //固定注释
     new webpack.BannerPlugin('作者: 空山 112093112@qq.com'),
@@ -166,6 +167,7 @@ var webpackConfBase = {
       "Vue" :  "vue",
       "Vuex" :  "vuex",
       "VueRouter" :  "vue-router",
+      "template" :  "art-template",
       //"_" :  "lodash"
     }),
     //根据模块调用次数，给模块分配ids，常被调用的ids分配更短的id，使得ids可预测，降低文件大小，
@@ -178,10 +180,11 @@ var webpackConfBase = {
     }),
     //HTML处理
     new HtmlWebpackPlugin({
-      template: config.src.html, //模板文件路径，支持加载器，比如 html-loader!./index.html
       // title : '', //标题
       filename: 'index.html', //输出的 HTML 文件名，默认是 index.html, 也可以直接配置带有子目录。
+      template: config.src.html, //模板文件路径，支持加载器，比如 html-loader!./index.html
       inject: 'body', // true | 'head' | 'body' | false  ,注入所有的资源到特定的 template 或者 templateContent 中，如果设置为 true 或者 body，所有的 javascript 资源将被放置到 body 元素的底部，'head' 将放置到 head 元素中
+      // favicon : '', //favicon 路径
       hash: false , // true | false, 如果为 true, 将添加一个唯一的 webpack 编译 hash 到所有包含的脚本和 CSS 文件，对于解除 cache 很有用
       cache: true, // true | false，如果为 true, 这是默认值，仅仅在文件修改之后才会发布文件
       showErrors: true, // true | false, 如果为 true, 这是默认值，错误信息会写入到 HTML 页面中
