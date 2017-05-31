@@ -8,14 +8,14 @@ CACHE:
   ./staticBase/css/main.css
   ./staticBase/js/lib/libs.js
 
-  ./staticBase/img/loading.png
-  ./staticBase/img/favicon.ico
-  ./staticBase/img/avatar.jpg
-  ./staticBase/img/bg.png
-  ./staticBase/img/car.png
-  ./staticBase/img/icon_1.png
-  ./staticBase/img/common.png
-  ./staticBase/images/common.png
+  ./static/img/loading.png
+  ./static/img/favicon.ico
+  ./static/img/avatar.jpg
+  ./static/img/bg.png
+  ./static/img/car.png
+  ./static/img/icon_1.png
+  ./static/img/common.png
+  ./static/images/common.png
 
   ./staticBase/js/city/chose_city.js
   ./staticBase/js/city/city_plug.js

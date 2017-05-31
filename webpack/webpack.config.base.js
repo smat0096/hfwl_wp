@@ -65,8 +65,12 @@ var webpackConfBase = {
   },
   //添加了此项，则表明从外部引入，内部不会打包合并进去
   externals: {
-      //jquery: 'window.jQuery',
-      //...
+      "jquery": "$", //从别名获取
+      "jquery": "jQuery",
+      "vue" :  "Vue",
+      "vuex" :  "Vuex",
+      "vue-router" :  "VueRouter",
+      "art-template" :  "template"
   },
   devtool : '#cheap-module-eval-source-map',
   module: {
@@ -110,10 +114,10 @@ var webpackConfBase = {
         loader: 'ejs-loader' 
       },
       {
-        test: /\.css$/, 
+        test: /[^((?!\.min\.css).)*$]\.css$/,  //含有.min.css的文件不会压缩
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
-          use: "css-loader",
+          use: "css-loader?minimize&-autoprefixer",
           publicPath: '../'
         })
       },
@@ -159,15 +163,15 @@ var webpackConfBase = {
     }),
     //固定注释
     new webpack.BannerPlugin('作者: 空山 112093112@qq.com'),
-    //提供预定义require
+    //提供预定义,无需require
     new webpack.ProvidePlugin({
       //Base: '../../base/index.js', //从路径获取
-      "$": "jquery", //从别名获取
-      "jQuery": "jquery",
-      "Vue" :  "vue",
-      "Vuex" :  "vuex",
-      "VueRouter" :  "vue-router",
-      "template" :  "art-template",
+      // "$": "jquery", //从别名获取
+      // "jQuery": "jquery",
+      // "Vue" :  "vue",
+      // "Vuex" :  "vuex",
+      // "VueRouter" :  "vue-router",
+      // "template" :  "art-template",
       //"_" :  "lodash"
     }),
     //根据模块调用次数，给模块分配ids，常被调用的ids分配更短的id，使得ids可预测，降低文件大小，
@@ -220,7 +224,7 @@ var webpackConfBase = {
       {
         from: config.src.static,
         to: config.dest.static,
-        ignore: ['.*']
+        //ignore: ['.*']
       }
     ])
   ]

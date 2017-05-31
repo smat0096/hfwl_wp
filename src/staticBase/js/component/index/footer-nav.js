@@ -10,7 +10,7 @@ var _template = `
         <router-link to="/home"  class="fsize">
           <!-- <span class="weui-badge" style="position: absolute;top: -.4em;right: 1em;">8</span> -->
           <div class="weui-tabbar__icon icon_1 icon_1_home">
-            <!--<img src="./staticBase/images/icon_nav_search_bar.png" alt="">-->
+            <!--<img src="./static/images/icon_nav_search_bar.png" alt="">-->
           </div>
           <p class="weui-tabbar__label">主页</p>
         </router-link>

@@ -4,7 +4,7 @@ var template = `
 <div class="wrap  transition-wrap home">
   <div class="content_box bg_f0" style="top:0;">
     <div>
-      <img src="`+window._G_.url.basicUrl+`/staticBase/img/top.jpg" style="width:100%; display: block; max-height:'200px'" />
+      <img src="`+window._G_.url.basicUrl+`/static/img/top.jpg" style="width:100%; display: block; max-height:'200px'" />
     </div>
     <div class="home_bd bg_f0" v-if="user.data.auditType != 1">
       <div class="h-200 flex_box mb-15">

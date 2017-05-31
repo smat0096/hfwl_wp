@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-  var carUrl = window._G_.url.basicUrl + '/staticBase/img/car.png';
+  var carUrl = window._G_.url.basicUrl + '/static/img/car.png';
   // initial state
   var state = {
     isShow : false,

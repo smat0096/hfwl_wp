@@ -222,7 +222,7 @@ define(function(require, exports, module) {
           if(iL > 0){
             for(var i= 0; i< iL;i++){
               temp = res[j].getPoi(i);
-              temp.avatarUrl = window._G_.url.basicUrl+"/staticBase/img/ic_launcher.png";
+              temp.avatarUrl = window._G_.url.basicUrl+"/static/img/ic_launcher.png";
               temp.ks_distance = ksmap.getDistance(_vm.user.pos.point, temp.point);
               s = '';
               s += temp.province ? temp.province : '';
@@ -234,7 +234,7 @@ define(function(require, exports, module) {
             }
           }else if(res[j].keyword =='恒丰物流'){
             temp = res[j];
-              temp.avatarUrl = window._G_.url.basicUrl+"/staticBase/img/ic_launcher.png";
+              temp.avatarUrl = window._G_.url.basicUrl+"/static/img/ic_launcher.png";
               temp.point = ksmap.makePoint({lng: '113.172664', lat: '25.803731'})
               temp.ks_distance = ksmap.getDistance(_vm.user.pos.point, temp.point)
               temp.userPoint = _vm.user.pos.point;

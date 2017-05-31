@@ -1,11 +1,10 @@
 "use strict";
   // Vue.use(VueLazyload, {
   //   preLoad: 1.3,
-  //   error: window._G_.url.basicUrl+'/staticBase/img/avatar.jpg',
-  //   loading: window._G_.url.basicUrl+'/staticBase/img/loadavatar.svg',
+  //   error: window._G_.url.basicUrl+'/static/img/avatar.jpg',
+  //   loading: window._G_.url.basicUrl+'/static/img/loadavatar.svg',
   //   attempt: 2
   // })
-
   window._base  = require('utils/ks_base.js');
   window._ks = _base.utils;
   window._common = _base.common;
@@ -14,7 +13,7 @@
   window.valiOpts = _base.valiOpts;
   window.KsMap = _base.map;
   window.Picker = _base.picker;
-  //window._fhIssue = require('fhIssue_new');//必须先在index这里引入 fhIssue, 然后 sendgoods 里才能引入成功,site文件较大/异步加载的关系?;
+  window._fhIssue = require('fhIssue_new');//必须先在index这里引入 fhIssue, 然后 sendgoods 里才能引入成功,site文件较大/异步加载的关系?;
   /* 全局替换 KsValidate S */
   var KsValidateReplace = {
         showSuccess : function(data){
