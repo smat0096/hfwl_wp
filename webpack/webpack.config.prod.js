@@ -5,9 +5,6 @@ var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 //插件
 module.exports = function(config){
 return {
-  output: {
-      publicPath: config.publicPath
-  },
   devtool : '#cheap-module-source-map',
   plugins: [
     new webpack.optimize.UglifyJsPlugin({

@@ -1,6 +1,6 @@
 CACHE MANIFEST
 #第一行一定是 CACHE MANIFEST
-#version 2017-05-27-6
+#version 2017-05-31-1
 #web服务器需要设置配置: AddType text/cache-manifest .appcache
 
 CACHE:

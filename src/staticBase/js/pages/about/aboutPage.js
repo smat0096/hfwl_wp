@@ -81,7 +81,7 @@ var template = `
         return false;
       },
       toFixed : function(){
-        $.alert("功能完善中,招商电话: 0735-8880606");
+        $.alert("招商电话: 0735-8880606");
         return false;
       }
     }

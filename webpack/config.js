@@ -7,12 +7,9 @@ var srcPath = path.resolve('./src/'),
     destPath = path.resolve(process.cwd(), './dest/'), //绝对路径 ,不要用 __dirname 文件所在目录
     nodeModPath = path.resolve(process.cwd(), './node_modules');
 
-var remoteUrlBase = '/app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile',//接口基础路径;
-    publicPath = '/addons/ewei_shopv2/plugin/wuliu/template/mobile/default/hfwl/'; //服务器文件基础路径
+var remoteUrlBase = '/app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile';//服务器接口基础路径;
 
 var config = {
-    port : 3000,
-    publicPath : publicPath,
     src : {
       path : srcPath,
       html : path.join(srcPath , './index.html'),
@@ -27,11 +24,13 @@ var config = {
     dest : {
       path : destPath
     },
-    //browser-sync 配置
+    //本地服务器 browser-sync 配置
     browser: {
+      port : 3000,
       index : 'index.html',
       startPath : '/loading.html'
     },
+    //别名
     alias : {
           'jquery' : path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/jquery-2.1.4.js'),
           'art-template' : path.join(srcPath , 'staticBase/js/lib/art-template/template-web.js'),
@@ -64,6 +63,7 @@ var config = {
 
           'fhIssue_new': path.join(srcPath , '/staticConsignorSendMS/js/fhIssue_new')
     },
+    //入口文件
     entry : {
       'index' : [
           path.join(srcPath , 'staticBase/js/base.js'),
@@ -101,8 +101,9 @@ var config = {
         }
     },
     //数据接口
-    localUrl : {
-      basicUrl : '',
+    selfUrl : {
+      publicPath : '', //基础路径
+      basicUrl : '', //基础路径, 下次改为 publicPath; TODO;
       index : '/',
       //login
       login : '/',// [登录页面]
@@ -171,7 +172,8 @@ var config = {
       ,business_r_get: 'static/json/business.json' // [业务员 推荐记录]
     },
     remoteUrl : {
-      basicUrl : publicPath,
+      publicPath : '/addons/ewei_shopv2/plugin/wuliu/template/mobile/default/hfwl/', //服务器文件基础路径
+      basicUrl : '/addons/ewei_shopv2/plugin/wuliu/template/mobile/default/hfwl/', //服务器文件基础路径
       index : '/app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile&r=wuliu.index',
       //login
       login : remoteUrlBase+'&r=account.login&backurl=aT0yJmM9ZW50cnkmbT1ld2VpX3Nob3B2MiZkbz1tb2JpbGUmcj13dWxpdS5pbmRleA',// [登录页面]

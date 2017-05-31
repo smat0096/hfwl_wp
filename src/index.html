@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>恒丰物流平台</title>
+        <title><%= htmlWebpackPlugin.options.title %></title>
         <meta name="description" content="不超过150个字符">
         <meta name="keywords" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -12,21 +12,16 @@
         <script>
           ;(function(){
             window.addEventListener('load',function(){
-              setTimeout(function(){
-                 $ && Vue && VueRouter && Vuex || window.location.reload(false);
-              },1e2);
               var loadfail = document.getElementById('loadfail');
               loadfail && (loadfail.innerText ='');
               setTimeout(function(){
                  window.__LOADED || window.location.reload(false);
                  loadfail && (loadfail.innerText ='加载失败,请重启应用');
-              },6e3);
+              },5e3);
             }, false)
           })();
         </script>
-
-        <link rel="shortcut icon" href="./static/img/favicon.ico" /> 
-        <link rel="stylesheet" href="./static/css/main.min.css" />
+        <link rel="stylesheet" href="<%=htmlWebpackPlugin.options.publicPath%>/static/css/main.min.css" />
 
     </head>
 <body ontouchstart>
@@ -63,7 +58,7 @@
 
 </div>
 <script src="https://api.map.baidu.com/api?v=2.0&&ak=DNbYBM3B9ANr8MlAPOiGVGhTU6b5B2z5"></script>
-<script src="./static/js/libs.js"></script>
-<iframe src="./manifest.html" frameborder="0" style="display:none"></iframe>
+<script src="<%=htmlWebpackPlugin.options.publicPath%>/static/js/libs.js"></script>
+<iframe src="<%=htmlWebpackPlugin.options.publicPath%>/manifest.html" frameborder="0" style="display:none"></iframe>
 </body>
 </html>

@@ -54,12 +54,14 @@ var webpackConfProd = require('./webpack.config.prod.js');
   };
 */
 module.exports = function(config){
+var _debug = config.debug;
 //config Object.assign()
 var webpackConfBase = {
   entry: config.entry,
   output: {
-    path: config.dest.path,
-    filename: "js/[name].[hash].js",
+    path: config.dest.path,              //输出路径
+    filename: "js/[name].[hash].js",     //输出文件名(可含子路径)
+    publicPath: config.currUrl.publicPath,//输出路径的基本路径,完整路径为: publicPath + path + filename
     chunkFilename: 'js/[name].[chunkhash].js',
     sourceMapFilename: '[file].[chunkhash].map'
   },
@@ -74,6 +76,7 @@ var webpackConfBase = {
   },
   devtool : '#cheap-module-eval-source-map',
   module: {
+    noParse: /node_modules\/(jquey|moment|chart\.js)/, //忽略解析这些文件的依赖
     rules: [
       {
         test: /\.((woff2?|svg)(\?v=[0-9]\.[0-9]\.[0-9]))|(woff2?|svg|jpe?g|png|gif|ico)$/,
@@ -114,11 +117,22 @@ var webpackConfBase = {
         loader: 'ejs-loader' 
       },
       {
+        // 分为压缩的和非压缩的，不会重复，否则可能会报错
+        // 包含css 但却不包含.min.css的
         test: /[^((?!\.min\.css).)*$]\.css$/,  //含有.min.css的文件不会压缩
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
           use: "css-loader?minimize&-autoprefixer",
           publicPath: '../'
+        })
+      }, 
+      {
+        // 包含css 包含.min.css的
+        test: /\.min\.css$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          // 不压缩css
+          use: "css-loader"
         })
       },
       {
@@ -140,14 +154,14 @@ var webpackConfBase = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: 'babel-loader?cacheDirectory',//开启 babel-loader 缓存
         options : {
           presets: ['es2015','latest','stage-3']
         }
       }
     ]
   },
-  //resolve 定义应用层的模块（要被打包的模块）的解析配置
+  //resolve 重定向定义应用层的模块（要被打包的模块）的解析配置
   resolve: {
     modules: [ "node_modules" ],
     extensions: [ '.js', '.json','.es6','.jsx','css','.scss'],//可省略的文件扩展名
@@ -159,7 +173,7 @@ var webpackConfBase = {
     //配置超全局变量[包括业务代码]
     new webpack.DefinePlugin({
         'G.env' : JSON.stringify(config.env), //注意,这里输出到业务环境的是标识符, 若需要识别为字符串,需双引号: "'字符串'",或 stringify;
-        'G.url' : JSON.stringify(config.debug ? config.localUrl : config.remoteUrl)
+        'G.url' : JSON.stringify(config.currUrl)
     }),
     //固定注释
     new webpack.BannerPlugin('作者: 空山 112093112@qq.com'),
@@ -184,18 +198,25 @@ var webpackConfBase = {
     }),
     //HTML处理
     new HtmlWebpackPlugin({
-      // title : '', //标题
+      title : '恒丰物流平台', //标题
       filename: 'index.html', //输出的 HTML 文件名，默认是 index.html, 也可以直接配置带有子目录。
       template: config.src.html, //模板文件路径，支持加载器，比如 html-loader!./index.html
       inject: 'body', // true | 'head' | 'body' | false  ,注入所有的资源到特定的 template 或者 templateContent 中，如果设置为 true 或者 body，所有的 javascript 资源将被放置到 body 元素的底部，'head' 将放置到 head 元素中
-      // favicon : '', //favicon 路径
+      publicPath: config.currUrl.publicPath, //向页面传递变量,替换静态资源链接
+      favicon : path.resolve(process.cwd(),'./src/static/img/favicon.ico'), //favicon 路径 以 cwd 路径为基础路径;
       hash: false , // true | false, 如果为 true, 将添加一个唯一的 webpack 编译 hash 到所有包含的脚本和 CSS 文件，对于解除 cache 很有用
       cache: true, // true | false，如果为 true, 这是默认值，仅仅在文件修改之后才会发布文件
       showErrors: true, // true | false, 如果为 true, 这是默认值，错误信息会写入到 HTML 页面中
       minify: { // 传递 html-minifier 选项给 minify 输出; https://github.com/kangax/html-minifier#options-quick-reference
-        removeComments: !config.debug,
-        collapseWhitespace: !config.debug,
-        removeAttributeQuotes: !config.debug
+        removeComments: !_debug,
+        collapseWhitespace: !_debug,
+        removeAttributeQuotes: !_debug,
+        collapseBooleanAttributes: !_debug,
+        removeEmptyAttributes: !_debug,
+        removeScriptTypeAttributes: !_debug,
+        removeStyleLinkTypeAttributes: !_debug,
+        minifyJS: !_debug,
+        minifyCSS: !_debug
       },
       chunks: ['manifest','vendor','index'], //允许只添加某些块 
       // excludeChunks: [] , //允许跳过某些块
@@ -203,10 +224,10 @@ var webpackConfBase = {
     }),
     // 提取公共模块
     // 注意：webpack用插件CommonsChunkPlugin进行打包的时候，将符合引用规则(minChunks)的模块打包到name参数的数组的第一个块里（chunk）,然后数组后面的块依次打包(查找entry里的key,没有找到相关的key就生成一个空的块)，最后一个块包含webpack生成的在浏览器上使用各个块的加载代码，所以页面上使用的时候最后一个块必须最先加载,
-    // 如果把minChunks修改为Infinity，那么chunk1和chunk2(公有的业务逻辑部分,在main.js和main1.js中require进来)都打包到main.js,main1.js里，也就是共有逻辑不会抽取出来作为一个单独的chunk,而是打包到jquery.js中!
+    // 如果把minChunks修改为Infinity，那么共有逻辑不会抽取出来作为一个单独的chunk,而是打包到最后一个js文件中!
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor','manifest'],
-      minChunks: Infinity,
+      // minChunks: Infinity,
       // minChunks: function (module, count) { // 只抽取 node_modules 中的块
       //   return (
       //     module.resource &&

@@ -24,11 +24,17 @@ env = minimist(process.argv.slice(2), env).env;
 //dev[默认] 本地开发 webpack-dev-server , 
 //brower 本地编译构建 browser-sync , 
 //product 服务器构建[替换url并压缩] 
-
+//格式化webpack配置项;
+if(env === 'dev' || env === 'browser'){
+  config.debug = true;
+  config.currUrl = config.selfUrl;
+}else{
+  config.debug = false;
+  config.currUrl = config.remoteUrl;
+}
 config.env = env;
-config.debug = (env === 'dev' || env === 'browser');
+
 gutil.log('env : ', config.env, ' ; debug :',config.debug);
-//配置webpack
 var webpackCompiler = webpackConfig( config );
 
 //check code
@@ -65,18 +71,18 @@ gulp.task('webpack-dev-server',  function (done) {
     //   webpackCompiler.entry[name] = ['./build/dev-client'].concat(webpackCompiler.entry[name])
     // })
     webpackCompiler.entry.index = webpackCompiler.entry.index || [];
-    webpackCompiler.entry.index.unshift("webpack-dev-server/client?http://localhost:"+config.port);  // 将执替换js内联进去
+    webpackCompiler.entry.index.unshift("webpack-dev-server/client?http://localhost:"+config.browser.port);  // 将执替换js内联进去
     webpackCompiler.entry.index.unshift("webpack/hot/dev-server"); // HMR 更新失败之后会刷新整个页面;webpack/hot/only-dev-server配置会要求手动刷新
     /*"server": "webpack-dev-server --progress --colors --hot --inline",*/
     new webpackDevServer(webpack(webpackCompiler), {
           hot: true , 
           stats: { colors: true },
           historyApiFallback: true
-    }).listen(config.port, 'localhost', function (err) {
+    }).listen(config.browser.port, 'localhost', function (err) {
         if (err) {
             throw new gutil.PluginError('webpack-dev-server 启动失败:', err);
         }
-        gutil.log('[webpack-dev-server 启动成功:]', 'http://localhost:' +config.port);
+        gutil.log('[webpack-dev-server 启动成功:]', 'http://localhost:' +config.browser.port);
     });
 });
 
@@ -87,7 +93,7 @@ gulp.task('browser-sync',['build'],function() {
       baseDir: config.dest.path,
       //index: config.browser.index,
       //startPath: config.browser.startPath,
-      port :  config.port
+      port :  config.browser.port
     }
   });
   gulp.start('watch');
