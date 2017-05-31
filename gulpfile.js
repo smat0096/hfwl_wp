@@ -27,7 +27,7 @@ env = minimist(process.argv.slice(2), env).env;
 //格式化webpack配置项;
 if(env === 'dev' || env === 'browser'){
   config.debug = true;
-  config.currUrl = config.selfUrl;
+  config.currUrl = config.localUrl;
 }else{
   config.debug = false;
   config.currUrl = config.remoteUrl;
@@ -38,10 +38,9 @@ gutil.log('env : ', config.env, ' ; debug :',config.debug);
 var webpackCompiler = webpackConfig( config );
 
 //check code
-gulp.task('hint', function () {
+gulp.task('hint', function () {return;
     var jshint = require('gulp-jshint')
     var stylish = require('jshint-stylish')
-    return;
     return gulp.src(config.src.babel)
         .pipe(jshint())
         .pipe(jshint.reporter(stylish));

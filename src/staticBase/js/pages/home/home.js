@@ -8,7 +8,7 @@ var template = `
     </div>
     <div class="home_bd bg_f0" v-if="user.data.auditType != 1">
       <div class="h-200 flex_box mb-15">
-        <router-link to="/sendGoods"  class="flex_item mr-15 bg_o flex_box flex_box-center">
+        <router-link to="/sendGoodsP"  class="flex_item mr-15 bg_o flex_box flex_box-center">
           <div class="home_box-item">
             <div class="icon_1 icon_1_home_sendgoods"></div>
             <div class="home_box-item_text">发布货源</div>

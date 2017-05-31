@@ -79,15 +79,7 @@ var config = {
       //     path.join(srcPath , 'staticBase/js/lib/vue/vue-router-2.1.1.min.js')
       // ]
     },
-    //局域网服务器
-    localServer : {
-        host: '192.168.56.130',
-        port : '80',
-        remotePath: '/data/website/website1',
-        user: 'root',
-        pass: 'password'
-    },
-    //远程服务器
+    //远程服务器上传配置
     remoteServer : {
         host: '211.149.183.58',
         port : '21',
@@ -100,8 +92,8 @@ var config = {
             gutil.log('上传完成!!!');
         }
     },
-    //数据接口
-    selfUrl : {
+    //本地数据接口
+    localUrl : {
       publicPath : '', //基础路径
       basicUrl : '', //基础路径, 下次改为 publicPath; TODO;
       index : '/',
@@ -171,6 +163,7 @@ var config = {
       //业务员
       ,business_r_get: 'static/json/business.json' // [业务员 推荐记录]
     },
+    //远程服务器数据接口
     remoteUrl : {
       publicPath : '/addons/ewei_shopv2/plugin/wuliu/template/mobile/default/hfwl/', //服务器文件基础路径
       basicUrl : '/addons/ewei_shopv2/plugin/wuliu/template/mobile/default/hfwl/', //服务器文件基础路径

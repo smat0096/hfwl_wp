@@ -4,7 +4,7 @@ module.exports = function(config){
 return {
   devServer: {
     contentBase: config.dest.path,//本地服务器所加载的页面所在的目录
-    watchContentBase: true,
+    //watchContentBase: true,
     port : config.browser.port,
     //跳转重定向 ;必须指定 contentBase 正确,否则此配置会造成错误;
     historyApiFallback: true,

@@ -57,7 +57,7 @@
         return;
       }
       var driverArr=['/findGoodsContact','/userCommentCar'],
-          senderArr=['/sendGoods','/sendGoodsR','/sendGoodsU','/sendGoodsL','/carportContact','/carportAdd','/carportKnown'],
+          senderArr=['/sendGoodsP','/sendGoodsR','/sendGoodsU','/sendGoodsL','/carportContact','/carportAdd','/carportKnown'],
           businessArr=['/businessR'];
       if(_ks.inArray(to.path, driverArr) && !(user.isAudited && user.isDriver)){
         $.alert("成功认证后可使用此项功能")

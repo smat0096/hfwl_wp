@@ -57,7 +57,7 @@ module.exports = function(config){
 var _debug = config.debug;
 //config Object.assign()
 var webpackConfBase = {
-  entry: config.entry,
+  entry: config.entry, //入口文件
   output: {
     path: config.dest.path,              //输出路径
     filename: "js/[name].[hash].js",     //输出文件名(可含子路径)
@@ -74,8 +74,8 @@ var webpackConfBase = {
       "vue-router" :  "VueRouter",
       "art-template" :  "template"
   },
-  devtool : '#cheap-module-eval-source-map',
-  module: {
+  devtool : '#cheap-module-eval-source-map', //source-map选项
+  module: { //模块
     noParse: /node_modules\/(jquey|moment|chart\.js)/, //忽略解析这些文件的依赖
     rules: [
       {
@@ -161,14 +161,14 @@ var webpackConfBase = {
       }
     ]
   },
-  //resolve 重定向定义应用层的模块（要被打包的模块）的解析配置
+  //解析,重定向定义应用层的模块（要被打包的模块）的解析配置
   resolve: {
     modules: [ "node_modules" ],
     extensions: [ '.js', '.json','.es6','.jsx','css','.scss'],//可省略的文件扩展名
     //定义引用路径的别名
     alias: config.alias
   },
-  
+  //插件
   plugins: [
     //配置超全局变量[包括业务代码]
     new webpack.DefinePlugin({
