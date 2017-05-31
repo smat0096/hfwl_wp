@@ -222,9 +222,17 @@ var webpackConfBase = {
     // 拷贝静态文件
     new CopyWebpackPlugin([
       {
-        from: config.src.static,
-        to: config.dest.static,
+        from: path.join(config.src.path,'static'),
+        to: path.join(config.dest.path,'static')
         //ignore: ['.*']
+      },
+      {
+        from: path.join(config.src.path,'manifest.html'),
+        to: path.join(config.dest.path,'manifest.html')
+      },
+      {
+        from: path.join(config.src.path,'manifest.appcache'),
+        to: path.join(config.dest.path,'manifest.appcache')
       }
     ])
   ]

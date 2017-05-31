@@ -16,7 +16,6 @@ var config = {
     src : {
       path : srcPath,
       html : path.join(srcPath , './index.html'),
-      static : path.resolve(srcPath, './static/'),
       babel : [
         path.join(srcPath , 'staticBase/js/component/**/*.js'),
         path.join(srcPath , 'staticBase/js/pages/**/*.js'),
@@ -26,8 +25,7 @@ var config = {
       ],
     },
     dest : {
-      path : destPath,
-      static : path.resolve(destPath, './static/'),
+      path : destPath
     },
     //browser-sync 配置
     browser: {
@@ -71,15 +69,15 @@ var config = {
           path.join(srcPath , 'staticBase/js/base.js'),
           path.join(srcPath , 'staticBase/js/index.js')
       ],
-      'vendor' : [
-          path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/jquery-2.1.4.js'),
-          path.join(srcPath , 'staticBase/js/lib/art-template/template-web.js'),
-          path.join(srcPath , 'staticBase/js/lib/jquery-weui/js/jquery-weui.min.js'),
-          path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/fastclick.js'),
-          path.join(srcPath , 'staticBase/js/lib/vue/vue-2.2.0.min.js'),
-          path.join(srcPath , 'staticBase/js/lib/vue/vuex.min.js'),
-          path.join(srcPath , 'staticBase/js/lib/vue/vue-router-2.1.1.min.js')
-      ]
+      // 'vendor' : [
+      //     path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/jquery-2.1.4.js'),
+      //     path.join(srcPath , 'staticBase/js/lib/art-template/template-web.js'),
+      //     path.join(srcPath , 'staticBase/js/lib/jquery-weui/js/jquery-weui.min.js'),
+      //     path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/fastclick.js'),
+      //     path.join(srcPath , 'staticBase/js/lib/vue/vue-2.2.0.min.js'),
+      //     path.join(srcPath , 'staticBase/js/lib/vue/vuex.min.js'),
+      //     path.join(srcPath , 'staticBase/js/lib/vue/vue-router-2.1.1.min.js')
+      // ]
     },
     //局域网服务器
     localServer : {
