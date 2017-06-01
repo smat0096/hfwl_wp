@@ -12,47 +12,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 var webpackConfDev = require('./webpack.config.dev.js');
 var webpackConfProd = require('./webpack.config.prod.js');
-/*
-//遍历入口JS文件
-  var entries= function (srcDir) {
-    var jsDir = path.resolve(srcDir, 'js')
-    var entryFiles = glob.sync(jsDir + '/*.{js,jsx}')
-    var map = {};
 
-    for (var i = 0; i < entryFiles.length; i++) {
-        var filePath = entryFiles[i];
-        var filename = filePath.substring(filePath.lastIndexOf('\/') + 1, filePath.lastIndexOf('.'));
-        map[filename] = filePath;
-    }
-    return map;
-  };
-
-  //遍历HTML文件
-  var html_plugins = function (srcDir) {
-      var entryHtml = glob.sync(srcDir + '/*.html')
-      var r = []
-      var entriesFiles = entries(srcDir);
-      console.log('入口JS文件: \n\r',entriesFiles,'\n\r\n\r模板HTML文件: \n\r',entryHtml);
-      for (var i = 0; i < entryHtml.length; i++) {
-          var filePath = entryHtml[i];
-          var filename = filePath.substring(filePath.lastIndexOf('\/') + 1, filePath.lastIndexOf('.'));
-          var conf = {
-              template: filePath,//'html!' + filePath,使用html!后 title属性无效
-              filename: filename + '.html',
-              title : filename
-          }
-          //如果和入口js文件同名
-          if (filename in entriesFiles) {
-              conf.inject = 'body';
-              conf.chunks = ['vendor', filename];
-          }
-          //跨页面引用，如pageA,pageB 共同引用了common-a-b.js，那么可以在这单独处理
-          //if(pageA|pageB.test(filename)) conf.chunks.splice(1,0,'common-a-b')
-          r.push(new HtmlWebpackPlugin(conf))
-      }
-      return r
-  };
-*/
 module.exports = function(config){
 var _debug = config.debug;
 //config Object.assign()
@@ -78,87 +38,106 @@ var webpackConfBase = {
   module: { //模块
     noParse: /node_modules\/(jquey|moment|chart\.js)/, //忽略解析这些文件的依赖
     rules: [
-      {
-        test: /\.((woff2?|svg)(\?v=[0-9]\.[0-9]\.[0-9]))|(woff2?|svg|jpe?g|png|gif|ico)$/,
-        use: [
-          {
-          //小于10KB的图片会自动转成dataUrl，
+      /* JS S */
+        {
+          test: /\.(js|jsx|vue)$/, // eslint代码检查/格式化
+          loader: 'eslint-loader',
+          enforce: 'pre',
+          exclude: /node_modules/,
+          include: config.src.babel,
+          options: {
+            formatter: require('eslint-friendly-formatter')
+          }
+        },
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader?cacheDirectory',//开启 babel-loader 缓存
+          options : {
+            presets: ['es2015','latest','stage-3']
+          }
+        },
+      /* JS E */
+      /* CSS S */
+        {
+          // 分为压缩的和非压缩的，不会重复，否则可能会报错
+          test: /[^((?!\.min\.css).)*$]\.css$/,  // 包含css 但却不包含.min.css的,使用压缩;
+          use: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            use: "css-loader?minimize&-autoprefixer",
+            publicPath: '../'
+          })
+        }, 
+        {
+          // 包含css 包含.min.css的
+          test: /\.min\.css$/,
+          loader: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            // 不压缩css
+            use: "css-loader",
+            publicPath: '../'
+          })
+        },
+        {
+          test: /\.scss$/, 
+          use: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            use: "scss-loader",
+            publicPath: '../'
+          })
+        },
+        {
+          test: /\.less$/, 
+          use: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            use: "less-loader",
+            publicPath: '../'
+          })
+        },
+      /* CSS E */
+      /* 图片 S */
+        {
+          test: /\.((woff2?|svg)(\?v=[0-9]\.[0-9]\.[0-9]))|(woff2?|svg|jpe?g|png|gif|ico)$/,
+          use: [
+            {
+            //小于10KB的图片会自动转成dataUrl，
+              loader: 'url-loader',
+              options: {
+                limit : 10000,
+                name : 'img/[name].[hash].[ext]'
+              }
+            },
+            {
+              loader: 'image-webpack-loader',
+              options: {
+                bypassOnDebug : true,
+                progressive : true,
+                optipng :{
+                  optimizationLevel : 3,
+                },
+                pngquant : '{quality:"65-80",speed:4}}'
+              }
+            }
+          ]
+        },
+        //矢量图标/字体
+        {
+          test: /\.((ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9]))|(ttf|eot)$/,
+          use: {
             loader: 'url-loader',
             options: {
               limit : 10000,
               name : 'img/[name].[hash].[ext]'
             }
           },
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              bypassOnDebug : true,
-              progressive : true,
-              optipng :{
-                optimizationLevel : 3,
-              },
-              pngquant : '{quality:"65-80",speed:4}}'
-            }
-          }
-        ]
-      },
-      {
-        test: /\.((ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9]))|(ttf|eot)$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit : 10000,
-            name : 'img/[name].[hash].[ext]'
-          }
         },
-      },
-      { 
-        test: /\.(tpl|ejs)$/, 
-        loader: 'ejs-loader' 
-      },
-      {
-        // 分为压缩的和非压缩的，不会重复，否则可能会报错
-        // 包含css 但却不包含.min.css的
-        test: /[^((?!\.min\.css).)*$]\.css$/,  //含有.min.css的文件不会压缩
-        use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: "css-loader?minimize&-autoprefixer",
-          publicPath: '../'
-        })
-      }, 
-      {
-        // 包含css 包含.min.css的
-        test: /\.min\.css$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          // 不压缩css
-          use: "css-loader"
-        })
-      },
-      {
-        test: /\.scss$/, 
-        use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: "scss-loader",
-          publicPath: '../'
-        })
-      },
-      {
-        test: /\.less$/, 
-        use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: "less-loader",
-          publicPath: '../'
-        })
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader?cacheDirectory',//开启 babel-loader 缓存
-        options : {
-          presets: ['es2015','latest','stage-3']
-        }
-      }
+      /* 图片 E */
+      /* 其它 S */
+        { 
+          test: /\.(tpl|ejs)$/, 
+          loader: 'ejs-loader' 
+        },
+      /* 其它 E */
     ]
   },
   //解析,重定向定义应用层的模块（要被打包的模块）的解析配置
