@@ -42,13 +42,8 @@
   
   var router = require('commonUrl/router/router-sync.js'),
       store = require('commonUrl/store/index.js');
-
-  window._base && component && router && store || window.location.reload(false);
-  window.__LOADED = true;
-  //vuex-router-sync
-  // store.state.route.path   // current path (string)
-  // store.state.route.params // current params (object)
-  // store.state.route.query  // current query (object)
+  window._base && component && router && store && (window.__LOADED = true);
+  
   _common.getUserInfo({},function(user){
       router.beforeEach(function(to, from, next){ 
       //非生产模式则不考虑权限过滤, 方便调试;
