@@ -75,6 +75,35 @@ var ks_dom = {
             return;
           };
       })
+    },
+    /**
+     * [description]
+     * @param  {[string]} tpl    [模板字符串] eg: '<li>{title} : {text} <span>加工的 { text }</span></li>'
+     * @param  {[array | object]} data   [数据] eg '[{title : '标题一', text: '内容一'},{title : '标题二', text: '内容二'}]'
+     * @param  {[element]} parent [父原生dom节点]
+     * @return {[type]}        [description]
+     */
+    "template" : function(tpl,data,parent){
+      var result = '';
+      if(data instanceof Array){
+        for(var i=0,iL=data.length; i<iL; i++){
+          result += replace(tpl,data[i]);
+        }
+      }else if(data && typeof data === 'object'){
+        result = replace(tpl,data);
+      }else{
+        throw new Error('template编译data错误');
+      }
+      function replace(tpl,data){
+        for(var key in data){
+          if(typeof key !== 'undefined' && data.hasOwnProperty(key)){
+            tpl = tpl.replace(new RegExp('\{\s*'+key+'\s*\}','g'),data[key]);
+          }
+        }
+        return tpl;
+      }
+      parent && (parent.innerHTML = result);
+      return result;
     }
   /* 9. dom操作 E */
 };

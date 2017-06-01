@@ -8,12 +8,11 @@
   window._base  = require('utils/ks_base.js');
   window._ks = _base.utils;
   window._common = _base.common;
-  window._dom = _base.dom;
+  window._dom = _base.dom; 
   window.KsValidate = _base.validate;
   window.valiOpts = _base.valiOpts;
   window.KsMap = _base.map;
   window.Picker = _base.picker;
-  window._fhIssue = require('fhIssue_new');//必须先在index这里引入 fhIssue, 然后 sendgoods 里才能引入成功,site文件较大/异步加载的关系?;
   /* 全局替换 KsValidate S */
   var KsValidateReplace = {
         showSuccess : function(data){

@@ -3,7 +3,7 @@ define(function(require, exports, module) {
   var _base = window._base,
       _ks = _base.utils,
       _common = _base.common;
-  //var _fhIssue = require('fhIssue_new');
+  var _fhIssue = require('fhIssue_new');
   //数据接口在 fhIssue_new.js 中
   var template = `
 <div class="wrap sendgoods transition-wrap JS_sendgoodsP">

@@ -15,7 +15,7 @@
               var loadfail = document.getElementById('loadfail');
               loadfail && (loadfail.innerText ='');
               setTimeout(function(){
-                 window.__LOADED || window.location.reload(false);
+                 //window.__LOADED || window.location.reload(false);
                  loadfail && (loadfail.innerText ='加载失败,请重启应用');
               },5e3);
             }, false)
