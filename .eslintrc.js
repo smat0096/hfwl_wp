@@ -22,6 +22,6 @@ module.exports = {
     // allow async-await
     'generator-star-spacing': 0,
     // allow debugger during development
-    'no-debugger': !G.env
+    'no-debugger': G.env === 'product'? 2 : 0
   }
 }
