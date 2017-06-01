@@ -1,7 +1,7 @@
 #2017-05-04-v0.01
 1. 添加 manifest 离线缓存功能, 需壳页面加载 loading.html 作为入口加载页面
 2. 计划 司机,货主,厂家分离壳注册页面, 通过url传递用户信息,后台通过登录页面跳转注册页面时需再次获取;
-3. 司机,货主,厂家 认证页面添加 推荐人电话 字段 : businessMobile , 在写入和获取user数据时需注意写入\输出对应字段; 
+3. 司机,货主,厂家 认证页面添加 推荐人电话 字段 : businessMobile , 在写入和获取user数据时需注意写入\输出对应字段;
 5. 获取用户信息接口 使用 auditStatus 替代 audited 和 auditing 字段
 6. 业务员业务记录 : business.json
 7. 业务员业务统计信息, 在获取用户信息时获取, userSettingN.json 中
