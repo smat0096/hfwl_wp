@@ -8,7 +8,8 @@
   window._base  = require('utils/ks_base.js');
   window._ks = _base.utils;
   window._common = _base.common;
-  window._dom = _base.dom; 
+  window._dom = _base.dom;
+  // console.log(_dom.template('<li>{title} : {text} <span>加工的{ text }</span></li>',[{title : '标题一', text: '内容一'},{title : '标题二', text: '内容二'}]));
   window.KsValidate = _base.validate;
   window.valiOpts = _base.valiOpts;
   window.KsMap = _base.map;
@@ -16,18 +17,18 @@
   /* 全局替换 KsValidate S */
   var KsValidateReplace = {
         showSuccess : function(data){
-          //$.toptip("添加熟车成功", 2000, 'success'); 
+          //$.toptip("添加熟车成功", 2000, 'success');
         },
         showWarn : function(data){
-          $.toptip(data.message, 2000, 'warn'); 
+          $.toptip(data.message, 2000, 'warn');
         },
         showError : function(data){
-          $.toast(data.message, 'forbidden'); 
+          $.toast(data.message, 'forbidden');
         }
       };
   _ks.extend(KsValidate.fn ,KsValidateReplace );
   /* 全局替换 KsValidate E */
-  
+
   $.toast.prototype.defaults.duration = 1000;
   /* 全局替换 E*/
 
@@ -38,13 +39,13 @@
       Vue.component(key, component[key]);
     }
   };
-  
+
   var router = require('commonUrl/router/router-sync.js'),
       store = require('commonUrl/store/index.js');
   window._base && component && router && store && (window.__LOADED = true);
-  
+
   _common.getUserInfo({},function(user){
-      router.beforeEach(function(to, from, next){ 
+      router.beforeEach(function(to, from, next){
       //非生产模式则不考虑权限过滤, 方便调试;
       if(window._G_.mode.status != window._G_.mode.server){
         next();
@@ -119,7 +120,7 @@
 
       }
     };
-    
+
     var main = Vue.extend(_main);
     new main().$mount('#index');
   });
