@@ -67,7 +67,7 @@ var webpackConfBase = {
             use: "css-loader?minimize&-autoprefixer",
             publicPath: '../'
           })
-        }, 
+        },
         {
           // 包含css 包含.min.css的
           test: /\.min\.css$/,
@@ -79,7 +79,7 @@ var webpackConfBase = {
           })
         },
         {
-          test: /\.scss$/, 
+          test: /\.scss$/,
           use: ExtractTextPlugin.extract({
             fallback: "style-loader",
             use: "scss-loader",
@@ -87,7 +87,7 @@ var webpackConfBase = {
           })
         },
         {
-          test: /\.less$/, 
+          test: /\.less$/,
           use: ExtractTextPlugin.extract({
             fallback: "style-loader",
             use: "less-loader",
@@ -133,9 +133,9 @@ var webpackConfBase = {
         },
       /* 图片 E */
       /* 其它 S */
-        { 
-          test: /\.(tpl|ejs)$/, 
-          loader: 'ejs-loader' 
+        {
+          test: /\.(tpl|ejs)$/,
+          loader: 'ejs-loader'
         },
       /* 其它 E */
     ]
@@ -197,7 +197,7 @@ var webpackConfBase = {
         minifyJS: !_debug,
         minifyCSS: !_debug
       },
-      chunks: ['manifest','vendor','index'], //允许只添加某些块 
+      chunks: ['manifest','vendor','index'], //允许只添加某些块
       // excludeChunks: [] , //允许跳过某些块
       chunksSortMode: 'dependency',  //允许控制块在添加到页面之前的排序方式，支持的值：'none' | 'default' | {function}-default:'auto'
     }),
@@ -240,17 +240,17 @@ var webpackConfBase = {
 
 var webpackConfAdd = {};
 switch(config.env){
-  case 'dev' : 
+  case 'dev' :
     webpackConfAdd = webpackConfDev(config);
     break;
-  case 'browser' : 
+  case 'browser' :
     break;
-  case 'product' : 
+  case 'product' :
     webpackConfAdd = webpackConfProd(config);
     break;
   default:
     break;
-} 
+}
 return merge(webpackConfBase,webpackConfAdd);
 
 }

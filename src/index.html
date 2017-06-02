@@ -11,14 +11,18 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <script>
           ;(function(){
-            window.addEventListener('load',function(){
+            function _reload (){
               var loadfail = document.getElementById('loadfail');
               loadfail && (loadfail.innerText ='');
               setTimeout(function(){
-                 //window.__LOADED || window.location.reload(false);
-                 loadfail && (loadfail.innerText ='加载失败,请重启应用');
+                window.__LOADED || window.location.reload(false);
+                loadfail && (loadfail.innerText ='加载失败,请重启应用');
+                window.removeEventListener('load', _reload , false);
+                reload = null;
+                loadfail = null;
               },5e3);
-            }, false)
+            };
+            window.addEventListener('load', _reload , false);
           })();
         </script>
         <link rel="stylesheet" href="<%=htmlWebpackPlugin.options.publicPath%>/static/css/main.min.css" />
@@ -50,7 +54,7 @@
         <a id="loadfail" class="weui-loadmore__tips c_o"></a>
     </div>
   </div>
-  
+
   <footer-nav :user = "user" ></footer-nav>
 
   <!-- 地图 -->

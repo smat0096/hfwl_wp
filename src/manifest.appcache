@@ -1,6 +1,6 @@
 CACHE MANIFEST
 #第一行一定是 CACHE MANIFEST
-#version 2017-06-01-1
+#version 2017-06-02-1
 #web服务器需要设置配置: AddType text/cache-manifest .appcache
 
 CACHE:
@@ -23,4 +23,4 @@ NETWORK:
   *
 
 #如果通过网络访问失败了，就去访问紧跟着的那个在本地缓存好的文件文件
-FALLBACK: 
+FALLBACK:

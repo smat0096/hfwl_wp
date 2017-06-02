@@ -6,7 +6,7 @@ define(function(require,exports,module) {
   /* 1.数据初始化 S */
     getUserInfo: function(opts,callback){
       var _this = this,
-          user = {}, 
+          user = {},
           sum = 2,
           num = 0,
           defalts = {};
@@ -62,7 +62,7 @@ define(function(require,exports,module) {
         complete : function(res){}
       };
       function toLogin(){
-        $.alert("请重新登录",function(){
+        // $.alert("请重新登录",function(){
           var login = _G_.url.login;
           var auditType = _ks.getUrlParam("auditType");
           if(auditType){
@@ -70,7 +70,7 @@ define(function(require,exports,module) {
               login += "auditType="+auditType;
           }
           window.location.href= login;
-        });
+        // });
       };
       var data = $.extend({}, defaults.data, opts.data),
           ajaxOpts = $.extend({}, defaults, opts.ajax);
@@ -172,7 +172,7 @@ define(function(require,exports,module) {
       //carpotKnown 等特殊列表 无Id值得情况
       if(!listF.id){
         if(window._G_.mode.status != window._G_.mode.server) console.warn("注意: 此列表无id值, 为自动补全")
-        listF.id = listF.collectId || listF.carId || listF.userId; 
+        listF.id = listF.collectId || listF.carId || listF.userId;
         if(!listF.id && (window._G_.mode.status != window._G_.mode.server)){
           console.error('列表缺少Id值,会引发某些错误')
         }
@@ -215,7 +215,7 @@ define(function(require,exports,module) {
           'pageSize' : _vm.pageSize,
           't' : new Date().getTime()
         },
-        success : function(res){ 
+        success : function(res){
           //setTimeout(function(){ //模拟延迟
           res = _common.digestData(res);
           var listData = res.content && res.content.messages || []; //listData=[];
@@ -307,7 +307,7 @@ define(function(require,exports,module) {
   /* 其它数据初始化 S */
     ,getAuditeStatus :function(listF){
       var status = '',type = '';
-      
+
       listF.isAudited = false;
       switch(Number(listF.auditStatus)){
         case window._G_.auditSuccess:
