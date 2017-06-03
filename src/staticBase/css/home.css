@@ -1,0 +1,4 @@
+.home{
+  -background : url('../img/home/home_bg1.jpg')  no-repeat fixed top/100% 100%;
+  z-index: 21;
+}

@@ -39,16 +39,16 @@ var webpackConfBase = {
     noParse: /node_modules\/(jquey|moment|chart\.js)/, //忽略解析这些文件的依赖
     rules: [
       /* JS S */
-        {
-          test: /\.(js|jsx|vue)$/, // eslint代码检查/格式化
-          loader: 'eslint-loader',
-          enforce: 'pre',
-          exclude: /node_modules/,
-          include: config.src.babel,
-          options: {
-            formatter: require('eslint-friendly-formatter')
-          }
-        },
+        // {
+        //   test: /\.(js|jsx|vue)$/, // eslint代码检查/格式化
+        //   loader: 'eslint-loader',
+        //   enforce: 'pre',
+        //   exclude: /node_modules/,
+        //   include: config.src.babel,
+        //   options: {
+        //     formatter: require('eslint-friendly-formatter')
+        //   }
+        // },
         {
           test: /\.js$/,
           exclude: /node_modules/,
