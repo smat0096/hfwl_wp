@@ -1,13 +1,12 @@
 CACHE MANIFEST
 #第一行一定是 CACHE MANIFEST
-#version 2017-06-02-1
+#version 2017-06-03-2
 #web服务器需要设置配置: AddType text/cache-manifest .appcache
 
 CACHE:
 # 指定你要浏览器进行离线存储的文件列表，一个文件一行,默认强制缓存入口文件[manifest.html]
   ./static/css/main.min.css
   ./static/js/libs.js
-
   ./static/img/loading.png
   ./static/img/favicon.ico
   ./static/img/avatar.jpg

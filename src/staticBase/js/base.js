@@ -5,7 +5,6 @@ window._G_={
   mode : {
     status : 0,
     debug : 0,
-    build : 1,
     server : 2,
   },
   //用户注册类型
@@ -23,19 +22,16 @@ window._G_={
   url:{}
 }
 _G_.url = G.url;
-switch(G.env){
-  case 'dev' : 
-    _G_.status = 0;
+switch(process.env.NODE_ENV){
+  case 'development' :
+    _G_.mode.status = _G_.mode.debug;
     break;
-  case 'browser' :
-    _G_.status = 1;
-    break;
-  case 'product' : 
-    _G_.status = 2;
+  case 'production' :
+    _G_.mode.status = _G_.mode.server;
     break;
   default:
     break;
-} 
+}
 var basicUrl = window.location.protocol +'\/\/'+window.location.host;
 if(window._G_.mode.status == window._G_.mode.server){
   basicUrl += '/addons/ewei_shopv2/plugin/wuliu/template/mobile/default/hfwl'; //服务器文件基础路径;

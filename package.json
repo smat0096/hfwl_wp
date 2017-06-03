@@ -4,10 +4,10 @@
   "description": "none",
   "main": "gulpfile.js",
   "scripts": {
-    "dev": "gulp --env dev",
-    "browser": "gulp --env browser",
-    "product": "gulp --env product",
-    "remote": "gulp --env remote",
+    "dev": "gulp webpack-dev-server --env development",
+    "brow": "gulp browser-sync-server --env development",
+    "prod": "gulp build --env production",
+    "remote": "gulp remote --env production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "kongshan",

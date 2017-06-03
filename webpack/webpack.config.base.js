@@ -21,7 +21,7 @@ var webpackConfBase = {
   output: {
     path: config.dest.path,              //输出路径
     filename: "js/[name].[hash].js",     //输出文件名(可含子路径)
-    publicPath: config.currUrl.publicPath,//输出路径的基本路径,完整路径为: publicPath + path + filename
+    publicPath: config.server.publicPath,//输出路径的基本路径,完整路径为: publicPath + path + filename
     chunkFilename: 'js/[name].[chunkhash].js',
     sourceMapFilename: '[file].[chunkhash].map'
   },
@@ -151,8 +151,9 @@ var webpackConfBase = {
   plugins: [
     //配置超全局变量[包括业务代码]
     new webpack.DefinePlugin({
-        'G.env' : JSON.stringify(config.env), //注意,这里输出到业务环境的是标识符, 若需要识别为字符串,需双引号: "'字符串'",或 stringify;
-        'G.url' : JSON.stringify(config.currUrl)
+        'process.env.NODE_ENV' : JSON.stringify(config.env), //注意,这里输出到业务环境的是标识符, 若需要识别为字符串,需双引号: "'字符串'",或 stringify;
+        'G.act' : JSON.stringify(config.act),
+        'G.url' : JSON.stringify(config.url)
     }),
     //固定注释
     new webpack.BannerPlugin('作者: 空山 112093112@qq.com'),
@@ -181,7 +182,7 @@ var webpackConfBase = {
       filename: 'index.html', //输出的 HTML 文件名，默认是 index.html, 也可以直接配置带有子目录。
       template: config.src.html, //模板文件路径，支持加载器，比如 html-loader!./index.html
       inject: 'body', // true | 'head' | 'body' | false  ,注入所有的资源到特定的 template 或者 templateContent 中，如果设置为 true 或者 body，所有的 javascript 资源将被放置到 body 元素的底部，'head' 将放置到 head 元素中
-      publicPath: config.currUrl.publicPath, //向页面传递变量,替换静态资源链接
+      publicPath: config.server.publicPath, //向页面传递变量,替换静态资源链接
       favicon : path.resolve(process.cwd(),'./src/static/img/favicon.ico'), //favicon 路径 以 cwd 路径为基础路径;
       hash: false , // true | false, 如果为 true, 将添加一个唯一的 webpack 编译 hash 到所有包含的脚本和 CSS 文件，对于解除 cache 很有用
       cache: true, // true | false，如果为 true, 这是默认值，仅仅在文件修改之后才会发布文件
@@ -239,13 +240,13 @@ var webpackConfBase = {
 }
 
 var webpackConfAdd = {};
-switch(config.env){
-  case 'dev' :
+switch(config.act){
+  case 'webpack-dev-server' :
     webpackConfAdd = webpackConfDev(config);
     break;
-  case 'browser' :
+  case 'browser-sync-server' :
     break;
-  case 'product' :
+  case 'build' :
     webpackConfAdd = webpackConfProd(config);
     break;
   default:

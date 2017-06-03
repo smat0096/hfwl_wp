@@ -128,11 +128,6 @@ define(function(require,exports,module) {
 
     formatList : function(listData,opts){
       if(!listData.length) return [];
-      if(window._G_.mode.status != window._G_.mode.server){
-        while(listData.length < 6){
-          listData = listData.concat(_ks.extend([],listData))
-        };
-      }
       opts = opts || {};
       var _vm = this;
       listData.forEach( function(listF, index) {
