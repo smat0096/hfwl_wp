@@ -1,29 +1,33 @@
 "use strict";
 require('basicUrl/staticBase/css/home.css');
 var template = `
-<div class="wrap transition-wrap home">
-  <div class="home_driver" v-if="user.data.auditType != 1">
-    <img src="`+window._G_.url.publicPath+`/static/img/home/home_bg1.jpg"
-      alt=""
-      width="100%"
-      height="100%"
-      border="0"
-      usemap="#home_driver_map"
-      />
-    <map name="home_driver_map" id="home_driver_map">
-      <area shape="circle" coords="106,287,20" href ="venus.html" alt="查看货源" />
-      <area shape="circle" coords="106,287,20" href ="mercur1.html" alt="发布车辆" />
-      <area shape="circle" coords="106,287,20" href ="mercur2.html" alt="联系记录" />
-      <area shape="circle" coords="106,287,20" href ="mercur3.html" alt="工具助手" />
-    </map>
-    <div class="home_bd ">
+<div class="wrap transition-wrap home" @click="invite">
+  <div class="home_driver" v-if="user.isDriver">
+    <div class="content_box" style="top:0;bottom:0;">
+        <router-link to="/findGoodsS"  class="home_link_lt" alt="查看货源">
+        </router-link>
+        <router-link to="/userCommentCar"  class="home_link_lb" alt="发布车辆">
+        </router-link>
+        <router-link to="/findGoodsContact"  class="home_link_rt" alt="联系记录">
+        </router-link>
+        <router-link to="/userSetting"  class="home_link_rb" alt="用户中心">
+        </router-link>
     </div>
   </div>
-  <div class="home_bd" v-if="user.data.auditType == 1">
+  <div class="home_sender" v-if="!user.isDriver">
+    <div class="content_box" style="top:0;bottom:0;">
+        <router-link to="/sendGoodsP"  class="home_link_lt" alt="发布货源">
+        </router-link>
+        <router-link to="/carportSource"  class="home_link_lb" alt="查看车辆">
+        </router-link>
+        <router-link to="/sendGoodsR"  class="home_link_rt" alt="发布记录">
+        </router-link>
+        <router-link to="/userSetting"  class="home_link_rb" alt="用户中心">
+        </router-link>
+    </div>
   </div>
 </div>
 `;
-
 var home = {
   template : template,
   data: function(){
@@ -33,7 +37,8 @@ var home = {
   props : ['user'],
   methods : {
     invite : function(){
-      $.alert("招商电话: 0735-8880606");
+      console.log(this.user)
+      //$.alert("招商电话: 0735-8880606");
     }
   }
 };

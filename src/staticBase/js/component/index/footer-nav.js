@@ -106,6 +106,9 @@ var _template = `
           <div class="sub_list" v-if="user.isBusiness" >
             <router-link to="/businessR" class="fsize" >我的推荐</router-link>
           </div>
+          <div class="sub_list">
+            <router-link to="/aboutPage" class="fsize">工具助手</router-link>
+          </div>
         </div>
       </transition>
     </div>
@@ -155,6 +158,7 @@ var _template = `
               case '/userAuditeSender':
               case '/userCommentSelf':
               case '/businessR':
+              case '/aboutPage':
                 index = 4;
                 break;
               default:

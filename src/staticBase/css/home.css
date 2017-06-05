@@ -1,4 +1,44 @@
 .home{
-  -background : url('../img/home/home_bg1.jpg')  no-repeat fixed top/100% 100%;
   z-index: 21;
+}
+.home_driver,
+.home_sender{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+
+}
+.home_driver{
+  background-image: url('../img/home/home_bg1.jpg');
+}
+.home_sender{
+  background-image: url('../img/home/home_bg2.jpg');
+}
+[class^="home_link_"]{
+  position: absolute;
+  width: 20%;
+  height: 13.5%;
+  -background: #f50;
+}
+.home_link_lt{
+  left: 19%;
+  top: 37%;
+}
+
+.home_link_lb{
+  left: 19%;
+  top: 51%;
+}
+.home_link_rt{
+  left: 60%;
+  top: 37%;
+}
+.home_link_rb{
+  left: 60%;
+  top: 51%;
+}
+.home_link_cc{
+  left: 39.5%;
+  top: 44%;
 }

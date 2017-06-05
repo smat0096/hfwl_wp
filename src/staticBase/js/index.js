@@ -45,6 +45,7 @@
   window._base && component && router && store && (window.__LOADED = true);
 
   _common.getUserInfo({},function(user){
+      console.log(user)
       router.beforeEach(function(to, from, next){
       //非生产模式则不考虑权限过滤, 方便调试;
       if(window._G_.mode.status != window._G_.mode.server){

@@ -2,7 +2,7 @@ define(function(require, exports, module) {
   "use strict";
 
 var template = `
-<div class="wrap  transition-wrap home">
+<div class="wrap  transition-wrap about">
   <div class="content_box bg_f0" style="top:0;">
     <div>
       <img src="`+window._G_.url.basicUrl+`/static/img/top.jpg" style="width:100%; display: block; max-height:'200px'" />
@@ -27,7 +27,7 @@ var template = `
             <div class="home_box-item">
               <div class="icon_1 icon_1_home_card"></div>
               <div class="home_box-item_text">身份证验证</div>
-              
+
             </div>
           </a>
         </div>
