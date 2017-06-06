@@ -16,17 +16,9 @@ define(function(require, exports, module) {
     >
     </header-choose>
     <!--地址插件区域 E-->
-    
-    <div class="btn_box carport_btn_box bg_f0">
-      <router-link to="/carportAdd" class="btn bg_o">
-        <span class="add_con_white mr_5"></span>
-        <span class="f18 " style="vertical-align: middle;">手动添加</span>
-      </router-link>
-    </div>
-
   </div>
 
-  <div class="content_box carport_content_box bg_f0"  style="top:150px; bottom: 50px; -padding: 0 15px;" id="loadmore-wrap-carport-known">
+  <div class="content_box carport_content_box bg_f0"  style="top:90px; bottom: 50px;" id="loadmore-wrap-carport-known">
 
     <pull-to-refresh
       wrap-id = 'loadmore-wrap-carport-known'
@@ -40,8 +32,14 @@ define(function(require, exports, module) {
       :style="{top : '90px', bottom: '0'}"
     ></loading-page>
 
-    <div class="weui-panel__bd car_lists">
+    <div class="btn_box carport_btn_box bg_f0">
+      <router-link to="/carportAdd" class="btn bg_o">
+        <span class="add_con_white mr_5"></span>
+        <span class="f18 " style="vertical-align: middle;">手动添加</span>
+      </router-link>
+    </div>
 
+    <div class="weui-panel__bd car_lists">
       <!-- car_list S  v-show 不显示熟车列表的移除信息 待更新 -->
       <transition-group name="flip-list" tag="div">
       <car-list

@@ -11,7 +11,7 @@ define(function(require, exports, module) {
   <div class="content_box">
     <div class="add_contact_con mt_10 border_b_1">
       <!--表单 S-->
-      <div class="weui-cells weui-cells_form">
+      <div class="weui-cells weui-cells_form hide_before">
       <form action="" ref="addCar_form">
         <div class="weui-cell">
           <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
