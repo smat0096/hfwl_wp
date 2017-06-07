@@ -26,7 +26,7 @@
         "auditStatus": 1,
 
         "ps" : "认证的类型, 1为司机,2为货主,3为业务员,4为厂家",
-        "auditType" : 2,
+        "auditType" : 1,
 
         "businessMobile" : 1888888888,
     "ps" : "用户相关 E",

@@ -36,7 +36,7 @@ var webpackConfBase = {
   },
   devtool : '#cheap-module-eval-source-map', //source-map选项
   module: { //模块
-    noParse: /node_modules\/(jquey|moment|chart\.js)/, //忽略解析这些文件的依赖
+    noParse: /node_modules\/(jquey|moment|chart\.js)/, //引入模块但是不会去做任何处理，也可减少构建的时间
     rules: [
       /* JS S */
         // {

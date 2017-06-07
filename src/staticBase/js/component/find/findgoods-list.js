@@ -1,7 +1,7 @@
 define(function(require,exports,module){
 "use strict";
 var _template = `
-<div class="weui-media-box weui-media-box_appmsg ks_list_item ks_list_item_findlist findgoods-list" @click="sendCount">
+<div class="weui-media-box weui-media-box_appmsg ks_list_item ks_list_item_findlist findgoods-list">
   <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg weui-media-box__bd ks_list_item_bd" @click="showDetail(listF)">
     <div class="weui-media-box__hd">
       <img class="weui-media-box__thumb" :src="listF.avatarUrl">
@@ -13,9 +13,9 @@ var _template = `
         <span class="address_name" v-text="listF.to"></span>
       </div>
       <p class="weui-media-box__desc address_detail">
-        <span class="address_detail_text" v-if="listF.cargoTypeName" v-text="listF.cargoTypeName"></span> 
-        <span class="address_detail_text" v-if="listF.carType" v-text="listF.carType"></span> 
-        <span class="address_detail_text" v-if="listF.carLen" v-text="listF.carLen"></span> 
+        <span class="address_detail_text" v-if="listF.cargoTypeName" v-text="listF.cargoTypeName"></span>
+        <span class="address_detail_text" v-if="listF.carType" v-text="listF.carType"></span>
+        <span class="address_detail_text" v-if="listF.carLen" v-text="listF.carLen"></span>
         <!--<i class="icon_find_renzheng"></i>-->
       </p>
       <ul class="weui-media-box__info address_author">
@@ -23,7 +23,7 @@ var _template = `
           <li class="weui-media-box__info__meta"
             v-if="listF.registerTimeDiff"
            v-text="listF.registerTimeDiff"></li>
-          <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" 
+          <li class="weui-media-box__info__meta weui-media-box__info__meta_extra"
           v-if="listF.userName !== '恒丰物流'"
           v-text="'发货' + listF.sendCount + '条'"></li>
       </ul>
@@ -45,13 +45,14 @@ var _template = `
         replace:true,
         data:function(){
             return{
-              
+
             }
         },
         props: ['listF'],
         methods: {
           showDetail: function(listF) {
-            this.$emit('show-detail',listF)
+            this.sendCount();
+            this.$emit('show-detail',listF);
           },
           sendCount : function(){
             var id = this.listF.id;
@@ -76,7 +77,7 @@ var _template = `
               complete : function(res){
               }
             };
-            return $.ajax(opts);
+            $.ajax(opts);
           },
           addContact : function(listF){
             this.$emit('add-contact',listF)
