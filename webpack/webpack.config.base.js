@@ -23,9 +23,10 @@ var webpackConfBase = {
     filename: "js/[name].[hash].js",     //输出文件名(可含子路径)
     publicPath: config.server.publicPath,//输出路径的基本路径,完整路径为: publicPath + path + filename
     chunkFilename: 'js/[name].[chunkhash].js',
-    sourceMapFilename: '[file].[chunkhash].map'
+    library: '[name].lib'
   },
-  //添加了此项，则表明从外部引入，内部不会打包合并进去
+  //添加了此项，则表明从外部引入，内部不会打包合并进去 ,但是会增加http请求
+  // 优化方案, 使用插件 DllPlugin 和 DllReferencePlugin 打包第三方全局/不处理的库
   externals: {
       "jquery": "$", //从别名获取
       "jquery": "jQuery",
@@ -39,16 +40,16 @@ var webpackConfBase = {
     noParse: /node_modules\/(jquey|moment|chart\.js)/, //引入模块但是不会去做任何处理，也可减少构建的时间
     rules: [
       /* JS S */
-        // {
-        //   test: /\.(js|jsx|vue)$/, // eslint代码检查/格式化
-        //   loader: 'eslint-loader',
-        //   enforce: 'pre',
-        //   exclude: /node_modules/,
-        //   include: config.src.babel,
-        //   options: {
-        //     formatter: require('eslint-friendly-formatter')
-        //   }
-        // },
+        {
+          test: /[^((?!\.min\.css).)*$]\.(js|jsx|vue)$/, // eslint代码检查/格式化
+          loader: 'eslint-loader',
+          enforce: 'pre',
+          exclude: /node_modules/,
+          include: config.src.babel,
+          options: {
+            formatter: require('eslint-friendly-formatter')
+          }
+        },
         {
           test: /\.js$/,
           exclude: /node_modules/,
@@ -219,6 +220,20 @@ var webpackConfBase = {
       // },
       // children: true,
       // async: true
+    }),
+    new webpack.DllPlugin({
+      /**
+       * path
+       * 定义 manifest 文件生成的位置
+       * [name]的部分由entry的名字替换
+       */
+      path: path.join(__dirname, 'lib', 'manifest.[name].json'),
+      /**
+       * name
+       * dll bundle 输出到那个全局变量上
+       * 和 output.library 一样即可。
+       */
+      name: '[name].lib'
     }),
     // 拷贝静态文件
     new CopyWebpackPlugin([

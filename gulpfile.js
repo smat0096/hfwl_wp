@@ -2,10 +2,11 @@
 
 var gulp = require('gulp');
 var path = require('path');
-
+var opn = require('opn'); //打开页面;
 var webpack = require('webpack');
 var webpackDevServer = require('webpack-dev-server');
 var browserSync = require('browser-sync').create(); //移动端浏览器同步热更新
+
 var webpackConfig = require('./webpack/webpack.config.base.js');
 var config = require('./webpack/config.base.js');
 var localConfig = require('./webpack/config.local.js');
@@ -82,6 +83,8 @@ gulp.task('webpack-dev-server',  function (done) {
             throw new gutil.PluginError('webpack-dev-server 启动失败:', err);
         }
         gutil.log('[webpack-dev-server 启动成功:]', 'http://localhost:' +config.server.port);
+        opn('http://localhost:' +config.server.port);
+        done(); //异步回调,返回完成信息;
     });
 });
 
@@ -95,7 +98,7 @@ gulp.task('browser-sync-server',['build'],function() {
       port :  config.server.port
     }
   });
-  gulp.start('watch');
+  return gulp.start('watch');
 });
 
 gulp.task('upload', function () {
@@ -121,6 +124,6 @@ gulp.task('reload', ['build'], function(done){
   done();
 });
 
-gulp.task('default',function(){
-  gulp.start('webpack-dev-server');
+gulp.task('default',['webpack-dev-server'],function(done){
+  done();
 });
