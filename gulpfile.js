@@ -83,8 +83,9 @@ gulp.task('webpack-dev-server',  function (done) {
             throw new gutil.PluginError('webpack-dev-server 启动失败:', err);
         }
         gutil.log('[webpack-dev-server 启动成功:]', 'http://localhost:' +config.server.port);
+        //编译完成后执行回调,打开页面
         opn('http://localhost:' +config.server.port);
-        done(); //异步回调,返回完成信息;
+        done();
     });
 });
 
