@@ -21,14 +21,14 @@ var webpackConfBase = {
   output: {
     path: config.dest.path,              //输出路径
     filename: "js/[name].[hash].js",     //输出文件名(可含子路径)
-    publicPath: config.server.publicPath,//输出路径的基本路径,完整路径为: publicPath + path + filename
+    publicPath: config.server.publicPath,//script标签内的 输出路径的基本路径,完整路径为: publicPath + path + filename
     chunkFilename: 'js/[name].[chunkhash].js',
-    library: '[name].lib'
+    // libraryTarget: "var", //指定你的模块输出类型，可以是commonjs,AMD,script形式,UMD模式
+    // library: "myClassName" //把打包文件捆绑在 window.myClassName 实例上, 可以在入口处调用这个方法
   },
-  //添加了此项，则表明从外部引入，内部不会打包合并进去 ,但是会增加http请求
+  //external的key是require时候模块名称，value是我们在页面中通过script引入的文件名!添加了此项，则表明从外部引入，内部不会打包合并进去 ,但是会增加http请求
   // 优化方案, 使用插件 DllPlugin 和 DllReferencePlugin 打包第三方全局/不处理的库
   externals: {
-      "jquery": "$", //从别名获取
       "jquery": "jQuery",
       "vue" :  "Vue",
       "vuex" :  "Vuex",
@@ -221,20 +221,21 @@ var webpackConfBase = {
       // children: true,
       // async: true
     }),
-    new webpack.DllPlugin({
-      /**
-       * path
-       * 定义 manifest 文件生成的位置
-       * [name]的部分由entry的名字替换
-       */
-      path: path.join(__dirname, 'lib', 'manifest.[name].json'),
-      /**
-       * name
-       * dll bundle 输出到那个全局变量上
-       * 和 output.library 一样即可。
-       */
-      name: '[name].lib'
-    }),
+    // 打包静态依赖库,生成 manifest.[name].json
+    // new webpack.DllPlugin({
+    //   /**
+    //    * path
+    //    * 定义 manifest 文件生成的位置
+    //    * [name]的部分由entry的名字替换
+    //    */
+    //   path: path.join(__dirname, 'lib', 'manifest.[name].json'),
+    //   /**
+    //    * name
+    //    * dll bundle 输出到那个全局变量上
+    //    * 和 output.library 一样即可。
+    //    */
+    //   name: '[name].lib'
+    // }),
     // 拷贝静态文件
     new CopyWebpackPlugin([
       {
