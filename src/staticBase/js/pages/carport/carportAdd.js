@@ -3,6 +3,7 @@ define(function(require, exports, module) {
   var _carport = require("./carport-common.js");
 
   var template = `
+<transition :name="transitionName" v-on:after-enter="initData">
 <div class="wrap transition-wrap carport-add" >
 
   <div class="header_box">
@@ -30,8 +31,8 @@ define(function(require, exports, module) {
             <textarea
               id="carport-add_comment"
               name="comment"
-              class="weui-textarea" 
-              placeholder="请输入备注信息" 
+              class="weui-textarea"
+              placeholder="请输入备注信息"
               rows="3"
               maxlength="60"
               v-model="driverComment"
@@ -51,6 +52,7 @@ define(function(require, exports, module) {
     </div>
   </div>
 </div>
+</transition>
 `
   var _carportAdd = {
     template : template,
@@ -59,7 +61,7 @@ define(function(require, exports, module) {
         //ks_chage_ajaxUrl
         'postUrl' : window._G_.url.carport_addKnown,
 
-        'transitionName' : 'in-out-translate-fade',
+        'transitionName' : 'in-out-translate',
 
         'ksvalidate' : '',
         driverMobile : '',
@@ -73,10 +75,6 @@ define(function(require, exports, module) {
       driverCommentLength : function(){
         return this.driverComment.length;
       }
-    },
-    mounted : function(){
-      var _vm = this;
-      this.initData();
     },
     methods : {
       initData : function(){

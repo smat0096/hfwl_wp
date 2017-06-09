@@ -6,17 +6,18 @@ define(function(require, exports, module) {
       _findgoods = require("./findgoods-common.js");
 
 var template = `
+<transition :name="transitionName" v-on:after-enter="initData">
 <div class="wrap  transition-wrap find_goods" >
 
   <header-back title = "联系货源" ></header-back>
   <div class="content_box JS_find_list" style="top:50px" id="js_findgoods_contact_list">
-  
+
     <pull-to-refresh
       wrap-id = 'js_findgoods_contact_list'
       @refresh = 'initData'
     ></pull-to-refresh>
 
-    <loading-page 
+    <loading-page
       v-show="isShowLoading"
       :loading-icon='loadingIcon'
       :loading-text="loadingText"
@@ -24,11 +25,11 @@ var template = `
 
     <div class="weui-panel weui-panel_access find"  v-if="listDataF.length > 0">
       <div class="weui-panel__bd">
-        
+
         <!-- goodlist -->
         <findgoods-list
           v-for="(listF, index) in listDataF"
-          v-bind:list-f="listF" 
+          v-bind:list-f="listF"
           :key = "listF.id"
           v-on:add-contact="addContact"
           v-on:show-detail="showDetail"
@@ -38,25 +39,26 @@ var template = `
       </div>
 
       <!-- 查看更多 -->
-      <loadmore-link 
+      <loadmore-link
         v-on:load-more-data="loadMoreData"
         v-bind:has-more = "hasMore"
         v-bind:is-loading-more = "isLoadingMore"
       >
       </loadmore-link>
-      
+
     </div>
   </div>
 
   <!-- 详细资源 -->
-  <find-detail 
-    v-bind:is-show-detail="isShowDetail" 
-    v-bind:list-f="detailData" 
+  <find-detail
+    v-bind:is-show-detail="isShowDetail"
+    v-bind:list-f="detailData"
     v-on:hidedetail="hideDetail"
     v-on:add-contact="addContact"
     >
   </find-detail>
 </div>
+</transition>
 `;
 
   var _findGoodsContact = {
@@ -66,7 +68,7 @@ var template = `
         'page' : 1,
         'pageSize' : 10,
         'minId' : '',
-        
+
         'hasData' : true,
         'hasMore' : true,
         'isLoading': false,
@@ -74,10 +76,10 @@ var template = `
         'isLoadingMore' : false,
         'loadingText' : '数据加载中',
         'loadingIcon' : true,
-        
+
         'initUrl' : window._G_.url.findgoodsContact_get,
         'loadMoreUrl' : window._G_.url.findgoodsContact_get,
-        
+
         'transitionName' : 'in-out-translate-fade',
 
         'isShowDetail' : false,
@@ -87,9 +89,9 @@ var template = `
       }
     },
     props : ['user'],
-    mounted : function(){
-      this.initData();
-    },
+    // mounted : function(){
+    //   this.initData();
+    // },
     methods : {
       initData : function(callback){
         var _vm = this;
@@ -107,7 +109,7 @@ var template = `
         this.isShowDetail = true;
       },
       hideDetail: function() {
-        
+
         this.isShowDetail = false;
       },
       //事件钩子 E

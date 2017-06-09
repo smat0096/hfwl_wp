@@ -5,6 +5,7 @@ define(function(require, exports, module) {
       _carport = require("./carport-common.js");
 
   var template = `
+<transition :name="transitionName" v-on:after-enter="initData">
 <div class="wrap transition-wrap bg_f0" id="carport-known">
 
   <div class="header_box carport_header_box">
@@ -24,8 +25,8 @@ define(function(require, exports, module) {
       wrap-id = 'loadmore-wrap-carport-known'
       @refresh = 'initData'
     ></pull-to-refresh>
-    
-    <loading-page 
+
+    <loading-page
       v-show="isShowLoading"
       :loading-icon='loadingIcon'
       :loading-text="loadingText"
@@ -44,7 +45,7 @@ define(function(require, exports, module) {
       <transition-group name="flip-list" tag="div">
       <car-list
         v-for="listF in listDataF"
-        v-bind:list-f="listF" 
+        v-bind:list-f="listF"
         :key="listF.id"
         v-show="listF.isKnown"
         v-on:show-detail="showDetail"
@@ -55,7 +56,7 @@ define(function(require, exports, module) {
       </transition-group>
       <!-- car_list E -->
 
-      <loadmore-scroll 
+      <loadmore-scroll
         v-on:load-more-data="loadMoreData"
         v-bind:has-more = "hasMore"
         v-bind:wrap-id = "'loadmore-wrap-carport-known'"
@@ -66,9 +67,9 @@ define(function(require, exports, module) {
   </div>
 
   <!-- 详细资源 v-show 不显示熟车列表的移除信息 待更新 -->
-  <car-detail 
-    v-bind:is-show-detail="isShowDetail" 
-    v-bind:list-f="detailData" 
+  <car-detail
+    v-bind:is-show-detail="isShowDetail"
+    v-bind:list-f="detailData"
     v-show="detailData.isKnown"
     v-on:hidedetail="hideDetail"
     v-on:add-known="addKnown"
@@ -77,6 +78,7 @@ define(function(require, exports, module) {
     v-on:post-comment="postComment"
   ></car-detail>
 </div>
+</transition>
 `;
   var _carportKnown = {
     template : template,
@@ -87,9 +89,9 @@ define(function(require, exports, module) {
         'loadMoreUrl' : window._G_.url.carport_known_get,
         'addKnownUrl' : window._G_.url.carport_known_act_addKnown,
         'postCommentUrl' : window._G_.url.carport_known_act_comment,
-        
+
         'minId' : '',
-        'transitionName' : 'in-out-translate-fade',
+        'transitionName' : 'in-out-translate',
         'page' : 1,
 
         'isLoading': false,
@@ -108,8 +110,8 @@ define(function(require, exports, module) {
         'isShowMap' : false,
         'detailData' : '',
         'cityPlugData' : {
-          'fromId' : '-1',
-          'from' : '全国',
+          'fromId' : this.user.pos.cityCode,
+          'from' : this.user.pos.cityName,
           'toIds' : '-1',
           'to' : '全国',
           'carLen' : '不限',
@@ -118,9 +120,9 @@ define(function(require, exports, module) {
       }
     },
     props : ['user'],
-    mounted : function(){
-      //this.initData();
-    },
+    // mounted : function(){
+    //   this.initData();
+    // },
     methods : {
       initData : function(callback){
         var _vm = this;
@@ -162,7 +164,7 @@ define(function(require, exports, module) {
       },
       hideDetail: function() {
         this.isShowDetail = false;
-        
+
       },
       addKnown : function(listF){
         var _vm = this;

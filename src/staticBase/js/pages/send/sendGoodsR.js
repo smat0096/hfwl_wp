@@ -4,13 +4,14 @@ define(function(require, exports, module) {
       _ks = _base.utils,
       _common = _base.common,
       _send = require("./send-common.js");
-      
+
   var template = `
+<transition :name="transitionName" v-on:after-enter="initData">
 <div class="wrap  transition-wrap publish_goods publish_goods_r">
 
-  <header-back 
-    title = "发布记录" 
-    v-bind:right-text = "isMultipleText" 
+  <header-back
+    title = "发布记录"
+    v-bind:right-text = "isMultipleText"
     v-on:right-event = "changeSelectMode"
   ></header-back>
 
@@ -18,7 +19,7 @@ define(function(require, exports, module) {
     <div class="weui-tab">
 
       <div class="weui-navbar">
-        <a 
+        <a
           class="weui-navbar__item weui-navbar__orange"
           :class="{ 'weui-bar__item--on' : listDataType === 'sending'}"
           href="javascript:;"
@@ -26,8 +27,8 @@ define(function(require, exports, module) {
           >
           发布中
         </a>
-        <a 
-          class="weui-navbar__item weui-navbar__orange" 
+        <a
+          class="weui-navbar__item weui-navbar__orange"
           :class="{ 'weui-bar__item--on' : listDataType === 'closing'}"
           href="javascript:;"
           @click = "getTypedData('closing')"
@@ -38,13 +39,13 @@ define(function(require, exports, module) {
 
       <div class="weui-tab__bd">
         <div class="weui-tab__bd-item weui-tab__bd-item--active" id="loadmore-wrap-sendgoods-r" style="width:100%">
-            
+
           <pull-to-refresh
             wrap-id = 'loadmore-wrap-sendgoods-r'
             @refresh = 'initData'
           ></pull-to-refresh>
-          
-          <loading-page 
+
+          <loading-page
             v-show="isShowLoading"
             :loading-icon='loadingIcon'
             :loading-text="loadingText"
@@ -58,20 +59,20 @@ define(function(require, exports, module) {
               <transition-group name="flip-list" tag="div">
               <div v-for="listF in listDataF"  :key="listF.id">
                 <sendgoods-list
-                  v-bind:list-f = "listF" 
+                  v-bind:list-f = "listF"
                   v-bind:list-data-type = "listDataType"
                   v-bind:is-multiple = "isMultiple"
                   v-on:select-one="selectOne"
                   v-on:action-data="doActionData"
                 >
                   <div slot="header">
-                    <div class="f_head" v-show="!isMultiple"> 
+                    <div class="f_head" v-show="!isMultiple">
                       <div class="clearfix">
-                        <div class="fl"> 
+                        <div class="fl">
                           <span v-text="listF.createTimeDiff"></span>&nbsp;&nbsp;
                           <i class="icon_1 icon_1_person"></i>
                           <span v-text="listF.browseCount">50</span><span>人已浏览</span>
-                        </div> 
+                        </div>
                         <div class="fr">
                           <a href="javascript:;" class="detail_price c_o hide_tmp">收信息费</a>
                         </div>
@@ -79,15 +80,15 @@ define(function(require, exports, module) {
                     </div>
                   </div>
                   <div slot="footer-right" class="fr c_o">
-                    <a 
-                      href="javascript:;" 
-                      class="weui-btn weui-btn_mini orange_btn_plain detail_btn detail_btn_smaller" 
+                    <a
+                      href="javascript:;"
+                      class="weui-btn weui-btn_mini orange_btn_plain detail_btn detail_btn_smaller"
                       v-if="listDataType == 'sending'"
                       @click="closeOne(listF)"
-                    >关闭</a><a href="javascript:;" 
+                    >关闭</a><a href="javascript:;"
                       class="weui-btn weui-btn_mini orange_btn_plain detail_btn detail_btn_smaller"
                       @click="deleteOne(listF)"
-                    >删除</a><a href="javascript:;" 
+                    >删除</a><a href="javascript:;"
                       class="weui-btn weui-btn_mini orange_btn_plain detail_btn detail_btn_smaller"
                       @click="refreshOne(listF)"
                     >重发</a>
@@ -98,14 +99,14 @@ define(function(require, exports, module) {
               <!-- content_box_list E-->
 
             </form>
-            <loadmore-scroll 
+            <loadmore-scroll
               v-on:load-more-data="loadMoreData"
               v-bind:has-more = "hasMore"
               v-bind:wrap-id = "'loadmore-wrap-sendgoods-r'"
               v-bind:is-loading-more = "isLoadingMore"
             >
             </loadmore-scroll>
-          
+
           </div>
         </div>
       </div>
@@ -119,17 +120,18 @@ define(function(require, exports, module) {
     @select-all = "selectAll"
     @action-all = "actionAll"
   ></footer-batch>
-  
+
 </div>
+</transition>
 `;
   var _sendgoodsR = {
     template : template,
     data: function(){
       return {
-        'transitionName' : 'in-out-translate-fade',
+        'transitionName' : 'in-out-translate',
         'page' : 1,
         'minId' : '',
-        
+
         //ks_chage_ajaxUrl
         'initUrl' : window._G_.url.sendgoods_r_get,
         'loadMoreUrl' : window._G_.url.sendgoods_r_get,
@@ -153,9 +155,6 @@ define(function(require, exports, module) {
       }
     },
     props : ['user'],
-    mounted : function(){
-      this.initData();
-    },
     methods : {
       initData : function(callback){
         var _vm = this;
@@ -178,7 +177,7 @@ define(function(require, exports, module) {
           var browseCount = listF.browseCount;
           var second = (nowTime - listF.createTime)/1e3;
           if(!browseCount || browseCount <= 0){// && typeof browseCount =="object"
-            if(second < 0) return; 
+            if(second < 0) return;
             if(second < 60){
               browseCount = parseInt(second/6);
             }else if(second < 60*10){
@@ -219,7 +218,7 @@ define(function(require, exports, module) {
       /** 需加载事件 **/
       initEvent : function(){
       },
-      
+
       /** send_common S **/
       //执行关闭,删除,重发动作
       doActionData : function(opts){

@@ -4,29 +4,30 @@ define(function(require,exports,module){
       _user = require("./user-common.js");
 
 var _template = `
+<transition :name="transitionName">
 <div class="wrap  transition-wrap  user-create-driver" style="padding-bottom:50px">
   <div class="wrap">
 
     <div class="header_box">
-      <header-back 
+      <header-back
         :title = "title"
       ></header-back>
     </div>
-    
+
     <div class="content_box p_b-0">
       <div class="border_b_1">
         <!--表单 S-->
         <div class="weui-cells weui-cells_form">
         <form  :action="formUrl" method="post" ref="driver_form"  enctype="multipart/form-data">
           <input type="hidden" name="formType" :value="formType" />
-          
+
           <div class="weui-cell">
             <div class="weui-cell__hd">
               <label class="weui-label">姓名</label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" type="text" autocomplete="off" maxlength="6" placeholder="请输入姓名" 
-                v-model="listF.realName" 
+              <input class="weui-input" type="text" autocomplete="off" maxlength="6" placeholder="请输入姓名"
+                v-model="listF.realName"
                 name="realName"
                 :readonly="isReadonly"
               />
@@ -39,11 +40,11 @@ var _template = `
               身份证号
             </label></div>
             <div class="weui-cell__bd">
-              <input class="weui-input" type="text" autocomplete="off" 
-                maxlength="19" 
+              <input class="weui-input" type="text" autocomplete="off"
+                maxlength="19"
                 minlength="15"
-                placeholder="请输入身份证号码" 
-                v-model="listF.idCard" 
+                placeholder="请输入身份证号码"
+                v-model="listF.idCard"
                 name="idCard"
                 :readonly="isReadonly"
               />
@@ -59,10 +60,10 @@ var _template = `
               </label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" 
-                type="text" 
+              <input class="weui-input"
+                type="text"
                 autocomplete="off"
-                placeholder="请选择车牌类型" 
+                placeholder="请选择车牌类型"
                 v-model="listF.plateType"
                 readonly
                 name="plateType"
@@ -78,10 +79,10 @@ var _template = `
               </label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" 
-                type="text" 
+              <input class="weui-input"
+                type="text"
                 autocomplete="off"
-                placeholder="请选择车牌号码" 
+                placeholder="请选择车牌号码"
                 v-model="listF.plateNumber"
                 readonly
                 name="plateNumber"
@@ -99,8 +100,8 @@ var _template = `
             </label></div>
             <div class="weui-cell__bd">
               <input class="weui-input" type="text" maxlength="11"
-                placeholder="请输入推荐人电话" 
-                v-model="listF.businessMobile" 
+                placeholder="请输入推荐人电话"
+                v-model="listF.businessMobile"
                 name="businessMobile"
                 :readonly="isReadonly"
               />
@@ -119,10 +120,10 @@ var _template = `
                   ref="driverLicenceInput"
                   name="driverLicence"
                   class="weui-uploader__input"
-                  type="file" 
+                  type="file"
                   accept="image/*"
                 >
-                <img 
+                <img
                   ref="driverLicenceImage"
                   class="weui-uploader__file"
                   :src="listF.driverLicenceUrl"
@@ -146,7 +147,7 @@ var _template = `
                   type="file"
                   accept="image/*"
                 >
-                <img 
+                <img
                   ref="drivingLicenceImage"
                   class="weui-uploader__file"
                   :src="listF.drivingLicenceUrl"
@@ -160,7 +161,7 @@ var _template = `
         </div>
         <!--表单 E-->
       </div>
-      
+
       <div class="weui-btn-area mb-20">
         <a class="weui-btn weui-btn_primary orange_btn" href="javascript:;" ref="driver_submit"  v-show="!isReadonly" @click="checkbusinessMobile" >确认提交</a> <!--  -->
       </div>
@@ -173,10 +174,11 @@ var _template = `
   </div>
   <picker-footer
     v-bind:is-show="isShowPicker"
-    v-bind:picker="picker" 
+    v-bind:picker="picker"
     v-on:hide="hidePicker"
   ></picker-footer>
 </div>
+</transition>
   `;
 
   return Vue.extend({

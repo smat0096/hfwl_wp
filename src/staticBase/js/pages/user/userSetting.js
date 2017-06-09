@@ -5,10 +5,11 @@ define(function(require, exports, module) {
       _common = _base.common;
 
   var template = `
+<transition :name="transitionName">
 <div class="wrap transition-wrap">
   <div class="header_box">
-    <header-back 
-      title = "用户设置" 
+    <header-back
+      title = "用户设置"
       right-text="退出"
       @right-event="logout"
     ></header-back>
@@ -20,8 +21,8 @@ define(function(require, exports, module) {
       @refresh = 'reload'
     ></pull-to-refresh>
     <!-- 用户信息头部 S-->
-    <user-detail-head 
-      v-bind:user="user" 
+    <user-detail-head
+      v-bind:user="user"
       v-on:audite= 'audite'
     >
     </user-detail-head>
@@ -33,12 +34,13 @@ define(function(require, exports, module) {
     </div>
   </div>
 </div>
+</transition>
 `;
   var _userSetting = {
     template : template,
     data: function(){
       return {
-        'transitionName' : 'in-out-translate-fade',
+        'transitionName' : 'in-out-translate',
         isShowCreateDriver : false,
         isShowCreateSender : false,
         detailTitle : '',
@@ -81,7 +83,7 @@ define(function(require, exports, module) {
             message = _ks.trim(_ks.getUrlParam('message','hash'));
         if(message){
           if(status==="OK"){
-            $.toast(message,'1000');  
+            $.toast(message,'1000');
           }else{
             $.toast(message, "cancel");
           }
@@ -96,10 +98,10 @@ define(function(require, exports, module) {
             title: "请选择认证类型",
             text: "成功认证可以获得更快更多的资讯",
             buttons: [
-              { text: "司机", onClick: function(){ 
+              { text: "司机", onClick: function(){
                 _this.$router.push('./userAuditeDriver');
               }},
-              { text: "货主", onClick: function(){ 
+              { text: "货主", onClick: function(){
                 _this.$router.push('./userAuditeSender');
               }}
             ]

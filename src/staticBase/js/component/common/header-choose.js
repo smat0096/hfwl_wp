@@ -121,7 +121,7 @@ var _template = `
                 fromCallBack: callbackFn,
                 fromAllWhole: 1
               });
-              this.initData();
+              //this.initData();
             },
             initData : function(){
               var _this = this;

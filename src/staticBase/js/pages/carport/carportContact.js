@@ -5,6 +5,7 @@ define(function(require, exports, module) {
       _carport = require("./carport-common.js");
 
   var template = `
+<transition :name="transitionName" v-on:after-enter="initData">
 <div class="wrap transition-wrap bg_f0" >
 
   <div class="header_box carport_header_box">
@@ -18,18 +19,18 @@ define(function(require, exports, module) {
       @refresh = 'initData'
     ></pull-to-refresh>
 
-    <loading-page 
+    <loading-page
       v-show="isShowLoading"
       :loading-icon='loadingIcon'
       :loading-text="loadingText"
     ></loading-page>
-    
+
     <div class="weui-panel__bd car_lists">
-    
+
       <!-- car_list S -->
       <car-list
         v-for="listF in listDataF"
-        v-bind:list-f="listF" 
+        v-bind:list-f="listF"
         :key="listF.id"
         v-on:show-detail="showDetail"
         v-on:add-known="addKnown"
@@ -38,7 +39,7 @@ define(function(require, exports, module) {
       </car-list>
       <!-- car_list E -->
 
-      <loadmore-scroll 
+      <loadmore-scroll
         v-on:load-more-data="loadMoreData"
         v-bind:has-more = "hasMore"
         v-bind:wrap-id = "'loadmore-wrap-carport-msg'"
@@ -49,9 +50,9 @@ define(function(require, exports, module) {
   </div>
 
   <!-- 详细资源 -->
-  <car-detail 
-    v-bind:is-show-detail="isShowDetail" 
-    v-bind:list-f="detailData" 
+  <car-detail
+    v-bind:is-show-detail="isShowDetail"
+    v-bind:list-f="detailData"
     v-on:hidedetail="hideDetail"
     v-on:add-known="addKnown"
     v-on:remove-known="removeKnown"
@@ -60,20 +61,21 @@ define(function(require, exports, module) {
   ></car-detail>
 
 </div>
+</transition>
 `
   var _carportMsg = {
     template : template,
     data: function(){
       return {
-        'transitionName' : 'in-out-translate-fade',
+        'transitionName' : 'in-out-translate',
         'page' : 1,
         'minId' : '',
-        
+
         'initUrl' : window._G_.url.carport_contact_get,
         'loadMoreUrl' : window._G_.url.carport_contact_get,
         'addKnownUrl' : window._G_.url.carport_source_act_addKnown,
         'postCommentUrl' : window._G_.url.carport_known_act_comment,
-        
+
         'isLoading': false,
         'isShowLoading': false,
         'hasData' : true,
@@ -92,9 +94,6 @@ define(function(require, exports, module) {
       }
     },
     props : ['user'],
-    mounted : function(){
-      this.initData();
-    },
     methods : {
       initData : function(callback){
         var _vm = this;
@@ -126,7 +125,7 @@ define(function(require, exports, module) {
       },
       hideDetail: function() {
         this.isShowDetail = false;
-        
+
       },
       addKnown : function(listF){
         var _vm = this;

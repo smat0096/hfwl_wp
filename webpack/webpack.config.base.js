@@ -219,7 +219,8 @@ var webpackConfBase = {
       //   )
       // },
       // children: true,
-      // async: true
+      // async: true,
+      // chunks:['index']
     }),
     // 打包静态依赖库,生成 manifest.[name].json
     // new webpack.DllPlugin({

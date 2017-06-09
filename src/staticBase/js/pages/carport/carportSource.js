@@ -3,8 +3,9 @@ define(function(require, exports, module) {
       _ks = _base.utils,
       _common = _base.common,
       _carport = require("./carport-common.js");
-      
+
   var template = `
+<transition :name="transitionName" v-on:after-enter="initData">
 <div class="wrap transition-wrap">
   <div class="header_box carport_header_box">
     <header-back title = "车源信息" ></header-back>
@@ -26,18 +27,18 @@ define(function(require, exports, module) {
       @refresh = 'initData'
     ></pull-to-refresh>
 
-    <loading-page 
+    <loading-page
       v-show="isShowLoading"
       :loading-icon='loadingIcon'
       :loading-text="loadingText"
       :style="{top : '90px', bottom: '0'}"
     ></loading-page>
-    
+
     <div class="weui-panel__bd car_lists">
       <!-- car_list S -->
       <car-list
         v-for="listF in listDataF"
-        v-bind:list-f="listF" 
+        v-bind:list-f="listF"
         :key="listF.id"
         v-on:show-detail="showDetail"
         v-on:add-known="addKnown"
@@ -46,7 +47,7 @@ define(function(require, exports, module) {
       </car-list>
       <!-- car_list E -->
 
-      <loadmore-scroll 
+      <loadmore-scroll
         v-on:load-more-data="loadMoreData"
         v-bind:has-more = "hasMore"
         v-bind:wrap-id = "'loadmore-wrap-carport-source'"
@@ -57,9 +58,9 @@ define(function(require, exports, module) {
   </div>
 
   <!-- 详细资源 -->
-  <car-detail 
-    v-bind:is-show-detail="isShowDetail" 
-    v-bind:list-f="detailData" 
+  <car-detail
+    v-bind:is-show-detail="isShowDetail"
+    v-bind:list-f="detailData"
     v-on:hidedetail="hideDetail"
     v-on:add-known="addKnown"
     v-on:remove-known="removeKnown"
@@ -68,6 +69,7 @@ define(function(require, exports, module) {
   </car-detail>
 
 </div>
+</transition>
 `;
   var carportSource = {
     template : template,
@@ -80,7 +82,7 @@ define(function(require, exports, module) {
         'postCommentUrl' : window._G_.url.carport_known_act_comment,
 
         'minId' : '',
-        'transitionName' : 'in-out-translate-fade',
+        'transitionName' : 'in-out-translate',
         'page' : 1,
 
         'isLoading': false,
@@ -99,8 +101,8 @@ define(function(require, exports, module) {
         'isShowMap' : false,
         'detailData' : '',
         'cityPlugData' : {
-          'fromId' : '-1',
-          'from' : '',
+          'fromId' : this.user.pos.cityCode,
+          'from' : this.user.pos.cityName,
           'toIds' : '',
           'to' : '',
           'carLen' : '',
@@ -156,7 +158,7 @@ define(function(require, exports, module) {
       },
       hideDetail: function() {
         this.isShowDetail = false;
-        
+
       },
       addKnown : function(listF){
         var _vm = this;

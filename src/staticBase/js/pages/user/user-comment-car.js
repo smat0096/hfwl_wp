@@ -31,15 +31,16 @@ var kscitychoose = require('utils/kscitychoose/ks_city_choose.js');
     });
   */
 var _template = `
+<transition :name="transitionName">
 <div class="wrap  transition-wrap  user-comment-driver" style="padding-bottom:50px">
   <div class="wrap">
 
     <div class="header_box">
-      <header-back 
+      <header-back
         :title = "title"
       ></header-back>
     </div>
-    
+
     <div class="content_box p_b-0">
       <div class="border_b_1 mg_t-30">
         <!--表单 S-->
@@ -75,10 +76,10 @@ var _template = `
               </label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" 
-                type="text" 
+              <input class="weui-input"
+                type="text"
                 autocomplete="off"
-                placeholder="请选择车牌类型" 
+                placeholder="请选择车牌类型"
                 v-model="listF.plateType"
                 readonly
                 name="plateType"
@@ -94,10 +95,10 @@ var _template = `
               </label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" 
-                type="text" 
+              <input class="weui-input"
+                type="text"
                 autocomplete="off"
-                placeholder="请选择车牌号码" 
+                placeholder="请选择车牌号码"
                 v-model="listF.plateNumber"
                 readonly
                 name="plateNumber"
@@ -113,10 +114,10 @@ var _template = `
               </label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" 
-                type="text" 
+              <input class="weui-input"
+                type="text"
                 autocomplete="off"
-                placeholder="请选择车型" 
+                placeholder="请选择车型"
                 v-model="listF.carType"
                 readonly
                 name="carType"
@@ -124,7 +125,7 @@ var _template = `
               />
             </div>
           </div>
-          
+
           <div class="weui-cell" >
             <div class="weui-cell__hd">
               <label class="weui-label">
@@ -132,10 +133,10 @@ var _template = `
               </label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" 
-                type="text" 
+              <input class="weui-input"
+                type="text"
                 autocomplete="off"
-                placeholder="请选择车长" 
+                placeholder="请选择车长"
                 v-model="listF.carLen"
                 readonly
                 name="carLen"
@@ -153,10 +154,10 @@ var _template = `
               </label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" 
-                type="text" 
+              <input class="weui-input"
+                type="text"
                 autocomplete="off"
-                placeholder="请输入载重" 
+                placeholder="请输入载重"
                 v-model="listF.loadNum"
                 name="loadNum"
               />
@@ -180,7 +181,7 @@ var _template = `
   </div>
   <picker-footer
     v-bind:is-show="isShowPicker"
-    v-bind:picker="picker" 
+    v-bind:picker="picker"
     v-on:hide="hidePicker"
   ></picker-footer>
 
@@ -206,8 +207,8 @@ var _template = `
       </div>
     </div>
   </div>
-
 </div>
+</transition>
   `;
 
   return Vue.extend({
@@ -215,7 +216,7 @@ var _template = `
         replace:true,
         data:function(){
             return{
-              'transitionName': 'in-out-translate-fade',
+              'transitionName' : 'in-out-translate',
               'driverComment' : '',
               'isShowPicker' : '',
               'picker' : '',
@@ -309,7 +310,7 @@ var _template = `
             _this.picker = _this.cityPicker;
             this.isShowPicker = true;
           },
-       
+
           "showplateTypePicker": function() {
             var _this = this;
             var  opts = {
@@ -400,7 +401,7 @@ var _template = `
           initValidate : function(){
             _user.initValidate.call(this,this.$refs.car_form,this.$refs.car_submit,true);
           }
-          
+
         }
     });
 })

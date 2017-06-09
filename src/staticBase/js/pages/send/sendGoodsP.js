@@ -6,8 +6,8 @@ define(function(require, exports, module) {
   var _fhIssue = require('fhIssue_new');
   //数据接口在 fhIssue_new.js 中
   var template = `
+<transition :name="transitionName" v-on:after-enter="initData">
 <div class="wrap sendgoods transition-wrap JS_sendgoodsP">
-
   <div class="wrap">
       <header-back title = "发布货源" ></header-back>
       <div class="content_box content_box_bottom">
@@ -119,7 +119,7 @@ define(function(require, exports, module) {
                   <div class="sub_btn" id="js_sub">确定发布<span></span></div>
               </div>
           </form>
-          
+
       </div>
   </div>
 
@@ -183,21 +183,19 @@ define(function(require, exports, module) {
       </div>
   </div>
 </div>
+</transition>
 `;
 
   var _sendGoods = {
     template : template,
     data: function(){
       return {
-        'transitionName' : 'in-out-translate-fade',
+        'transitionName' : 'in-out-translate',
         'isLoading' : false,
         'isShowLoading' : false
       }
     },
     props : ['user'],
-    mounted : function(){
-      this.initData();
-    },
     beforeDestroy : function() {
       $(".JS_sendgoodsP").off().html("");
     },

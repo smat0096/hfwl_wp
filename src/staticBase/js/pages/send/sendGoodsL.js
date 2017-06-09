@@ -6,6 +6,7 @@ define(function(require, exports, module) {
       _send = require("./send-common.js");
 
   var template = `
+<transition :name="transitionName" v-on:after-enter="initData">
 <div class="wrap  transition-wrap publish_goods publish_goods_l">
 
   <header-back title = "运单" ></header-back>
@@ -14,7 +15,7 @@ define(function(require, exports, module) {
     <div class="weui-tab">
 
       <div class="weui-navbar">
-        <a 
+        <a
           class="weui-navbar__item weui-navbar__orange"
           :class="{ 'weui-bar__item--on' : listDataType == 'salaryLoading'}"
           href="javascript:;"
@@ -22,24 +23,24 @@ define(function(require, exports, module) {
           >
           待装货
         </a>
-        <a 
-          class="weui-navbar__item weui-navbar__orange" 
+        <a
+          class="weui-navbar__item weui-navbar__orange"
           :class="{ 'weui-bar__item--on' : listDataType == 'salaryLoaded'}"
           href="javascript:;"
           @click = "getTypedData('salaryLoaded')"
           >
           已装货
         </a>
-        <a 
-          class="weui-navbar__item weui-navbar__orange" 
+        <a
+          class="weui-navbar__item weui-navbar__orange"
           :class="{ 'weui-bar__item--on' : listDataType == 'salaryRefund'}"
           href="javascript:;"
           @click = "getTypedData('salaryRefund')"
           >
           已退款
         </a>
-        <a 
-          class="weui-navbar__item weui-navbar__orange" 
+        <a
+          class="weui-navbar__item weui-navbar__orange"
           :class="{ 'weui-bar__item--on' : listDataType == 'salaryGetPay'}"
           href="javascript:;"
           @click = "getTypedData('salaryGetPay')"
@@ -50,25 +51,25 @@ define(function(require, exports, module) {
 
       <div class="weui-tab__bd">
         <div class="weui-tab__bd-item weui-tab__bd-item--active"  id="loadmore-wrap-sendgoods-l"  style="width:100%">
-            
+
           <pull-to-refresh
             wrap-id = 'loadmore-wrap-sendgoods-l'
             @refresh = 'initData'
           ></pull-to-refresh>
-          
-          <loading-page 
+
+          <loading-page
             v-show="isShowLoading"
             :loading-icon='loadingIcon'
             :loading-text="loadingText"
           ></loading-page>
 
           <div class="weui-panel weui-panel_access publish_goods_r_listsbox" >
-            
+
             <form id="published_goods">
               <!-- content_box_list S-->
               <div v-for="listF in listDataF">
-                <sendgoods-list 
-                  v-bind:list-f = "listF" 
+                <sendgoods-list
+                  v-bind:list-f = "listF"
                   v-bind:list-data-type = "listDataType"
                   v-on:select-one="selectOne"
                   v-on:action-data="doActionData"
@@ -77,14 +78,14 @@ define(function(require, exports, module) {
               <!-- content_box_list E-->
             </form>
 
-            <loadmore-scroll 
+            <loadmore-scroll
               v-on:load-more-data="loadMoreData"
               v-bind:has-more = "hasMore"
               v-bind:wrap-id = "'loadmore-wrap-sendgoods-l'"
               v-bind:is-loading-more = "isLoadingMore"
             >
             </loadmore-scroll>
-          
+
           </div>
         </div>
       </div>
@@ -93,14 +94,15 @@ define(function(require, exports, module) {
   </div>
 
 </div>
+</transition>
 `
   var _sendgoodsL = {
       template : template,
       data: function(){
         return {
-        'transitionName' : 'in-out-translate-fade',
+        'transitionName' : 'in-out-translate',
         'page' : 1,
-        
+
         'minId' : '',
         'isLoading': false,
         'isShowLoading': false,
@@ -123,9 +125,6 @@ define(function(require, exports, module) {
       }
     },
     props : ['user'],
-    mounted : function(){
-      this.initData();
-    },
     methods : {
       initData : function(callback){
         var _vm = this;

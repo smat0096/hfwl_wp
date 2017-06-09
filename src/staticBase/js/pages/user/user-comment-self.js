@@ -3,15 +3,16 @@ define(function(require,exports,module){
 
 
 var _template = `
+<transition :name="transitionName">
 <div class="wrap  transition-wrap  user-comment-driver" style="padding-bottom:50px">
   <div class="wrap">
 
     <div class="header_box">
-      <header-back 
+      <header-back
         :title = "title"
       ></header-back>
     </div>
-    
+
     <div class="content_box p_b-0">
       <div class="border_b_1">
         <!--表单 S-->
@@ -26,15 +27,15 @@ var _template = `
             </div>
             <div class="weui-cell__hd">
               <div :class= "avatarInputClass">
-                <input 
+                <input
                   ref="avatarInput"
                   name="avatar"
                   class="weui-uploader__input"
-                  type="file" 
+                  type="file"
                   accept="image/*"
                   v-if="!isWeixin"
                 >
-                <img 
+                <img
                   ref="avatarImage"
                   class="weui-uploader__file"
                   :src="listF.avatarUrl"
@@ -48,8 +49,8 @@ var _template = `
               <label class="weui-label">用户名称</label>
             </div>
             <div class="weui-cell__bd">
-              <input class="weui-input" type="text" autocomplete="off" maxlength="6" placeholder="请输入用户名称" 
-                v-model="listF.userName" 
+              <input class="weui-input" type="text" autocomplete="off" maxlength="6" placeholder="请输入用户名称"
+                v-model="listF.userName"
                 name="userName"
               />
             </div>
@@ -62,8 +63,8 @@ var _template = `
             </label></div>
             <div class="weui-cell__bd">
               <input class="weui-input" type="text" maxlength="11"
-                placeholder="请输入手机号码" 
-                v-model="listF.mobile" 
+                placeholder="请输入手机号码"
+                v-model="listF.mobile"
                 name="userMobile"
               />
             </div>
@@ -80,9 +81,10 @@ var _template = `
 
     <div class="weui-mask_transparent" v-show="isSubmiting"></div>
     <div class="weui-toast weui-toast--text weui-toast--visible" v-show="isSubmiting"><i class="weui-icon-success-no-circle weui-icon_toast"></i><p class="weui-toast_content">数据上传中,请稍候...</p></div>
-    
+
   </div>
 </div>
+</transition>
   `;
 
   return Vue.extend({
@@ -99,7 +101,8 @@ var _template = `
 
               'isSubmiting' : false,
               'isWeixin' : false,
-              'ksvalidate' : ''
+              'ksvalidate' : '',
+              'transitionName' : 'in-out-translate',
             }
         },
         props: ['user'],

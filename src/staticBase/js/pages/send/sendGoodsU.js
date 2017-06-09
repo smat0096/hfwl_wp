@@ -4,36 +4,37 @@ define(function(require, exports, module) {
       _ks = _base.utils,
       _common = _base.common,
       _send = require("./send-common.js");
-      
+
   var template = `
+<transition :name="transitionName" v-on:after-enter="initData">
 <div class="wrap  transition-wrap publish_goods publish_goods_u" id="send_goods_u">
 
-  <header-back 
-    title = "常发货源" 
-    v-bind:right-text = "isMultipleText" 
+  <header-back
+    title = "常发货源"
+    v-bind:right-text = "isMultipleText"
     v-on:right-event = "changeSelectMode"
   ></header-back>
 
   <div class="content_box"  style="top:50px; bottom: 50px" id="loadmore-wrap-sendgoods-u">
-  
+
     <pull-to-refresh
       wrap-id = 'loadmore-wrap-sendgoods-u'
       @refresh = 'initData'
     ></pull-to-refresh>
 
-    <loading-page 
+    <loading-page
       v-show="isShowLoading"
       :loading-icon='loadingIcon'
       :loading-text="loadingText"
     ></loading-page>
-    
+
     <div class="weui-panel weui-panel_access publish_goods_r_listsbox" >
       <form id="published_goods">
         <!-- content_box_list S-->
           <transition-group name="flip-list" tag="div">
           <div v-for="listF in listDataF"  :key="listF.id">
             <sendgoods-list
-              v-bind:list-f = "listF" 
+              v-bind:list-f = "listF"
               v-bind:list-data-type = "listDataType"
               v-bind:is-multiple = "isMultiple"
               v-on:select-one="selectOne"
@@ -41,7 +42,7 @@ define(function(require, exports, module) {
             >
               <div slot="footer-right">
                 <div class="fr c_o">
-                  <a href="javascript:;" 
+                  <a href="javascript:;"
                     class="weui-btn weui-btn_mini orange_btn_plain detail_btn"
                     @click="deleteOne(listF)"
                   >删除</a>
@@ -56,7 +57,7 @@ define(function(require, exports, module) {
           </transition-group>
         <!-- content_box_list E-->
       </form>
-      <loadmore-scroll 
+      <loadmore-scroll
         v-on:load-more-data="loadMoreData"
         v-bind:has-more = "hasMore"
         v-bind:wrap-id = "'loadmore-wrap-sendgoods-u'"
@@ -75,6 +76,7 @@ define(function(require, exports, module) {
   ></footer-batch>
 
 </div>
+</transition">
 ` ;
 
   var _sendgoodsU = {
@@ -83,14 +85,14 @@ define(function(require, exports, module) {
       return {
         'page' : 1,
         'minId' : '',
-        
+
         //ks_change_ajaxUrl
         'initUrl' : window._G_.url.sendgoods_u_get,
         'loadMoreUrl' : window._G_.url.sendgoods_u_get,
         'actionUrl' : window._G_.url.sendgoods_u_act,
-        
-        'transitionName' : 'in-out-translate-fade',
-        
+
+        'transitionName' : 'in-out-translate',
+
         'isLoading': false,
         'isShowLoading': false,
         'hasData' : true,
@@ -107,9 +109,6 @@ define(function(require, exports, module) {
       }
     },
     props : ['user'],
-    mounted : function(){
-      this.initData();
-    },
     methods : {
       initData : function(callback){
         var _vm = this;

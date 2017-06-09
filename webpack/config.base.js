@@ -22,13 +22,13 @@ var config = {
     },
     //别名
     alias : {
-          'jquery' : path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/jquery-2.1.4.js'),
-          'art-template' : path.join(srcPath , 'staticBase/js/lib/art-template/template-web.js'),
-          'jquery-weui' : path.join(srcPath , 'staticBase/js/lib/jquery-weui/js/jquery-weui.min.js'),
-          'fastclick' : path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/fastclick.js'),
-          'vue' : path.join(srcPath , 'staticBase/js/lib/vue/vue-2.2.0.min.js'),
-          'vuex' : path.join(srcPath , 'staticBase/js/lib/vue/vuex.min.js'),
-          'vue-router' : path.join(srcPath , 'staticBase/js/lib/vue/vue-router-2.1.1.min.js'),
+          // 'jquery' : path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/jquery-2.1.4.js'),
+          // 'art-template' : path.join(srcPath , 'staticBase/js/lib/art-template/template-web.js'),
+          // 'jquery-weui' : path.join(srcPath , 'staticBase/js/lib/jquery-weui/js/jquery-weui.min.js'),
+          // 'fastclick' : path.join(srcPath , 'staticBase/js/lib/jquery-weui/lib/fastclick.js'),
+          // 'vue' : path.join(srcPath , 'staticBase/js/lib/vue/vue-2.2.0.min.js'),
+          // 'vuex' : path.join(srcPath , 'staticBase/js/lib/vue/vuex.min.js'),
+          // 'vue-router' : path.join(srcPath , 'staticBase/js/lib/vue/vue-router-2.1.1.min.js'),
 
           //文件别名
           'basicUrl' : srcPath,

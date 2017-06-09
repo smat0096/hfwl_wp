@@ -6,10 +6,10 @@ define(function(require, exports, module) {
       _findgoods = require("./findgoods-common.js");
 
   var template = `
+<transition :name="transitionName" v-on:after-enter="initData">
 <div class="weui-tab wrap  transition-wrap find_goods">
-
   <div class="header_box">
-    <!-- 跑马灯 
+    <!-- 跑马灯
     <road-hourse title="恒丰物流系统"></road-hourse>
     -->
     <header-back title = "查看货源" ></header-back>
@@ -22,15 +22,15 @@ define(function(require, exports, module) {
     </header-choose>
     <!--地址插件区域 E-->
   </div>
-  
+
   <div class="content_box" style="top:90px" id="loadmore-wrap-findgoods" ref="findList">
-  
+
     <pull-to-refresh
       wrap-id = 'loadmore-wrap-findgoods'
       @refresh = 'initData'
     ></pull-to-refresh>
 
-    <loading-page 
+    <loading-page
       v-show="isShowLoading"
       :loading-icon='loadingIcon'
       :loading-text="loadingText"
@@ -44,7 +44,7 @@ define(function(require, exports, module) {
         <transition-group name="flip-list" tag="div">
           <findgoods-list
             v-for="listF in listDataF"
-            v-bind:list-f="listF" 
+            v-bind:list-f="listF"
             v-on:show-detail="showDetail"
             v-on:add-contact="addContact"
             :key = "listF">
@@ -52,34 +52,35 @@ define(function(require, exports, module) {
         </transition-group>
         <!-- /goodlist -->
 
-        <loadmore-scroll 
+        <loadmore-scroll
           v-on:load-more-data="loadMoreData"
           v-bind:has-more = "hasMore"
           v-bind:wrap-id = "'loadmore-wrap-findgoods'"
           v-bind:is-loading-more = "isLoadingMore"
         >
         </loadmore-scroll>
-        
-        <!--div 
+
+        <!--div
           class="get_goods bg_o"
-          :class="{checked : isAutoTop}" 
+          :class="{checked : isAutoTop}"
           @click="getGoods"><i class="icon_check_white"></i><span>自动滚屏</span>
         div-->
-        
+
       </div>
     </div>
   </div>
 
   <!-- 详细资源 -->
-  <find-detail 
-    v-bind:is-show-detail="isShowDetail" 
-    v-bind:list-f="detailData" 
+  <find-detail
+    v-bind:is-show-detail="isShowDetail"
+    v-bind:list-f="detailData"
     v-on:hidedetail="hideDetail"
     v-on:add-contact="addContact"
     >
   </find-detail>
 
 </div>
+</transition >
 ` ;
 
   var findGoods = {
@@ -93,7 +94,7 @@ define(function(require, exports, module) {
         'pageAdd' : 1,
         'pageSize' : 10,
         'minId' : '',
-        'transitionName' : 'in-out-translate-fade',
+        'transitionName' : 'in-out-translate',
         'isLoading': false,
         'isShowLoading': false,
         'hasData' : true,
@@ -106,12 +107,12 @@ define(function(require, exports, module) {
         'listLimit' : 10,
         'detailData' : '',
         'cityPlugData' : {
-          'fromId' : '-1',
-          'from' : '',
-          'toIds' : '',
-          'to' : '',
-          'carLen' : '',
-          'carType': ''
+          'fromId' : this.user.pos.cityCode,
+          'from' : this.user.pos.cityName,
+          'toIds' : '-1',
+          'to' : '全国',
+          'carLen' : '不限',
+          'carType': '不限'
         }
       }
     },

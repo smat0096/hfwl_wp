@@ -2,6 +2,7 @@ define(function(require, exports, module) {
   "use strict";
 
 var template = `
+<transition :name="transitionName">
 <div class="wrap  transition-wrap about">
   <div class="content_box bg_f0" style="top:0;">
     <div>
@@ -64,17 +65,17 @@ var template = `
     </div>
   </div>
 </div>
+</transition>
 `;
 
   var home = {
     template : template,
     data: function(){
       return {
+        'transitionName' : 'in-out-translate',
       }
     },
     props : ['user'],
-    mounted : function(){
-    },
     methods : {
       invite : function(){
         $.alert("招商电话: 0735-8880606");

@@ -1,9 +1,10 @@
 define(function(require, exports, module) {
   var cityData = require('utils/kspicker/cityData.js');
-      
+
   var template = `
+<transition :name="transitionName" v-on:after-enter="initData">
 <div class="wrap transition-wrap">
-  
+
   <div class="header_box carport_header_box">
     <header-back title = "附近停车场" ></header-back>
 
@@ -16,17 +17,17 @@ define(function(require, exports, module) {
           </label>
         </div>
         <div class="weui-cell__bd">
-          <input class="weui-input" 
-            type="text" 
+          <input class="weui-input"
+            type="text"
             autocomplete="off"
-            placeholder="请选择地址" 
+            placeholder="请选择地址"
             v-model="fromName"
             name="fromName"
             readonly
             @click="showFromPicker"
           />
-          <input class="weui-input" 
-            type="hidden" 
+          <input class="weui-input"
+            type="hidden"
             v-model="fromCode"
             readonly
             name="fromCode"
@@ -44,7 +45,7 @@ define(function(require, exports, module) {
       @refresh = 'initData'
     ></pull-to-refresh>
 
-    <loading-page 
+    <loading-page
       v-show="isShowLoading"
       :loading-icon='loadingIcon'
       :loading-text="loadingText"
@@ -56,13 +57,13 @@ define(function(require, exports, module) {
       <!-- depart_list S -->
       <depart-list
         v-for="listF in listDataF"
-        v-bind:list-f="listF" 
+        v-bind:list-f="listF"
         :key="listF.id"
         v-on:show-detail="showDetail"
       ></depart-list>
       <!-- depart_list E -->
 
-      <loadmore-scroll 
+      <loadmore-scroll
         v-on:load-more-data="loadMoreData"
         v-bind:has-more = "hasMore"
         v-bind:wrap-id = "'loadmore-wrap-deport'"
@@ -73,18 +74,19 @@ define(function(require, exports, module) {
   </div>
 
   <!-- 详细资源 -->
-  <depart-detail 
-    v-bind:is-show-detail="isShowDetail" 
-    v-bind:list-f="detailData" 
+  <depart-detail
+    v-bind:is-show-detail="isShowDetail"
+    v-bind:list-f="detailData"
     v-on:hidedetail="hideDetail"
     v-on:post-comment="postComment">
   </depart-detail>
   <picker-footer
     v-bind:is-show="isShowPicker"
-    v-bind:picker="picker" 
+    v-bind:picker="picker"
     v-on:hide="hidePicker"
   ></picker-footer>
 </div>
+</transition>
 `;
   var _carportSource = {
     template : template,
@@ -96,7 +98,7 @@ define(function(require, exports, module) {
         'addKnownUrl' : window._G_.url.carport_source_act_addKnown,
         'postCommentUrl' : window._G_.url.carport_known_act_comment,
 
-        'transitionName' : 'in-out-translate-fade',
+        'transitionName' : 'in-out-translate',
         'page' : 1,
         'radius' : 10000,
         'query' : ["恒丰物流", "物流园"],
@@ -125,14 +127,11 @@ define(function(require, exports, module) {
         'isShowPicker' : '',
         'picker' : '',
         'fromPicker' : '',
-        'fromName' : '',
+        'fromName' : this.user.pos.cityName,
         'fromCode' : ''
       }
     },
     props : ['user'],
-    mounted : function(){
-      this.fromName = this.user.pos.cityName
-    },
     watch:{
       fromName : function(){
         this.initData();
@@ -195,7 +194,7 @@ define(function(require, exports, module) {
             radius : _vm.radius*_vm.page, //半径
             query : _vm.query, //查询目标
             type : 'local', //lbs ,local,bound ,查询方式
-            renderOptions : null, 
+            renderOptions : null,
             success : function(res){
               _vm.isShowLoading = false;
               _ks.run(callback,_vm.formatDeparts(res));
@@ -214,7 +213,7 @@ define(function(require, exports, module) {
         _ks.run(callback, _vm.formatDeparts([]));
       },
       formatDeparts :function(res){
-        var _vm  = this, 
+        var _vm  = this,
             iL ,
             temp,s,arr=[];
         for(var j=0; j<res.length; j++){

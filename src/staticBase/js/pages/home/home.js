@@ -1,6 +1,7 @@
 "use strict";
 require('basicUrl/staticBase/css/home.css');
 var template = `
+<transition :name="transitionName">
 <div class="wrap transition-wrap home" @click="invite">
   <div class="home_driver" v-if="user.isDriver">
     <div class="content_box" style="top:0;bottom:0;">
@@ -27,11 +28,13 @@ var template = `
     </div>
   </div>
 </div>
+</transition>
 `;
 var home = {
   template : template,
   data: function(){
     return {
+      'transitionName' : 'in-out-translate'
     }
   },
   props : ['user'],
