@@ -67,7 +67,10 @@ gulp.task('build', ['clean'], function (done) {
 gulp.task('webpack-dev-server',  function (done) {
     var uri = 'http://localhost:' +config.server.port;
     Object.keys(webpackConfig.entry).forEach(function (name) {
-      webpackConfig.entry[name] = [path.resolve(process.cwd(), "node_modules/webpack/hot/dev-server"), "webpack-dev-server/client?"+uri ].concat(webpackConfig.entry[name])
+      if (!(webpackConfig.entry[name] instanceof Array)) {
+          throw new gutil.PluginError('entry[name] 需为 Array');
+      }
+      webpackConfig.entry[name].unshift("webpack-dev-server/client?http://localhost:"+config.server.port, path.resolve(process.cwd(), "node_modules/webpack/hot/dev-server"));
     })
     new webpackDevServer(webpack(webpackConfig), {
           hot: true ,
@@ -87,7 +90,10 @@ gulp.task('webpack-dev-server',  function (done) {
 //webpack-dev-middleware
 gulp.task('webpack-dev-middleware',  function (done) {
   Object.keys(webpackConfig.entry).forEach(function (name) {
-    webpackConfig.entry[name] = ['./webpack/dev-client'].concat(webpackConfig.entry[name])
+    if (!(webpackConfig.entry[name] instanceof Array)) {
+        throw new gutil.PluginError('entry[name] 需为 Array');
+    }
+    webpackConfig.entry[name].unshift('./webpack/dev-client');
   })
   require('./webpack/webpack-dev-middleware.js')(config,webpackConfig);
   done();

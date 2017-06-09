@@ -1,9 +1,10 @@
 define(function(require, exports, module) {
   "use strict";
   var template = `
+<transition :name="transitionName"  v-on:after-enter="initData">
 <div class="wrap  transition-wrap publish_goods ">
 
-  <header-back 
+  <header-back
     title = "我的推荐"
     @right-event = "toggleSearchBar"
     :right-text="headerRightIcon"
@@ -12,15 +13,15 @@ define(function(require, exports, module) {
   <div class="content_box"  style="top:50px; bottom: 10px">
     <div class="weui-tab">
       <div class="weui-navbar">
-        <a 
-          class="weui-navbar__item weui-navbar__orange" 
+        <a
+          class="weui-navbar__item weui-navbar__orange"
           :class="{ 'weui-bar__item--on' : listDataType == 'businessRAuditing'}"
           href="javascript:;"
           @click = "getTypedData('businessRAuditing')"
           >
           认证中
         </a>
-        <a 
+        <a
           class="weui-navbar__item weui-navbar__orange"
           :class="{ 'weui-bar__item--on' : listDataType == 'businessRSuccess'}"
           href="javascript:;"
@@ -28,16 +29,16 @@ define(function(require, exports, module) {
           >
           认证成功
         </a>
-        <a 
-          class="weui-navbar__item weui-navbar__orange" 
+        <a
+          class="weui-navbar__item weui-navbar__orange"
           :class="{ 'weui-bar__item--on' : listDataType == 'businessRFailed'}"
           href="javascript:;"
           @click = "getTypedData('businessRFailed')"
           >
           认证失败
         </a>
-        <a 
-          class="weui-navbar__item weui-navbar__orange" 
+        <a
+          class="weui-navbar__item weui-navbar__orange"
           :class="{ 'weui-bar__item--on' : listDataType == 'businessRSummary'}"
           href="javascript:;"
           @click = "getTypedData('businessRSummary')"
@@ -48,13 +49,13 @@ define(function(require, exports, module) {
 
       <div class="weui-tab__bd">
         <div class="weui-tab__bd-item weui-tab__bd-item--active"  id="loadmore-wrap-businessR"  style="width:100%">
-            
+
           <pull-to-refresh
             wrap-id = 'loadmore-wrap-businessR'
             @refresh = 'initData'
           ></pull-to-refresh>
 
-          <loading-page 
+          <loading-page
             v-show="isShowLoading"
             :loading-icon='loadingIcon'
             :loading-text="loadingText"
@@ -71,13 +72,13 @@ define(function(require, exports, module) {
             <div v-show="isShowList" key='recoment'>
               <transition-group name="flip-list" tag="div">
                 <div class="weui-panel weui-panel_access mt_0" key='weuiPanel'>
-                  
+
                   <div class="weui-panel__bd">
                     <!-- content_box_list S-->
                     <transition-group name="flip-list" tag="div">
-                      <business-list 
+                      <business-list
                         v-for="listF in listDataF"
-                        v-bind:list-f = "listF" 
+                        v-bind:list-f = "listF"
                         v-bind:list-data-type = "listDataType"
                         :key = "listF"
                       ></business-list>
@@ -85,7 +86,7 @@ define(function(require, exports, module) {
                     <!-- content_box_list E-->
                   </div>
 
-                  <loadmore-scroll 
+                  <loadmore-scroll
                     v-on:load-more-data="loadMoreData"
                     v-bind:has-more = "hasMore"
                     v-bind:wrap-id = "'loadmore-wrap-businessR'"
@@ -96,7 +97,7 @@ define(function(require, exports, module) {
                 </div>
               </transition-group>
             </div>
-          
+
             <div v-show="!isShowList" class='table-responsive pd-15 mg_t-30' key='summary'>
               <table class='table table-bordered'>
                 <thead>
@@ -135,11 +136,13 @@ define(function(require, exports, module) {
   </div>
 
 </div>
+</transition>
 `
   var businessR = {
       template : template,
       data: function(){
         return {
+        'transitionName': 'in-out-translate',
         'page' : 1,
         'G' : window._G_,
         'minId' : '',
@@ -150,7 +153,7 @@ define(function(require, exports, module) {
         'loadingIcon' : true,
         'isLoadingMore': false,
         'hasMore' : true,
-        
+
         'headerRightIcon' : "<i class='weui-icon-search' style='color: #fafafa;font-size:16px'></i>",
         'isShowSearchBar' : false,
 
@@ -163,12 +166,6 @@ define(function(require, exports, module) {
       }
     },
     props : ['user'],
-    mounted : function(){
-      var _this = this;
-      _this.initData(function(){
-          _this.initEvent();
-      });
-    },
     methods : {
       initData : function(callback){
         var _vm = this;
@@ -209,10 +206,7 @@ define(function(require, exports, module) {
       searchBusinessR : function(searchValue){
         this.searchValue = searchValue;
         this.initData();
-      },
-      /** 需加载事件 **/
-      initEvent : function(){
-      },
+      }
       /** send_common S **/
 
       /** send_common E **/

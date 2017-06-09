@@ -186,6 +186,7 @@ var _template = `
         replace:true,
         data:function(){
             return{
+              'transitionName': 'in-out-translate',
               'driverComment' : '',
               'isShowPicker' : '',
               'picker' : '',
