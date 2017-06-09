@@ -8,10 +8,7 @@ var merge = require('webpack-merge');
 //插件
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin')
-
-var webpackConfDev = require('./webpack.config.dev.js');
-var webpackConfProd = require('./webpack.config.prod.js');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = function(config){
 var _debug = config.debug;
@@ -35,7 +32,6 @@ var webpackConfBase = {
       "vue-router" :  "VueRouter",
       "art-template" :  "template"
   },
-  devtool : '#cheap-module-eval-source-map', //source-map选项
   module: { //模块
     noParse: /node_modules\/(jquey|moment|chart\.js)/, //引入模块但是不会去做任何处理，也可减少构建的时间
     rules: [
@@ -259,12 +255,15 @@ var webpackConfBase = {
 var webpackConfAdd = {};
 switch(config.act){
   case 'webpack-dev-server' :
-    webpackConfAdd = webpackConfDev(config);
+    webpackConfAdd = require('./webpack.config.dev.js')(config);
+    break;
+  case 'webpack-dev-middleware' :
+    webpackConfAdd = require('./webpack.config.mid.js')(config);
     break;
   case 'browser-sync-server' :
     break;
   case 'build' :
-    webpackConfAdd = webpackConfProd(config);
+    webpackConfAdd = require('./webpack.config.prod.js')(config);
     break;
   default:
     break;

@@ -68,7 +68,8 @@ var config = {
       //     path.join(srcPath , 'staticBase/js/lib/vue/vuex.min.js'),
       //     path.join(srcPath , 'staticBase/js/lib/vue/vue-router-2.1.1.min.js')
       // ]
-    }
+    },
+    autoOpenBrowser : true
 };
 
 module.exports = config;

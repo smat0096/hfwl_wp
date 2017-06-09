@@ -5,11 +5,11 @@ var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 //插件
 module.exports = function(config){
 return {
-  devtool : '#cheap-module-source-map',
+  devtool : '#source-map',
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-        // 在UglifyJs删除没有用到的代码时不输出警告  
+        // 在UglifyJs删除没有用到的代码时不输出警告
         warnings: false,
         // 删除所有的 `console` 语句 还可以兼容ie浏览器
         drop_console: true,
