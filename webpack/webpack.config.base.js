@@ -12,14 +12,22 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = function(config){
 var _debug = config.debug;
+var hash , chunkhash , contenthash;
+if(_debug){
+  hash = chunkhash = contenthash = '';
+}else{
+  hash = '-[hash:8]';
+  chunkhash = '-[chunkhash:8]';
+  contenthash = '-[contenthash:8]';
+}
 //config Object.assign()
 var webpackConfBase = {
   entry: config.entry, //入口文件
   output: {
     path: config.dest.path,              //输出路径
-    filename: "js/[name].[hash].js",     //输出文件名(可含子路径)
+    filename: `js/[name]${chunkhash}.js`,     //输出文件名(可含子路径)
     publicPath: config.server.publicPath,//script标签内的 输出路径的基本路径,完整路径为: publicPath + path + filename
-    chunkFilename: 'js/[name].[chunkhash].js',
+    chunkFilename: `js/[name]${chunkhash}.js`,
     // libraryTarget: "var", //指定你的模块输出类型，可以是commonjs,AMD,script形式,UMD模式
     // library: "myClassName" //把打包文件捆绑在 window.myClassName 实例上, 可以在入口处调用这个方法
   },
@@ -59,9 +67,9 @@ var webpackConfBase = {
         {
           // 分为压缩的和非压缩的，不会重复，否则可能会报错
           test: /[^((?!\.min\.css).)*$]\.css$/,  // 包含css 但却不包含.min.css的,使用压缩;
-          use: ExtractTextPlugin.extract({
-            fallback: "style-loader",
-            use: "css-loader?minimize&-autoprefixer",
+          use: ExtractTextPlugin.extract({ //把引入到页面内的css转换为 link 引入
+            fallback: "style-loader",   //引入css到页面内
+            use: "css-loader?minimize&-autoprefixer", //处理css
             publicPath: '../'
           })
         },
@@ -101,7 +109,7 @@ var webpackConfBase = {
               loader: 'url-loader',
               options: {
                 limit : 10000,
-                name : 'img/[name].[hash].[ext]'
+                name : `img/[name]${hash}.[ext]`
               }
             },
             {
@@ -124,7 +132,7 @@ var webpackConfBase = {
             loader: 'url-loader',
             options: {
               limit : 10000,
-              name : 'img/[name].[hash].[ext]'
+              name : `img/[name]${hash}.[ext]`
             }
           },
         },
@@ -169,13 +177,13 @@ var webpackConfBase = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     //css
     new ExtractTextPlugin({
-     filename: 'css/[name].[contenthash].css',
+     filename: `css/[name]${contenthash}.css`,
      disable: false,
      allChunks: true
     }),
     //HTML处理
-    new HtmlWebpackPlugin({
-      title : '恒丰物流平台', //标题
+    new HtmlWebpackPlugin({ //支持 ejs 模板语法 引入到 html模板中, htmlWebpackPlugin 含 options 和 files 两个key
+      title : '恒丰物流平台', //标题 可通过 <%= htmlWebpackPlugin.options.title %> 模板语法在html中调用
       filename: 'index.html', //输出的 HTML 文件名，默认是 index.html, 也可以直接配置带有子目录。
       template: config.src.html, //模板文件路径，支持加载器，比如 html-loader!./index.html
       inject: 'body', // true | 'head' | 'body' | false  ,注入所有的资源到特定的 template 或者 templateContent 中，如果设置为 true 或者 body，所有的 javascript 资源将被放置到 body 元素的底部，'head' 将放置到 head 元素中

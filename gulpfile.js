@@ -36,8 +36,9 @@ if(config.env === 'development'){
   config.url = remoteConfig.url;
   config.server = remoteConfig.server;
 }
-gutil.log(_opts, config.env, config.act);
 var webpackConfig = webpackConfigBase( config );
+gutil.log(`[_opts : ${_opts} ] , [config.act : ${config.act} ] ,[config.env : ${config.env} ]`);
+//gutil.log('[_opts :]',_opts,' | [config.act :]',config.act, ' | [config.env :]', config.env );
 
 //check code
 gulp.task('hint', function () {return;
