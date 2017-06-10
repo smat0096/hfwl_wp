@@ -65,7 +65,7 @@ var webpackConfBase = {
               { loader: 'css-loader', options: { importLoaders: 1 } },
               'postcss-loader'
             ],
-            publicPath: '../'
+            publicPath: '../' //校正css中 image等资源的路径
           })
         },
         {
