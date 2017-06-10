@@ -11,7 +11,7 @@ var path = require('path');
 var opn = require('opn'); //打开页面;
 var webpack = require('webpack');
 var webpackDevServer = require('webpack-dev-server');
-var browserSync = require('browser-sync'); //移动端浏览器同步热更新
+var browserSync = require('browser-sync').create(); //移动端浏览器同步
 
 //读取配置
 var webpackConfigBase = require('./webpack/webpack.config.base.js');
@@ -37,7 +37,7 @@ if(config.env === 'development'){
   config.server = remoteConfig.server;
 }
 var webpackConfig = webpackConfigBase( config );
-gutil.log(`[_opts : ${_opts} ] , [config.act : ${config.act} ] ,[config.env : ${config.env} ]`);
+gutil.log(_opts , `[config.act : ${config.act} ] ,[config.env : ${config.env} ]`);
 //gutil.log('[_opts :]',_opts,' | [config.act :]',config.act, ' | [config.env :]', config.env );
 
 //check code
@@ -102,7 +102,6 @@ gulp.task('webpack-dev-middleware',  function (done) {
 
 //browser-sync-server
 gulp.task('browser-sync-server',['build'],function() {
-  browserSync = browserSync.create();
   browserSync.init({
     server: {
       baseDir: config.dest.path,
@@ -131,9 +130,9 @@ gulp.task('watch', function () {
   );
 });
 
+
 gulp.task('reload', ['build'], function(done){
-  gulp.start('watch');
-  browserSync.reload();
+  browserSync.reload(); // 需要为文件设置hash才能实现自动刷新, 原因未知
   done();
 });
 

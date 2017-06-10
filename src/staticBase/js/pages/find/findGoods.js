@@ -9,9 +9,6 @@ define(function(require, exports, module) {
 <transition :name="transitionName" v-on:after-enter="initData">
 <div class="weui-tab wrap  transition-wrap find_goods">
   <div class="header_box">
-    <!-- 跑马灯
-    <road-hourse title="恒丰物流系统"></road-hourse>
-    -->
     <header-back title = "查看货源" ></header-back>
 
     <!--地址插件区域 S-->
@@ -188,9 +185,8 @@ define(function(require, exports, module) {
       }
     },
     beforeDestroy : function() {
-      _findgoods = findGoods = this.$data.listF = this.$el = this.$children = this.$parent = null;
+      this.$data.listF = this.$el = this.$children = this.$parent = null;
     }
   };
-  findGoods = Vue.extend(findGoods);
-  return findGoods;
+  return Vue.extend(findGoods);
 });

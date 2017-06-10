@@ -115,7 +115,7 @@ define(function(require, exports, module) {
       //this.initData();
     },
     beforeDestroy : function() {
-      _carport = carportSource = this.$data.listF = this.$el = this.$children = this.$parent = null;
+      this.$data.listF = this.$el = this.$children = this.$parent = null;
     },
     methods : {
       initData : function(callback){
@@ -244,6 +244,5 @@ define(function(require, exports, module) {
       }
     }
   };
-  carportSource = Vue.extend(carportSource);
-  return carportSource;
+  return Vue.extend(carportSource);
 });

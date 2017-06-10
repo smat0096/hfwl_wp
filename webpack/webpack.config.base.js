@@ -12,22 +12,14 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = function(config){
 var _debug = config.debug;
-var hash , chunkhash , contenthash;
-if(_debug){
-  hash = chunkhash = contenthash = '';
-}else{
-  hash = '-[hash:8]';
-  chunkhash = '-[chunkhash:8]';
-  contenthash = '-[contenthash:8]';
-}
-//config Object.assign()
+var _hash = ( config.act == 'webpack-dev-server' || config.act == 'webpack-dev-middleware' );
 var webpackConfBase = {
   entry: config.entry, //入口文件
   output: {
     path: config.dest.path,              //输出路径
-    filename: `js/[name]${chunkhash}.js`,     //输出文件名(可含子路径)
+    filename: _hash ? `js/[name].js` : `js/[name]-[chunkhash:8].js`,     //输出文件名(可含子路径)
     publicPath: config.server.publicPath,//script标签内的 输出路径的基本路径,完整路径为: publicPath + path + filename
-    chunkFilename: `js/[name]${chunkhash}.js`,
+    chunkFilename: _hash ? `js/[name].js` : `js/[name]-[chunkhash:8].js`,
     // libraryTarget: "var", //指定你的模块输出类型，可以是commonjs,AMD,script形式,UMD模式
     // library: "myClassName" //把打包文件捆绑在 window.myClassName 实例上, 可以在入口处调用这个方法
   },
@@ -109,7 +101,7 @@ var webpackConfBase = {
               loader: 'url-loader',
               options: {
                 limit : 10000,
-                name : `img/[name]${hash}.[ext]`
+                name : _hash ? `img/[name].[ext]` : `img/[name]-[hash:8].[ext]`
               }
             },
             {
@@ -132,7 +124,7 @@ var webpackConfBase = {
             loader: 'url-loader',
             options: {
               limit : 10000,
-              name : `img/[name]${hash}.[ext]`
+              name : _hash ? `img/[name].[ext]` : `img/[name]-[hash:8].[ext]`
             }
           },
         },
@@ -177,7 +169,7 @@ var webpackConfBase = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     //css
     new ExtractTextPlugin({
-     filename: `css/[name]${contenthash}.css`,
+     filename: _hash ? `css/[name].css` : `css/[name]-[contenthash:8].css`,
      disable: false,
      allChunks: true
     }),
