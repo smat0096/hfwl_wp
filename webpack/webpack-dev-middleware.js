@@ -1,6 +1,7 @@
 module.exports = function(config,webpackConfig){
 var opn = require('opn')
 var path = require('path')
+var gutil = require('gulp-util');
 var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
@@ -14,6 +15,13 @@ var autoOpenBrowser = !!config.autoOpenBrowser
 var proxyTable = config.proxyTable || {}
 
 var app = express()
+
+Object.keys(webpackConfig.entry).forEach(function (name) {
+  if (!(webpackConfig.entry[name] instanceof Array)) {
+      throw new gutil.PluginError('entry[name] 需为 Array');
+  }
+  webpackConfig.entry[name].unshift('./webpack/dev-client');
+})
 
 var compiler = webpack(webpackConfig)
 

@@ -7,6 +7,7 @@ var minimist = require('minimist');
 var gutil = require('gulp-util');
 var clean = require('gulp-clean');
 var path = require('path');
+var merge = require('webpack-merge');
 
 var opn = require('opn'); //打开页面;
 var webpack = require('webpack');
@@ -27,18 +28,35 @@ var _opts = {
 _opts = minimist(process.argv.slice(2), _opts);
 config.env = _opts.env;
 config.act = _opts._[0] || 'webpack-dev-middleware';
-if(config.env === 'development'){
-  config.debug = true;
-  config.url = localConfig.url;
-  config.server = localConfig.server;
-}else{
-  config.debug = false;
-  config.url = remoteConfig.url;
-  config.server = remoteConfig.server;
+
+var webpackConfAdd = {};
+switch(config.act){
+  case 'webpack-dev-server' :
+    config.url = localConfig.url;
+    config.server = localConfig.server;
+    webpackConfAdd = require('./webpack/webpack.config.dev.js')(config);
+    break;
+  case 'webpack-dev-middleware' :
+    config.url = remoteConfig.url; //设置代理获取远程数据
+    config.server = localConfig.server;
+    webpackConfAdd = require('./webpack/webpack.config.mid.js')(config);
+    break;
+  case 'browser-sync-server' :
+    config.url = localConfig.url;
+    config.server = localConfig.server;
+    webpackConfAdd = require('./webpack/webpack.config.prod.js')(config);
+    break;
+  case 'build' :
+    config.url = remoteConfig.url;
+    config.server = remoteConfig.server;
+    webpackConfAdd = require('./webpack/webpack.config.prod.js')(config);
+    break;
+  default:
+    throw new gutil.PluginError('运行参数错误!!!',config.act);
+    break;
 }
-var webpackConfig = webpackConfigBase( config );
+var webpackConfig = merge( webpackConfigBase(config), webpackConfAdd );
 gutil.log(_opts , `[config.act : ${config.act} ] ,[config.env : ${config.env} ]`);
-//gutil.log('[_opts :]',_opts,' | [config.act :]',config.act, ' | [config.env :]', config.env );
 
 //check code
 gulp.task('hint', function () {return;
@@ -90,12 +108,25 @@ gulp.task('webpack-dev-server',  function (done) {
 
 //webpack-dev-middleware
 gulp.task('webpack-dev-middleware',  function (done) {
-  Object.keys(webpackConfig.entry).forEach(function (name) {
-    if (!(webpackConfig.entry[name] instanceof Array)) {
-        throw new gutil.PluginError('entry[name] 需为 Array');
+  //设置代理跨域  https://github.com/chimurai/http-proxy-middleware
+  config.proxyTable = {
+    '/app': {
+      target: 'http://cwh.qiruiw.com',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/app': '/app'
+      },
+      //设置cookie
+      onProxyReq(proxyReq, req, res) {
+        proxyReq.setHeader('cookie', 'Hm_lvt_76e0f7fba99c643ac87df5b4822a2932=1493011547,1493011552,1493794769,1494485427; ab46___ewei_shopv2_member_session_2=eyJpZCI6IjcwIiwib3BlbmlkIjoid2FwX3VzZXJfMl8xMzMzMzMzMzMzMiIsIm1vYmlsZSI6IjEzMzMzMzMzMzMyIiwicHdkIjoiZWMxMmFkYWY0M2JhNjgwMmNjMDU0M2MxMGIxYzQ5M2IiLCJzYWx0IjoiUEY0Wk9HWkdaMlZETjNHTyIsImF1ZGl0VHlwZSI6IjEiLCJld2VpX3Nob3B2Ml9tZW1iZXJfaGFzaCI6IjdhMjFkZTE2ZWU1ZmI5ZWZmMGQxZGE2NWQyZjQxMWMyIn0%3D; PHPSESSID=dd0314d1b8a34af27d35a29e9db692cc')
+      },
+      onProxyRes(proxyRes, req, res){
+        Object.keys(proxyRes.headers).forEach(function (key) {
+          res.append(key, proxyRes.headers[key]);
+        });
+      }
     }
-    webpackConfig.entry[name].unshift('./webpack/dev-client');
-  })
+  };
   require('./webpack/webpack-dev-middleware.js')(config,webpackConfig);
   done();
 })

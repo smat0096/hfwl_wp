@@ -3,7 +3,6 @@ var webpack = require('webpack');
 var path = require('path');
 var glob = require('glob');
 var gutil = require('gulp-util');
-var merge = require('webpack-merge');
 
 //插件
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -11,7 +10,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = function(config){
-var _debug = config.debug;
+var _debug = config.env === 'development';
 var _hash = ( config.act == 'webpack-dev-server' || config.act == 'webpack-dev-middleware' );
 var webpackConfBase = {
   entry: config.entry, //入口文件
@@ -51,27 +50,21 @@ var webpackConfBase = {
           exclude: /node_modules/,
           loader: 'babel-loader?cacheDirectory',//开启 babel-loader 缓存
           options : {
-            presets: ['es2015','latest','stage-3']
+            presets: ['es2015','env','stage-3']
           }
         },
       /* JS E */
       /* CSS S */
         {
-          // 分为压缩的和非压缩的，不会重复，否则可能会报错
-          test: /[^((?!\.min\.css).)*$]\.css$/,  // 包含css 但却不包含.min.css的,使用压缩;
+          //  包含css 但却不包含.min.css的/[^((?!\.min\.css).)*$]\.css$/
+          test: /\.css$/,
           use: ExtractTextPlugin.extract({ //把引入到页面内的css转换为 link 引入
             fallback: "style-loader",   //引入css到页面内
-            use: "css-loader?minimize&-autoprefixer", //处理css
-            publicPath: '../'
-          })
-        },
-        {
-          // 包含css 包含.min.css的
-          test: /\.min\.css$/,
-          loader: ExtractTextPlugin.extract({
-            fallback: "style-loader",
-            // 不压缩css
-            use: "css-loader",
+            //use: "css-loader?minimize&-autoprefixer", //处理css
+            use: [
+              { loader: 'css-loader', options: { importLoaders: 1 } },
+              'postcss-loader'
+            ],
             publicPath: '../'
           })
         },
@@ -100,7 +93,7 @@ var webpackConfBase = {
             //小于10KB的图片会自动转成dataUrl，
               loader: 'url-loader',
               options: {
-                limit : 10000,
+                limit : 1000,
                 name : _hash ? `img/[name].[ext]` : `img/[name]-[hash:8].[ext]`
               }
             },
@@ -251,23 +244,6 @@ var webpackConfBase = {
     ])
   ]
 }
-
-var webpackConfAdd = {};
-switch(config.act){
-  case 'webpack-dev-server' :
-    webpackConfAdd = require('./webpack.config.dev.js')(config);
-    break;
-  case 'webpack-dev-middleware' :
-    webpackConfAdd = require('./webpack.config.mid.js')(config);
-    break;
-  case 'browser-sync-server' :
-    break;
-  case 'build' :
-    webpackConfAdd = require('./webpack.config.prod.js')(config);
-    break;
-  default:
-    break;
-}
-return merge(webpackConfBase,webpackConfAdd);
+return webpackConfBase;
 
 }

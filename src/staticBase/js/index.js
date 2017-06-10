@@ -1,4 +1,5 @@
 "use strict";
+  require('../../static/css/main.min.css');
   // Vue.use(VueLazyload, {
   //   preLoad: 1.3,
   //   error: window._G_.url.basicUrl+'/static/img/avatar.jpg',
