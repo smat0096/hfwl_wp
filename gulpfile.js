@@ -15,10 +15,10 @@ var webpackDevServer = require('webpack-dev-server');
 var browserSync = require('browser-sync').create(); //移动端浏览器同步
 
 //读取配置
-var webpackConfigBase = require('./webpack/webpack.config.base.js');
-var config = require('./webpack/config.base.js');
-var localConfig = require('./webpack/config.local.js');
-var remoteConfig = require('./webpack/config.remote.js');
+var webpackConfigBase = require('./config/webpack.config.base.js');
+var config = require('./config/config.base.js');
+var localConfig = require('./config/config.local.js');
+var remoteConfig = require('./config/config.remote.js');
 
 //初始化webpack配置项;
 var _opts = {
@@ -34,22 +34,22 @@ switch(config.act){
   case 'webpack-dev-server' :
     config.url = localConfig.url;
     config.server = localConfig.server;
-    webpackConfAdd = require('./webpack/webpack.config.dev.js')(config);
+    webpackConfAdd = require('./config/webpack.config.dev.js')(config);
     break;
   case 'webpack-dev-middleware' :
     config.url = remoteConfig.url; //设置代理获取远程数据
     config.server = localConfig.server;
-    webpackConfAdd = require('./webpack/webpack.config.mid.js')(config);
+    webpackConfAdd = require('./config/webpack.config.mid.js')(config);
     break;
   case 'browser-sync-server' :
     config.url = localConfig.url;
     config.server = localConfig.server;
-    //webpackConfAdd = require('./webpack/webpack.config.prod.js')(config);
+    webpackConfAdd = require('./config/webpack.config.prod.js')(config);
     break;
   case 'build' :
     config.url = remoteConfig.url;
     config.server = remoteConfig.server;
-    webpackConfAdd = require('./webpack/webpack.config.prod.js')(config);
+    webpackConfAdd = require('./config/webpack.config.prod.js')(config);
     break;
   default:
     throw new gutil.PluginError('运行参数错误!!!',config.act);
@@ -127,7 +127,7 @@ gulp.task('webpack-dev-middleware',  function (done) {
       }
     }
   };
-  require('./webpack/webpack-dev-middleware.js')(config,webpackConfig);
+  require('./config/webpack-dev-middleware.js')(config,webpackConfig);
   done();
 })
 

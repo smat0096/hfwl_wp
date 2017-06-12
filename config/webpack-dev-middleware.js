@@ -20,7 +20,7 @@ Object.keys(webpackConfig.entry).forEach(function (name) {
   if (!(webpackConfig.entry[name] instanceof Array)) {
       throw new gutil.PluginError('entry[name] 需为 Array');
   }
-  webpackConfig.entry[name].unshift('./webpack/dev-client');
+  webpackConfig.entry[name].unshift('./config/dev-client');
 })
 
 var compiler = webpack(webpackConfig)
