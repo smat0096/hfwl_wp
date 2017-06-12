@@ -36,7 +36,7 @@ var webpackConfBase = {
     rules: [
       /* JS S */
         {
-          test: /[^((?!\.min\.css).)*$]\.(js|jsx|vue)$/, // eslint代码检查/格式化
+          test: /[^((?!\.min).)*$]\.(jsx?|vue)$/, // eslint代码检查/格式化
           loader: 'eslint-loader',
           enforce: 'pre',
           exclude: /node_modules/,
@@ -56,11 +56,10 @@ var webpackConfBase = {
       /* JS E */
       /* CSS S */
         {
-          //  包含css 但却不包含.min.css的/[^((?!\.min\.css).)*$]\.css$/
+          //  包含css 但却不包含.min.css /^(?!.*\.min).*\.css$/
           test: /\.css$/,
           use: ExtractTextPlugin.extract({ //把引入到页面内的css转换为 link 引入
-            fallback: "style-loader",   //引入css到页面内
-            //use: "css-loader?minimize&-autoprefixer", //处理css
+            fallback: "style-loader",
             use: [
               { loader: 'css-loader', options: { importLoaders: 1 } },
               'postcss-loader'
@@ -72,7 +71,13 @@ var webpackConfBase = {
           test: /\.scss$/,
           use: ExtractTextPlugin.extract({
             fallback: "style-loader",
-            use: "scss-loader",
+            use: [
+              {
+                loader: 'css-loader',
+              },
+              'postcss-loader',
+              'sass-loader'
+            ],
             publicPath: '../'
           })
         },
@@ -86,8 +91,9 @@ var webpackConfBase = {
         },
       /* CSS E */
       /* 图片 S */
+        //图片如果是在模板页面中, 可使用ejs模版语法 <img src="${ require('../img/bg.png')}" />
         {
-          test: /\.((woff2?|svg)(\?v=[0-9]\.[0-9]\.[0-9]))|(woff2?|svg|jpe?g|png|gif|ico)$/,
+          test: /\.(woff2?|svg|jpe?g|png|gif|ico)$/,
           use: [
             {
             //小于10KB的图片会自动转成dataUrl，
@@ -112,7 +118,7 @@ var webpackConfBase = {
         },
         //矢量图标/字体
         {
-          test: /\.((ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9]))|(ttf|eot)$/,
+          test: /\.(ttf|eot)$/,
           use: {
             loader: 'url-loader',
             options: {

@@ -26,7 +26,7 @@ var _opts = {
         default: {env: process.env.NODE_ENV || 'development'}
     };
 _opts = minimist(process.argv.slice(2), _opts);
-config.env = _opts.env;
+config.env = process.env.NODE_ENV || _opts.env;
 config.act = _opts._[0] || 'webpack-dev-middleware';
 
 var webpackConfAdd = {};
@@ -44,7 +44,7 @@ switch(config.act){
   case 'browser-sync-server' :
     config.url = localConfig.url;
     config.server = localConfig.server;
-    webpackConfAdd = require('./webpack/webpack.config.prod.js')(config);
+    //webpackConfAdd = require('./webpack/webpack.config.prod.js')(config);
     break;
   case 'build' :
     config.url = remoteConfig.url;

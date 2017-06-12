@@ -19,7 +19,6 @@
   position: absolute;
   width: 20%;
   height: 13.5%;
-  -background: #f50;
 }
 .home_link_lt{
   left: 19%;
@@ -41,4 +40,7 @@
 .home_link_cc{
   left: 39.5%;
   top: 44%;
+}
+.tess{
+  display: flex;
 }
