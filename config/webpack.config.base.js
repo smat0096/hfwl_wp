@@ -200,10 +200,9 @@ var webpackConfBase = {
     }),
     // 提取公共模块
     // 注意：webpack用插件CommonsChunkPlugin进行打包的时候，将符合引用规则(minChunks)的模块打包到name参数的数组的第一个块里（chunk）,然后数组后面的块依次打包(查找entry里的key,没有找到相关的key就生成一个空的块)，最后一个块包含webpack生成的在浏览器上使用各个块的加载代码，所以页面上使用的时候最后一个块必须最先加载,
-    // 如果把minChunks修改为Infinity，那么共有逻辑不会抽取出来作为一个单独的chunk,而是打包到最后一个js文件中!
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor','manifest'],
-      // minChunks: Infinity,
+      names: ['vendor'],
+      minChunks: Infinity,// 如果有多入口, 也不会提取非对应入口的复用模块;
       // minChunks: function (module, count) { // 只抽取 node_modules 中的块
       //   return (
       //     module.resource &&
