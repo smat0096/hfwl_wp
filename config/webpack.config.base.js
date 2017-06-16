@@ -22,10 +22,10 @@ var webpackConfBase = {
     // libraryTarget: "var", //指定你的模块输出类型，可以是commonjs,AMD,script形式,UMD模式
     // library: "myClassName" //把打包文件捆绑在 window.myClassName 实例上, 可以在入口处调用这个方法
   },
-  //external的key是require时候模块名称，value是我们在页面中通过script引入的文件名!添加了此项，则表明从外部引入，内部不会打包合并进去 ,但是会增加http请求
+  //external的key是require时候模块名称，value是我们在页面中通过script引入的全局变量名!添加了此项，则表明从外部引入，内部不会打包合并进去 ,但是因为使用script引入, 会增加http请求
   // 优化方案, 使用插件 DllPlugin 和 DllReferencePlugin 打包第三方全局/不处理的库
   externals: {
-      "jquery": "jQuery",
+      "jquery": "window.jQuery", //把 ' require("jquery") '编译为' = window.JQuery ';
       "vue" :  "Vue",
       "vuex" :  "Vuex",
       "vue-router" :  "VueRouter",
