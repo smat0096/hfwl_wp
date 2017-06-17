@@ -4,12 +4,12 @@
   "description": "none",
   "main": "gulpfile.js",
   "scripts": {
-    "dev":  "cross-env NODE_ENV=development gulp webpack-dev-server --env development",
-    "mid":  "cross-env NODE_ENV=development gulp webpack-dev-middleware",
+    "dev": "cross-env NODE_ENV=development gulp webpack-dev-server --env development",
+    "mid": "cross-env NODE_ENV=development gulp webpack-dev-middleware",
     "brow": "cross-env NODE_ENV=production gulp browser-sync-server",
-    "build":"cross-env NODE_ENV=production gulp build",
+    "build": "cross-env NODE_ENV=production gulp build",
     "remote": "cross-env NODE_ENV=production gulp remote",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env NODE_ENV=production gulp test"
   },
   "author": "kongshan",
   "license": "ISC",

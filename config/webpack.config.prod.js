@@ -28,12 +28,8 @@ return {
           except: ['$', 'exports', 'require', 'avalon']
       }
     }),
-    //压缩css
-    new OptimizeCSSPlugin({
-      cssProcessorOptions: {
-        safe: true
-      }
-    }),
+    // 压缩css 已使用 postCss
+    // new OptimizeCSSPlugin({ cssProcessor: require('cssnano'), cssProcessorOptions: { safe: true } }),
     new webpack.LoaderOptionsPlugin({ minimize: true }),
     new webpack.NoEmitOnErrorsPlugin()
   ]

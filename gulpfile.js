@@ -15,7 +15,10 @@ var webpackDevServer = require('webpack-dev-server');
 var browserSync = require('browser-sync').create(); //移动端浏览器同步
 
 //读取配置
-var webpackConfigBase = require('./config/webpack.config.base.js');
+var webpackConfig = require('./config/webpack.config.base.js');
+var webpackConfigDev = require('./config/webpack.config.dev.js');
+var webpackConfigProd = require('./config/webpack.config.prod.js');
+var webpackConfigMid = require('./config/webpack.config.mid.js');
 var config = require('./config/config.base.js');
 var localConfig = require('./config/config.local.js');
 var remoteConfig = require('./config/config.remote.js');
@@ -29,34 +32,42 @@ _opts = minimist(process.argv.slice(2), _opts);
 config.env = process.env.NODE_ENV || _opts.env;
 config.act = _opts._[0] || 'webpack-dev-middleware';
 
-var webpackConfAdd = {};
 switch(config.act){
   case 'webpack-dev-server' :
     config.url = localConfig.url;
+    config.publicPath = localConfig.publicPath;
     config.server = localConfig.server;
-    webpackConfAdd = require('./config/webpack.config.dev.js')(config);
+    webpackConfig = merge( webpackConfig(config), webpackConfigDev(config));
     break;
   case 'webpack-dev-middleware' :
-    config.url = remoteConfig.url; //设置代理获取远程数据
+    config.url = localConfig.url; 
+    config.publicPath = localConfig.publicPath;
     config.server = localConfig.server;
-    webpackConfAdd = require('./config/webpack.config.mid.js')(config);
+    webpackConfig = merge( webpackConfig(config), webpackConfigMid(config));
     break;
+  case 'test' :
+    config.url = remoteConfig.url; //远程数据
+    config.proxyTable = remoteConfig.proxyTable; //设置代理获取远程数据
+    config.publicPath = localConfig.publicPath;
+    config.server = localConfig.server;
+    webpackConfig = merge( webpackConfig(config), webpackConfigMid(config), webpackConfigProd(config));
   case 'browser-sync-server' :
     config.url = localConfig.url;
+    config.publicPath = localConfig.publicPath;
     config.server = localConfig.server;
-    webpackConfAdd = require('./config/webpack.config.prod.js')(config);
+    webpackConfig = merge( webpackConfig(config), webpackConfigProd(config) );
     break;
   case 'build' :
     config.url = remoteConfig.url;
+    config.publicPath = remoteConfig.publicPath;
     config.server = remoteConfig.server;
-    webpackConfAdd = require('./config/webpack.config.prod.js')(config);
+    webpackConfig = merge( webpackConfig(config), webpackConfigProd(config) );
     break;
   default:
     throw new gutil.PluginError('运行参数错误!!!',config.act);
     break;
 }
-var webpackConfig = merge( webpackConfigBase(config), webpackConfAdd );
-gutil.log(_opts , `[config.act : ${config.act} ] ,[config.env : ${config.env} ]`);
+gutil.log(config.act ,config.env );
 
 //check code
 gulp.task('hint', function () {return;
@@ -111,7 +122,7 @@ gulp.task('webpack-dev-middleware',  function (done) {
   require('./config/webpack-dev-middleware.js')(config,webpackConfig);
   done();
 })
-
+gulp.task('test', ['webpack-dev-middleware'],function(){})
 //browser-sync-server
 gulp.task('browser-sync-server',['build'],function() {
   browserSync.init({

@@ -1,9 +1,0 @@
-body { 
-	color: #F60;
-    background-color: #fafafa;
-    background-image:url('../img/bg.jpg');
-    background-repeat: no-repeat;
-}
-body img{
-	transform: scale(1.1);
-}

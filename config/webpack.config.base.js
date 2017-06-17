@@ -11,15 +11,15 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = function(config){
 var _debug = config.env === 'development';
-var _hash = ( config.act == 'webpack-dev-server' || config.act == 'webpack-dev-middleware' );
+var _hash = ( config.act == 'webpack-dev-server' || config.act == 'webpack-dev-middleware' || config.act == 'test' );//注意 热替换与chunkhash冲突
 var webpackConfBase = {
   entry: config.entry, //入口文件
   output: {
     path: config.dest.path,              //输出路径
     filename: _hash ? `js/[name].js` : `js/[name]-[chunkhash:8].js`,     //输出文件名(可含子路径)
-    publicPath: config.server.publicPath,//script标签内的 输出路径的基本路径,完整路径为: publicPath + path + filename
+    publicPath: config.publicPath,//script标签内的 输出路径的基本路径,完整路径为: publicPath + path + filename
     chunkFilename: _hash ? `js/[name].js` : `js/[name]-[chunkhash:8].js`,
-    // libraryTarget: "var", //指定你的模块输出类型，可以是commonjs,AMD,script形式,UMD模式
+    // libraryTarget: "var", //指定模块输出类型，可以是commonjs,AMD,script形式,UMD模式
     // library: "myClassName" //把打包文件捆绑在 window.myClassName 实例上, 可以在入口处调用这个方法
   },
   //external的key是require时候模块名称，value是我们在页面中通过script引入的全局变量名!添加了此项，则表明从外部引入，内部不会打包合并进去 ,但是因为使用script引入, 会增加http请求
@@ -178,7 +178,7 @@ var webpackConfBase = {
       filename: 'index.html', //输出的 HTML 文件名，默认是 index.html, 也可以直接配置带有子目录。
       template: config.src.html, //模板文件路径，支持加载器，比如 html-loader!./index.html
       inject: 'body', // true | 'head' | 'body' | false  ,注入所有的资源到特定的 template 或者 templateContent 中，如果设置为 true 或者 body，所有的 javascript 资源将被放置到 body 元素的底部，'head' 将放置到 head 元素中
-      publicPath: config.server.publicPath, //向页面传递变量,替换静态资源链接
+      publicPath: config.publicPath, //向页面传递变量,替换静态资源链接
       favicon : path.resolve(process.cwd(),'./src/static/img/favicon.ico'), //favicon 路径 以 cwd 路径为基础路径;
       hash: false , // true | false, 如果为 true, 将添加一个唯一的 webpack 编译 hash 到所有包含的脚本和 CSS 文件，对于解除 cache 很有用
       cache: true, // true | false，如果为 true, 这是默认值，仅仅在文件修改之后才会发布文件

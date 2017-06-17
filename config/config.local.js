@@ -1,15 +1,14 @@
 'use strict';
 var localConfig = {
+    publicPath : '', //基础路径
     //本地服务器配置 webpack-dev-server 和 browser-sync
     server : {
       port : 3000,
       index : 'index.html',
-      startPath : '/loading.html',
-      publicPath : '', //基础路径
+      startPath : '/loading.html'
     },
     //本地服务器数据接口
     url : {
-      publicPath : '', //基础路径
       basicUrl : '', //基础路径, 下次改为 publicPath; TODO;
       index : '/',
       //login

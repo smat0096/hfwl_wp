@@ -1,1 +1,0 @@
-document.write('entry-c的输出信息<br>');

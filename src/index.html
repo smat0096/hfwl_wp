@@ -20,14 +20,14 @@
                 window.__LOADED || window.location.reload(false);
                 loadfail && (loadfail.innerText ='加载失败,请重启应用');
                 window.removeEventListener('load', _reload , false);
-                reload = null;
+                _reload = null;
                 loadfail = null;
               },5e3);
             };
             window.addEventListener('load', _reload , false);
           })();
         </script>
-        <!-- <link rel="stylesheet" href="<%=htmlWebpackPlugin.options.publicPath%>/static/css/main.min.css" /> -->
+        <link rel="stylesheet" href="<%=htmlWebpackPlugin.options.publicPath%>/static/css/main.min.css" />
 
     </head>
 <body ontouchstart>
