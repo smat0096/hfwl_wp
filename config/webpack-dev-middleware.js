@@ -10,8 +10,26 @@ var proxyMiddleware = require('http-proxy-middleware')
 var port = config.server.port
 // automatically open browser, if not set will be false
 var autoOpenBrowser = !!config.autoOpenBrowser
-// Define HTTP proxies to your custom API backend
-// https://github.com/chimurai/http-proxy-middleware
+
+//设置代理跨域  https://github.com/chimurai/http-proxy-middleware
+config.proxyTable = {
+  '/app': {
+    target: 'http://cwh.qiruiw.com',
+    changeOrigin: true,
+    pathRewrite: {
+      '^/app': '/app'
+    },
+    //设置cookie
+    onProxyReq(proxyReq, req, res) {
+      proxyReq.setHeader('cookie', 'Hm_lvt_76e0f7fba99c643ac87df5b4822a2932=1493011547,1493011552,1493794769,1494485427; ab46___ewei_shopv2_member_session_2=eyJpZCI6IjcwIiwib3BlbmlkIjoid2FwX3VzZXJfMl8xMzMzMzMzMzMzMiIsIm1vYmlsZSI6IjEzMzMzMzMzMzMyIiwicHdkIjoiZWMxMmFkYWY0M2JhNjgwMmNjMDU0M2MxMGIxYzQ5M2IiLCJzYWx0IjoiUEY0Wk9HWkdaMlZETjNHTyIsImF1ZGl0VHlwZSI6IjEiLCJld2VpX3Nob3B2Ml9tZW1iZXJfaGFzaCI6IjdhMjFkZTE2ZWU1ZmI5ZWZmMGQxZGE2NWQyZjQxMWMyIn0%3D; PHPSESSID=dd0314d1b8a34af27d35a29e9db692cc')
+    },
+    onProxyRes(proxyRes, req, res){
+      Object.keys(proxyRes.headers).forEach(function (key) {
+        res.append(key, proxyRes.headers[key]);
+      });
+    }
+  }
+};
 var proxyTable = config.proxyTable || {}
 
 var app = express()
