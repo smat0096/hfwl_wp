@@ -6,6 +6,7 @@
   //   loading: window._G_.url.basicUrl+'/static/img/loadavatar.svg',
   //   attempt: 2
   // })
+  
   window._base  = require('utils/ks_base.js');
   window._ks = _base.utils;
   window._common = _base.common;
@@ -49,7 +50,7 @@
       console.log(user)
       router.beforeEach(function(to, from, next){
       //非生产模式则不考虑权限过滤, 方便调试;
-      if(window._G_.mode.status != window._G_.mode.server){
+      if(window._G_.mode.status !== window._G_.mode.server){
         next();
         return;
       }
@@ -90,7 +91,7 @@
           _vm.initEvent();
         });
       },
-      methods : {
+      methods : { 
         initUser: function(callback){
           var _vm = this;
           _ks.run(callback);
