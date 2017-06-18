@@ -50,6 +50,7 @@ switch(config.act){
     config.publicPath = localConfig.publicPath;
     config.server = localConfig.server;
     webpackConfig = merge( webpackConfig(config), webpackConfigMid(config), webpackConfigProd(config));
+    break;
   case 'browser-sync-server' :
     config.url = localConfig.url;
     config.publicPath = localConfig.publicPath;
