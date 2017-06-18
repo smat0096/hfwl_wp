@@ -2,12 +2,11 @@
 
 var gulp = require('gulp');
 //gulp工具
-var runSequence = require('run-sequence');//同步执行
 var minimist = require('minimist');
 var gutil = require('gulp-util');
 var clean = require('gulp-clean');
 var path = require('path');
-var merge = require('webpack-merge');
+var merge = require('webpack-merge'); 
 
 var opn = require('opn'); //打开页面;
 var webpack = require('webpack');

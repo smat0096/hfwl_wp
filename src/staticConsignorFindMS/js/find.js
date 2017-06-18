@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     r = e.dialog,
     l = require("find/findCommon"),
     d = require("find/sourseInfo"),
-    c = require("plug/siteHashDo")
+    c = require("plug/siteHashDo"),
     _ = {
       _init: function() {
         this._renderMsgVisitor()
