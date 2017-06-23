@@ -6,7 +6,7 @@
   //   loading: window._G_.url.basicUrl+'/static/img/loadavatar.svg',
   //   attempt: 2
   // })
-  
+  require('babel-polyfill');
   window._base  = require('utils/ks_base.js');
   window._ks = _base.utils;
   window._common = _base.common;
